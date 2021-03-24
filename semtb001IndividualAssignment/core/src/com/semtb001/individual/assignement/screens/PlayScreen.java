@@ -106,9 +106,13 @@ public class PlayScreen implements Screen {
         gameCamera.position.y = player.box2dBody.getPosition().y+ 6;
         //gameCamera.update();
 
-        System.out.println(player.box2dBody.getPosition().x);
-        System.out.println(player.box2dBody.getPosition().y);
-        System.out.println(getPlayerPos());
+        if(player.box2dBody.getLinearVelocity().x <= 5f){
+            player.box2dBody.applyLinearImpulse(new Vector2(1f, 0), player.box2dBody.getWorldCenter(), true);
+        }
+
+//        System.out.println(player.box2dBody.getPosition().x);
+//        System.out.println(player.box2dBody.getPosition().y);
+//        System.out.println(getPlayerPos());
 
     }
 

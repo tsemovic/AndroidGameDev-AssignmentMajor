@@ -1,6 +1,11 @@
 {
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
     "activeFile": "",
     "expandedProjectPaths": [
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap"
     ],
     "fileStates": {
         "": {
@@ -89,6 +94,26 @@
                 "y": 723
             }
         },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/buildings_spritesheet.tsx": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 2
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/items_spritesheet.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/level1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2528,
+                "y": 721
+            }
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/tiles_spritesheet.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/tiles_spritesheet.tsx": {
             "scaleInDock": 1
         },
@@ -105,42 +130,41 @@
             "scaleInEditor": 5.5
         },
         "buildings_spritesheet.tsx": {
-            "scaleInDock": 0.5,
-            "scaleInEditor": 2
-        },
-        "items_spritesheet.tsx": {
             "scaleInDock": 1,
-            "scaleInEditor": 2
-        },
-        "level1.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 2528,
-                "y": 721
-            }
+            "scaleInEditor": 1
         },
         "tiles_spritesheet.tsx": {
             "scaleInDock": 1,
-            "scaleInEditor": 2
+            "scaleInEditor": 1
         }
     },
-    "map.lastUsedExportFilter": "All Files (*)",
+    "map.height": 20,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
+    "map.tileHeight": 70,
+    "map.tileWidth": 70,
+    "map.width": 250,
     "openFiles": [
     ],
-    "project": "untitled.tiled-project",
+    "project": "maps.tiled-project",
     "recentFiles": [
+        "buildings_spritesheet.tsx",
         "tiles_spritesheet.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/level1.tmx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/buildings_spritesheet.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/tiles_spritesheet.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mapFiles/level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/island1.tmx",
-        "buildings_spritesheet.tsx",
-        "level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/Island Survival/android/assets/iso-64x64-outside.tsx",
-        "items_spritesheet.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/items_spritesheet.tsx",
         "C:/Users/tully/Desktop/Android Studio/AndroidGame/Island Survival/android/assets/island1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/Items.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/assets/level1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/Island Survival/android/assets/!CL_DEMO_32x32.tsx"
-    ]
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/Items.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.spacing": 2,
+    "tileset.tileSize": {
+        "height": 70,
+        "width": 70
+    }
 }

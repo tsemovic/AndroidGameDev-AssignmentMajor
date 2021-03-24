@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 
 public class Semtb001IndividualAssignment extends Game {
-	SpriteBatch batch;
+	public SpriteBatch batch;
 
 	public static float SCREEN_WIDTH;
 	public static float SCREEN_HEIGHT;
-	public static final float PPM = 32; // PPM = Pixel per Meter
+	public static final float PPM = 500; // PPM = Pixel per Meter
 	public static final float WORLD_HEIGHT = 480;
 	public static final float WORLD_WIDTH = 800;
 

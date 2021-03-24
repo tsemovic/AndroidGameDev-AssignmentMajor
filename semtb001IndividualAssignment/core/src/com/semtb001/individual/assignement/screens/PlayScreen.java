@@ -37,11 +37,11 @@ public class PlayScreen implements Screen {
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
         game = semtb001IndividualAssignment;
         gameCamera = new OrthographicCamera();
-        gameViewPort = new FitViewport((Gdx.graphics.getWidth() / semtb001IndividualAssignment.WORLD_WIDTH) / semtb001IndividualAssignment.PPM, (Gdx.graphics.getHeight() / semtb001IndividualAssignment.WORLD_HEIGHT) / semtb001IndividualAssignment.PPM, gameCamera);
+        gameViewPort = new FitViewport( semtb001IndividualAssignment.WORLD_WIDTH / semtb001IndividualAssignment.PPM, semtb001IndividualAssignment.WORLD_HEIGHT / semtb001IndividualAssignment.PPM, gameCamera);
         inputMultiplexer = new InputMultiplexer();
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level1.tmx");
+        map = mapLoader.load("mapFiles/level1.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, 1/semtb001IndividualAssignment.PPM);
 
@@ -53,6 +53,8 @@ public class PlayScreen implements Screen {
 
         player = new Player(world, this);
 
+        gameCamera.position.set(gameViewPort.getScreenWidth() / 2, gameViewPort.getScreenHeight() / 2, 0);
+
     }
 
     @Override
@@ -60,22 +62,35 @@ public class PlayScreen implements Screen {
 
     }
 
+    public void inputHandler(float delta){
+        if(Gdx.input.isTouched()){
+            gameCamera.position.x += 100 * delta;
+        }
+    }
+
     public void update(float delta){
 
+        renderer.setView(gameCamera);
     }
 
     @Override
     public void render(float delta) {
         //separate our update logic from render
         update(delta);
-
+        inputHandler(delta);
+        game.batch.setProjectionMatrix(gameCamera.combined);
         world.step(1 / 60f, 6, 2);
 
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
+        renderer.render();
+
+        box2dRenderer.render(world, gameCamera.combined);
+
         //make camera follow player
-        gameCamera.position.x = player.box2dBody.getPosition().x;
-        gameCamera.position.y = player.box2dBody.getPosition().y;
+        //gameCamera.position.x = player.box2dBody.getPosition().x;
+        //gameCamera.position.y = player.box2dBody.getPosition().y;
         gameCamera.update();
-        renderer.setView(gameCamera);
 
 
     }

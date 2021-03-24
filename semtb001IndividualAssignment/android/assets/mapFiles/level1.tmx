@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="4" nextobjectid="2">
  <tileset firstgid="1" source="buildings_spritesheet.tsx"/>
+ <tileset firstgid="99" source="tiles_spritesheet.tsx"/>
  <layer id="2" name="groundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
+   eJzt07ENwDAIRUH2Hy2DuM0AaTKDYyECupN+B+WL2LM274F+dA7z6Rzm0zkAAAAAAAAAAAB/dDUYcOZpMODMHfUd6xxyVTesc8hX3bDOId9uc+vDj86hls5hvhc1XRT+
   </data>
  </layer>
  <layer id="1" name="buildingsTiles" width="250" height="20">
@@ -12,6 +13,6 @@
   </data>
  </layer>
  <objectgroup id="3" name="groundObject">
-  <object id="1" x="-12" y="908" width="2872" height="504"/>
+  <object id="1" x="-12" y="908" width="18008" height="504"/>
  </objectgroup>
 </map>

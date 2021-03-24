@@ -35,6 +35,10 @@ public class Box2DWorldCreator {
         //create map walls
         for (MapObject object : map.getLayers().get("groundObject").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            System.out.println("HERERE");
+            System.out.println(rect.getX());
+            System.out.println(rect.getY());
+            System.out.println(rect.getHeight());
 
             bodyDef.type = BodyDef.BodyType.StaticBody;
             bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
@@ -42,7 +46,7 @@ public class Box2DWorldCreator {
             body = world.createBody(bodyDef);
             shape.setAsBox((rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
             fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);//.setUserData("WORLD");
+            body.createFixture(fixtureDef).setUserData("WORLD");
         }
     }
 

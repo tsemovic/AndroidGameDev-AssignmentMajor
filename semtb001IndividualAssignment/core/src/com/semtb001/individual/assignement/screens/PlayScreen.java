@@ -43,7 +43,7 @@ public class PlayScreen implements Screen {
         inputMultiplexer = new InputMultiplexer();
         //gameViewPort = new FitViewport((Gdx.graphics.getWidth() / Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Gdx.graphics.getHeight() / Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM, gameCamera);
 
-        gameCamera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
+        gameCamera.setToOrtho(false, (float) (Semtb001IndividualAssignment.WORLD_WIDTH * 1.5), (float) (Semtb001IndividualAssignment.WORLD_HEIGHT * 1.5));
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("mapFiles/level1.tmx");
@@ -68,19 +68,13 @@ public class PlayScreen implements Screen {
     }
 
     public void inputHandler(float delta){
-        if(Gdx.input.isTouched()){
-            //gameCamera.position.x += 100 * delta;
-            //gameCamera.zoom += 1*delta;
-            //player.box2dBody.setLinearVelocity(1, 0);
+        if (Gdx.input.isTouched()) {
+            if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2){
+                player.jump();
+            } else {
+                //touchde left
+            }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DPAD_RIGHT))
-            player.jump();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DPAD_LEFT))
-            player.slide();
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) && player.box2dBody.getLinearVelocity().x <= 5)
-            player.box2dBody.applyLinearImpulse(new Vector2(1f, 0), player.box2dBody.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) && player.box2dBody.getLinearVelocity().x >= -5)
-            player.box2dBody.applyLinearImpulse(new Vector2(-1f, 0), player.box2dBody.getWorldCenter(), true);
     }
 
     public void update(float delta){

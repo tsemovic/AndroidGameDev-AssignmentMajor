@@ -182,6 +182,7 @@ public class Player extends Sprite {
                     if (slideStartTimer > 0) {
                         slideStartTimer -= delta;
                     } else {
+                        slideStartTimer = 0;
                         currentState = State.SLIDE_END;
                     }
 
@@ -189,6 +190,7 @@ public class Player extends Sprite {
                     if (slideEndTimer > 0) {
                         slideEndTimer -= delta;
                     } else {
+                        slideEndTimer = 0;
                         currentState = State.RUN;
                     }
                 }

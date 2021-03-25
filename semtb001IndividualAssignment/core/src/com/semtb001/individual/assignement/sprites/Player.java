@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 
-public class Player extends Sprite{
+public class Player extends Sprite {
 
     private World world;
     private PlayScreen playScreen;
@@ -28,13 +28,17 @@ public class Player extends Sprite{
     public static final int WORLD = 3;
     public static final int ENEMY = 3;
 
+    private enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
 
-    private enum State {RUN, JUMP_START, JUMP_END, SLIDE, FAIL};
+    ;
     private boolean playerIsDead;
     private State currentState;
     private State previousState;
 
     private float stateTimer;
+    private double slideStartTimer;
+    private double slideEndTimer;
+
 
     public Body box2dBody;
     public SpriteBatch batch;
@@ -42,15 +46,23 @@ public class Player extends Sprite{
     private Animation running;
     private Animation jumpStart;
     private Animation jumpEnd;
+    private Animation slideStart;
+    private Animation slideEnd;
 
     public TextureRegion currentFrame;
 
-
+    private FixtureDef fixtureDef;
+    private PolygonShape shape;
+    private Rectangle rect;
+    private BodyDef bodyDef;
 
     public Player(World world, PlayScreen playScreen) {
         this.world = world;
         this.playScreen = playScreen;
         stateTimer = 0;
+        slideStartTimer = 0;
+        slideEndTimer = 0;
+
         currentState = State.RUN;
         previousState = State.RUN;
 
@@ -61,34 +73,48 @@ public class Player extends Sprite{
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
         //run
-        for(int i = 1; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("running"),  i* 256, 0, 256, 256));
+        for (int i = 1; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("running"), i * 256, 0, 256, 256));
         }
         running = new Animation(0.1f, tempFrames);
         tempFrames.clear();
 
         //jump start
-        for(int i = 0; i <= 2; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("jumping start"),  i* 256, 0, 256, 256));
+        for (int i = 0; i <= 2; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("jumping start"), i * 256, 0, 256, 256));
         }
         jumpStart = new Animation(0.1f, tempFrames);
         tempFrames.clear();
 
         //jump end
-        for(int i = 0; i <= 2; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("jumping end"),  i* 256, 0, 256, 256));
+        for (int i = 0; i <= 2; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("jumping end"), i * 256, 0, 256, 256));
         }
         jumpEnd = new Animation(0.1f, tempFrames);
 
         tempFrames.clear();
 
+        //slide
+        for (int i = 0; i <= 1; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sliding start"), i * 256, 0, 256, 256));
+        }
+        slideStart = new Animation(0.3f, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 1; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sliding end"), 0, 0, 256, 256));
+        }
+        slideEnd = new Animation(0.3f, tempFrames);
+
+        tempFrames.clear();
+
     }
 
-    public void definePlayer(){
-        BodyDef bodyDef = new BodyDef();
-        Rectangle rect = new Rectangle();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fixtureDef = new FixtureDef();
+    public void definePlayer() {
+        bodyDef = new BodyDef();
+        rect = new Rectangle();
+        shape = new PolygonShape();
+        fixtureDef = new FixtureDef();
 
         fixtureDef.filter.categoryBits = Player.PLAYER;
         fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD;
@@ -106,60 +132,83 @@ public class Player extends Sprite{
         //fixtureDef.shape = cir;
         fixtureDef.shape = shape;
         box2dBody.createFixture(fixtureDef).setUserData(this);
-
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         currentFrame = getFramesFromAnimation(delta);
-        //currentFrame = (TextureRegion) jumpStart.getKeyFrame(stateTimer, true);
-        System.out.println(stateTimer);
-
+        System.out.println(slideStartTimer);
     }
 
     private TextureRegion getFramesFromAnimation(float delta) {
-        getState();
+        getState(delta);
         TextureRegion returnRegion = null;
 
-        if(currentState == State.JUMP_START) {
+        if (currentState == State.JUMP_START) {
             returnRegion = (TextureRegion) jumpStart.getKeyFrame(stateTimer, false);
-        }else if(currentState == State.JUMP_END) {
+        } else if (currentState == State.JUMP_END) {
             returnRegion = (TextureRegion) jumpEnd.getKeyFrame(stateTimer, false);
-        }else {
+        } else if (currentState == State.SLIDE_START) {
+            returnRegion = (TextureRegion) slideStart.getKeyFrame(stateTimer, false);
+        } else if (currentState == State.SLIDE_END) {
+            returnRegion = (TextureRegion) slideEnd.getKeyFrame(stateTimer, false);
+        } else {
             returnRegion = (TextureRegion) running.getKeyFrame(stateTimer, true);
         }
 
-        if(currentState != previousState){
+        if (currentState != previousState) {
             stateTimer = 0;
-        }else{
+        } else {
             stateTimer += delta;
         }
         previousState = currentState;
 
         return returnRegion;
-
     }
 
-    public void getState(){
-        if(playerIsDead) {
+    public void getState(float delta) {
+        if (playerIsDead) {
             currentState = State.FAIL;
-        }else if(box2dBody.getLinearVelocity().y > 0) {
-            currentState = State.JUMP_START;
-        }else if(box2dBody.getLinearVelocity().y < 0) {
-            currentState = State.JUMP_END;
-        }else {
-            currentState = State.RUN;
+        } else {
+            if (slideStartTimer == 0 && slideEndTimer == 0) {
+                if (box2dBody.getLinearVelocity().y > 0) {
+                    currentState = State.JUMP_START;
+                } else if (box2dBody.getLinearVelocity().y < 0) {
+                    currentState = State.JUMP_END;
+                } else {
+                    currentState = State.RUN;
+                }
+            } else {
+                if (currentState == State.SLIDE_START) {
+                    if (slideStartTimer > 0) {
+                        slideStartTimer -= delta;
+                    } else {
+                        currentState = State.SLIDE_END;
+                    }
+
+                } else if (currentState == State.SLIDE_END) {
+                    if (slideEndTimer > 0) {
+                        slideEndTimer -= delta;
+                    } else {
+                        currentState = State.RUN;
+                    }
+                }
+            }
         }
     }
 
-    public void jump(){
-        if(currentState != State.JUMP_START && currentState != State.JUMP_END) {
+
+    public void jump() {
+        if (currentState != State.JUMP_START && currentState != State.JUMP_END && currentState != State.SLIDE_START && currentState != State.SLIDE_END) {
             box2dBody.applyLinearImpulse(new Vector2(0, 40f), box2dBody.getWorldCenter(), true);
             currentState = State.JUMP_START;
         }
     }
 
-    public void slide(){
-        box2dBody.applyLinearImpulse(new Vector2(0, 4f), box2dBody.getWorldCenter(), true);
-            currentState = State.SLIDE;
+    public void slide() {
+        if (currentState != State.JUMP_START && currentState != State.JUMP_END && currentState != State.SLIDE_START && currentState != State.SLIDE_END) {
+            currentState = State.SLIDE_START;
+            slideStartTimer = 1.3;
+            slideEndTimer = 0.1;
+        }
     }
 }

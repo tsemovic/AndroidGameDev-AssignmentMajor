@@ -85,7 +85,7 @@ public class PlayScreen implements Screen {
             if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2){
                 player.jump();
             } else {
-                //touchde left
+                player.slide();
             }
         }
 //        if(Gdx.input.isTouched()){

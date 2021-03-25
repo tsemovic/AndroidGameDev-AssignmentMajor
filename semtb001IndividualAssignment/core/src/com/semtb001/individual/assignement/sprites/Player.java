@@ -23,6 +23,8 @@ public class Player {
     public static final int PLAYER = 2;
     public static final int WORLD = 3;
 
+    private enum State {RUN, JUMP, SLIDE, FAIL};
+    private State currentState;
 
     public Body box2dBody;
     private SpriteBatch batch;
@@ -40,21 +42,27 @@ public class Player {
         Rectangle rect = new Rectangle();
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
+        currentState = State.RUN;
 
         fixtureDef.filter.categoryBits = Player.PLAYER;
         fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(10, 100);
+        bodyDef.position.set(10, 250);
 
         box2dBody = world.createBody(bodyDef);
 
-        CircleShape cir = new CircleShape();
-        cir.setRadius(3);
+        shape.setAsBox(5, 10);
+        //CircleShape cir = new CircleShape();
+        //cir.setRadius(15);
         //shape.setAsBox(5/IslandSurvival.PPM, 5/IslandSurvival.PPM);
         //shape.setAsBox((rect.getWidth() / 2), (rect.getHeight() / 2));
-        fixtureDef.shape = cir;
+        //fixtureDef.shape = cir;
+        fixtureDef.shape = shape;
         box2dBody.createFixture(fixtureDef).setUserData("PLAYER");
+
+
+
     }
 
     public void update(float delta){

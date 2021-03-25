@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
+import com.semtb001.individual.assignement.sprites.Slime;
 import com.semtb001.individual.assignement.tools.Box2DWorldCreator;
 import com.semtb001.individual.assignement.tools.WorldContactListener;
 
@@ -35,7 +36,7 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer box2dRenderer;
     private Box2DWorldCreator box2dWorldCreator;
 
-    private TextureAtlas textureAtlas;
+    public TextureAtlas textureAtlas;
     private Player player;
 
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
@@ -50,14 +51,19 @@ public class PlayScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map, 1f/Semtb001IndividualAssignment.PPM);
 
-        world = new World(new Vector2(0, -50), true);
+        world = new World(new Vector2(0, -100f), true);
 
         box2dRenderer = new Box2DDebugRenderer();
         box2dWorldCreator = new Box2DWorldCreator(this);
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
+        textureAtlas = new TextureAtlas("texturepack/playerAndSlime.pack");
+
         player = new Player(world, this);
-        textureAtlas = new TextureAtlas("/texturepack/playerAndSlime.pack");
+
+        world.setContactListener(new WorldContactListener(box2dWorldCreator));
+
+
     }
 
     @Override
@@ -80,7 +86,8 @@ public class PlayScreen implements Screen {
         world.step(1 / 60f, 6, 2);
 
         gameCamera.update();
-        //player.update(delta);
+        player.update(delta);
+
         renderer.setView(gameCamera);
 
     }
@@ -100,15 +107,22 @@ public class PlayScreen implements Screen {
         box2dRenderer.render(world, gameCamera.combined);
 
         //make camera follow player
-        gameCamera.position.x = player.box2dBody.getPosition().x + 170;
-        gameCamera.position.y = 370;
-        //gameCamera.update();
+        //gameCamera.position.x = player.box2dBody.getPosition().x + 170;
+        //gameCamera.position.y = 370;
+
+        gameCamera.position.x = player.box2dBody.getPosition().x;
+        gameCamera.position.y = player.box2dBody.getPosition().y;
 
         if(player.box2dBody.getLinearVelocity().x <= 50f){
             player.box2dBody.applyLinearImpulse(new Vector2(1f, 0), player.box2dBody.getWorldCenter(), true);
+
         }
 
-        System.out.println(getPlayerPos());
+        player.batch.begin();
+        //player.batch.draw(player.currentFrame, 370, getPlayerPos().y*3 - (128*5));
+        player.batch.end();
+
+        //System.out.println((int) getPlayerPos().x);
 
     }
 
@@ -148,5 +162,9 @@ public class PlayScreen implements Screen {
     public Vector2 getPlayerPos() {
         Vector2 pos = new Vector2(player.box2dBody.getPosition().x, player.box2dBody.getPosition().y);
         return pos;
+    }
+
+    public TextureAtlas getTextureAtlas() {
+        return textureAtlas;
     }
 }

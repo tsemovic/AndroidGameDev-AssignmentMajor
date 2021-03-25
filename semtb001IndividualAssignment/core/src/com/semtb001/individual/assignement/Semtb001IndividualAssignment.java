@@ -11,14 +11,17 @@ import com.semtb001.individual.assignement.screens.PlayScreen;
 public class Semtb001IndividualAssignment extends Game {
 	public SpriteBatch batch;
 
-	public static final float PPM = 2;
+	public static final float PPM = 32; // PPM = Pixel per Meter
+	public static final float MPP = 1 / PPM; // MPP = Meter per Pixel
+	public static float ICONSIZE = 2 * PPM; // MPP = Meter per Pixel
+	public static float SCREEN_WIDTH;
+	public static float SCREEN_HEIGHT;
 
-	public static final float WORLD_PIXEL_HEIGHT = 1400;
-	public static final float WORLD_PIXEL_WIDTH = 2489;
+	public static final int WORLD_PIXEL_WIDTH = 1920/2;
+	public static final int WORLD_PIXEL_HEIGHT = 1080/2;
+	public static final float WORLD_WIDTH = WORLD_PIXEL_WIDTH / PPM; //in meter
+	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
 
-
-	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM;
-	public static final float WORLD_WIDTH = WORLD_PIXEL_WIDTH / PPM;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();

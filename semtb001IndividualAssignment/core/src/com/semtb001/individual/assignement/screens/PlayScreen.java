@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -38,18 +39,26 @@ public class PlayScreen implements Screen {
 
     public TextureAtlas textureAtlas;
     private Player player;
+    public SpriteBatch batch;
 
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
         game = semtb001IndividualAssignment;
         gameCamera = new OrthographicCamera();
+        batch = semtb001IndividualAssignment.batch;
         gameCamera.setToOrtho(false, ( Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM);
         //gameViewPort = new FitViewport((Gdx.graphics.getWidth() / Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Gdx.graphics.getHeight() / Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM, gameCamera);
+
+        gameCamera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
+        //gameCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        gameViewPort = new FitViewport((Gdx.graphics.getWidth() / Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Gdx.graphics.getHeight() / Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM, gameCamera);
+
 
         inputMultiplexer = new InputMultiplexer();
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("mapFiles/level1.tmx");
 
-        renderer = new OrthogonalTiledMapRenderer(map, 1f/Semtb001IndividualAssignment.PPM);
+        renderer = new OrthogonalTiledMapRenderer(map, Semtb001IndividualAssignment.MPP);
 
         world = new World(new Vector2(0, -100f), true);
 
@@ -79,6 +88,9 @@ public class PlayScreen implements Screen {
                 //touchde left
             }
         }
+//        if(Gdx.input.isTouched()){
+//            gameCamera.zoom += 0.1f;
+//        }
     }
 
     public void update(float delta){
@@ -98,7 +110,9 @@ public class PlayScreen implements Screen {
         update(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        //game.batch.setProjectionMatrix(gameCamera.combined);
+        game.batch.setProjectionMatrix(gameCamera.combined);
+        //player.batch.setProjectionMatrix(gameCamera.combined);
+
 
         Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -107,22 +121,18 @@ public class PlayScreen implements Screen {
         box2dRenderer.render(world, gameCamera.combined);
 
         //make camera follow player
-        //gameCamera.position.x = player.box2dBody.getPosition().x + 170;
-        //gameCamera.position.y = 370;
+        gameCamera.position.x = player.box2dBody.getPosition().x + 10;
+        gameCamera.position.y = 22;
 
-        gameCamera.position.x = player.box2dBody.getPosition().x;
-        gameCamera.position.y = player.box2dBody.getPosition().y;
-
-        if(player.box2dBody.getLinearVelocity().x <= 50f){
+        if(player.box2dBody.getLinearVelocity().x <= 10f){
             player.box2dBody.applyLinearImpulse(new Vector2(1f, 0), player.box2dBody.getWorldCenter(), true);
-
         }
 
-        player.batch.begin();
-        //player.batch.draw(player.currentFrame, 370, getPlayerPos().y*3 - (128*5));
-        player.batch.end();
+        game.batch.begin();
+        game.batch.draw(player.currentFrame,player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.1), 10, 10);
+        game.batch.end();
 
-        //System.out.println((int) getPlayerPos().x);
+        //System.out.println(player.getState());
 
     }
 
@@ -160,7 +170,8 @@ public class PlayScreen implements Screen {
     }
 
     public Vector2 getPlayerPos() {
-        Vector2 pos = new Vector2(player.box2dBody.getPosition().x, player.box2dBody.getPosition().y);
+        Vector2 pos = new Vector2((int) (player.box2dBody.getPosition().x * Semtb001IndividualAssignment.PPM / 32),
+                (int) (player.box2dBody.getPosition().y * Semtb001IndividualAssignment.PPM / 32));
         return pos;
     }
 

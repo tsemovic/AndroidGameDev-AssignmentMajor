@@ -63,6 +63,8 @@ public class PlayScreen implements Screen {
     private Player player;
     private Queue<Slime> slimes;
 
+    private boolean alreadyPaused;
+
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
         game = semtb001IndividualAssignment;
         gameCamera = new OrthographicCamera();
@@ -97,7 +99,7 @@ public class PlayScreen implements Screen {
         inputMultiplexer.addProcessor(paused.stage);
         inputMultiplexer.addProcessor(hud.stage);
 
-
+        alreadyPaused = false;
     }
 
     @Override
@@ -139,8 +141,15 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
 
         if (isPaused) {
-            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
-            paused.stage.draw();
+            //checks if the game is already paused so that the stage doesn't keep being drawn
+            //(runs once only when the game is paused
+            if(!alreadyPaused) {
+                game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
+                paused.stage.draw();
+                alreadyPaused = true;
+            }
+
+        //If the game is not paused
         } else {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             update(delta);
@@ -271,6 +280,11 @@ public class PlayScreen implements Screen {
     }
 
     public void setPaused(boolean value) {
+
+        //reset the 'already paused' boolean
+        if(value  == true){
+            alreadyPaused = false;
+        }
         isPaused = value;
     }
 }

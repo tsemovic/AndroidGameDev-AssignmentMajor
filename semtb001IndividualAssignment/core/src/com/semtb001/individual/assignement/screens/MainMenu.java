@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -29,24 +31,25 @@ import java.util.logging.Level;
 
 public class MainMenu implements Screen {
 
-    public Texture background;
+    private MainMenu menu = this;
     public Semtb001IndividualAssignment game;
     private SpriteBatch batch;
     protected Stage stage;
     private Viewport viewport;
-
     private OrthographicCamera camera;
-    private Label play;
-    private Label sandbox;
-    private Label highScores;
 
-    private Label blank;
+    private BitmapFont buttonFont;
+    private Label title;
+    private Label play;
+    private boolean playActive;
+    private Label exit;
+    private boolean exitActive;
 
     private Sprite backgroundSprite;
 
-    private MainMenu menu = this;
 
-    public MainMenu(){
+    public MainMenu(Semtb001IndividualAssignment game) {
+        this.game = game;
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
@@ -70,35 +73,98 @@ public class MainMenu implements Screen {
         //Set alignment of contents in the table.
         mainTable.center();
 
-        //Create buttons
-        Label.LabelStyle style1 = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
-        play = new Label("PLAY", style1);
-        play.setColor(Color.WHITE);
+        //https://github.com/libgdx/libgdx/wiki/Gdx-freetype
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/poxel.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        sandbox = new Label("SANDBOX MODE", style1);
-        sandbox.setColor(Color.WHITE);
+        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 4);
+        BitmapFont titleFont = generator.generateFont(parameter);
 
-        highScores = new Label("HIGHSCORES", style1);
-        highScores.setColor(Color.WHITE);
+        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
+        buttonFont = generator.generateFont(parameter);
+        generator.dispose();
 
-        blank = new Label("", style1);
+        Label.LabelStyle titleTextStyle = new Label.LabelStyle(titleFont, Color.WHITE);
+
+        Label.LabelStyle buttonTextStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
+
+        title = new Label("GAME TITLE", titleTextStyle);
+        play = new Label("PLAY", buttonTextStyle);
+        exit = new Label("EXIT", buttonTextStyle);
+
+        mainTable.add(title).pad(Semtb001IndividualAssignment.PPM / 2);
+        mainTable.row();
+        mainTable.add(play).pad(Semtb001IndividualAssignment.PPM / 2);
+        mainTable.row();
+        mainTable.add(exit).pad(Semtb001IndividualAssignment.PPM / 2);
+
 
         //sprite for background image
-        Texture backgroundTexture = new Texture("background.PNG");
-        backgroundSprite =new Sprite(backgroundTexture);
+        Texture backgroundTexture = new Texture("gui/mainMenuBackground.png");
+        backgroundSprite = new Sprite(backgroundTexture);
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
         backgroundSprite.setAlpha(400);
 
-        mainTable.add(play);
-        mainTable.row();
-        mainTable.add(blank);
-        mainTable.row();
-        mainTable.add(sandbox);
-        mainTable.row();
-        mainTable.add(blank);
-        mainTable.row();
-        mainTable.add(highScores);
+
+        play.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                play.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                playActive = true;
+                return true;
+            }
+
+            //allow the user to drag off the button to not activate a click
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                if (x > 0 && x < play.getWidth() && y > 0 && y < play.getHeight()) {
+                    play.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    playActive = true;
+                } else {
+                    play.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    playActive = false;
+                }
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (playActive) {
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game));
+                }
+                play.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+            }
+        });
+
+        exit.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                exit.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                exitActive = true;
+                return true;
+            }
+
+            //allow the user to drag off the button to not activate a click
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                if (x > 0 && x < exit.getWidth() && y > 0 && y < exit.getHeight()) {
+                    exit.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    exitActive = true;
+                } else {
+                    exit.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    exitActive = false;
+                }
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (exitActive) {
+                    Gdx.app.exit();
+                    System.exit(0);
+                }
+                exit.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+            }
+        });
 
         stage.addActor(mainTable);
 

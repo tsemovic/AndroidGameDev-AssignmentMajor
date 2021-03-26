@@ -63,8 +63,6 @@ public class PlayScreen implements Screen {
     private Player player;
     private Queue<Slime> slimes;
 
-    private boolean alreadyPaused;
-
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
         game = semtb001IndividualAssignment;
         gameCamera = new OrthographicCamera();
@@ -95,11 +93,9 @@ public class PlayScreen implements Screen {
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
         hud = new Hud(game.batch, this);
-        paused = new Paused(game.batch, this);
+        paused = new Paused(game.batch, game, this);
         inputMultiplexer.addProcessor(paused.stage);
         inputMultiplexer.addProcessor(hud.stage);
-
-        alreadyPaused = false;
     }
 
     @Override
@@ -110,13 +106,13 @@ public class PlayScreen implements Screen {
     public void inputHandler(float delta) {
 
         //if the screen is touched (excluding the pause button)
-        if (Gdx.input.isTouched() && !hud.pausedPressed) {
+        if (Gdx.input.isTouched() && !hud.pausedPressed && !isPaused) {
 
             //if the top half of the screen is touched: player jump
             if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
                 player.jump();
 
-            //if the bottom half of the screen is touched: player slide
+                //if the bottom half of the screen is touched: player slide
             } else {
                 player.slide();
             }
@@ -140,40 +136,51 @@ public class PlayScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        //clear the screen
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //if the game is paused, draw the pause menu
         if (isPaused) {
-            //checks if the game is already paused so that the stage doesn't keep being drawn
-            //(runs once only when the game is paused
-            if(!alreadyPaused) {
-                game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
-                paused.stage.draw();
-                alreadyPaused = true;
-            }
+            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
+            paused.stage.draw();
+            delta = 0;
 
-        //If the game is not paused
-        } else {
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-            update(delta);
-
-            game.batch.setProjectionMatrix(gameCamera.combined);
-            Gdx.input.setInputProcessor(inputMultiplexer);
-            renderer.render();
-            box2dRenderer.render(world, gameCamera.combined);
-
-            //draw player and enemy animations
-            game.batch.begin();
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
-
-            for (Slime s : slimes) {
-                s.update(delta);
-                game.batch.draw(s.currentFrame, s.box2dBody.getPosition().x - 1, (float) (s.box2dBody.getPosition().y - 1), 5, 5);
-
-            }
-            game.batch.end();
-
-            //draw the heads up display
-            game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-            hud.stage.draw();
         }
+
+        //if the game is not paused, update the game
+        if(!isPaused) {
+            update(delta);
+        }
+
+        game.batch.setProjectionMatrix(gameCamera.combined);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+        renderer.render();
+        box2dRenderer.render(world, gameCamera.combined);
+
+        //begin the sprite batch for drawing everything
+        game.batch.begin();
+
+        //draw player animation frames
+        game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
+
+        //draw slime animation frames
+        for (Slime s : slimes) {
+            s.update(delta);
+            game.batch.draw(s.currentFrame, s.box2dBody.getPosition().x - 1, (float) (s.box2dBody.getPosition().y - 1), 5, 5);
+        }
+
+        //draw transparent background when the game is paused
+        if (isPaused) {
+            paused.getBackgroundSprite().draw(game.batch);
+        }
+
+        //end the sprite batch for drawing everything
+        game.batch.end();
+
+        //draw the heads up display
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+
     }
 
     private void moveGameCamera() {
@@ -280,11 +287,7 @@ public class PlayScreen implements Screen {
     }
 
     public void setPaused(boolean value) {
-
-        //reset the 'already paused' boolean
-        if(value  == true){
-            alreadyPaused = false;
-        }
         isPaused = value;
     }
+
 }

@@ -155,9 +155,9 @@ public class Player extends Sprite {
         getState(delta);
         TextureRegion returnRegion = null;
 
-        if(currentState == State.FAIL){
+        if (currentState == State.FAIL) {
             returnRegion = (TextureRegion) fail.getKeyFrame(stateTimer, false);
-        }else if (currentState == State.JUMP_START) {
+        } else if (currentState == State.JUMP_START) {
             returnRegion = (TextureRegion) jumpStart.getKeyFrame(stateTimer, false);
         } else if (currentState == State.JUMP_END) {
             returnRegion = (TextureRegion) jumpEnd.getKeyFrame(stateTimer, false);
@@ -211,20 +211,28 @@ public class Player extends Sprite {
         }
     }
 
-    public void updateBodyAndFixture(){
+    public void updateBodyAndFixture() {
 
         //if currently sliding and previously wasn't (reduce box height to slide under enemies)
-        if((currentState == State.SLIDE_START || currentState == State.SLIDE_END) &&
-                (previousState != State.SLIDE_START && previousState != State.SLIDE_END)){
+        if ((currentState == State.SLIDE_START || currentState == State.SLIDE_END) &&
+                (previousState != State.SLIDE_START && previousState != State.SLIDE_END)) {
             shape = new PolygonShape();
-            shape.setAsBox(1, (float) 1);
+            shape.setAsBox(1, (float) 0.8);
             fixtureDef.shape = shape;
             box2dBody.getFixtureList().clear();
             box2dBody.createFixture(fixtureDef).setUserData(this);
 
-        //if currently running and was previously sliding (return to normal box height)
-        }else if((currentState == State.RUN || currentState == State.JUMP_START || currentState == State.JUMP_END) &&
-                (previousState == State.SLIDE_START || previousState == State.SLIDE_END)){
+            //if currently running and was previously sliding or jumping (return to normal box height)
+        } else if ((currentState == State.JUMP_START || currentState == State.JUMP_END) &&
+                (previousState != State.JUMP_START && previousState != State.JUMP_END)) {
+            shape = new PolygonShape();
+            shape.setAsBox(1, (float) 1.3);
+            fixtureDef.shape = shape;
+            box2dBody.getFixtureList().clear();
+            box2dBody.createFixture(fixtureDef).setUserData(this);
+
+        } else if ((currentState == State.RUN) &&
+                (previousState == State.SLIDE_START || previousState == State.SLIDE_END || previousState == State.JUMP_START || previousState == State.JUMP_END)) {
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 2.8);
             fixtureDef.shape = shape;
@@ -248,11 +256,11 @@ public class Player extends Sprite {
         }
     }
 
-    public State getState(){
+    public State getState() {
         return currentState;
     }
 
-    public FixtureDef getFixtureDef(){
+    public FixtureDef getFixtureDef() {
         return fixtureDef;
     }
 

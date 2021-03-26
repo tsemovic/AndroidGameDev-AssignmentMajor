@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.semtb001.individual.assignement.sprites.Player;
-import com.semtb001.individual.assignement.sprites.Slime;
+import com.semtb001.individual.assignement.sprites.GroundEnemy;
 
 
 public class WorldContactListener implements ContactListener {
@@ -23,7 +23,7 @@ public class WorldContactListener implements ContactListener {
         Fixture fixB = contact.getFixtureB();
 
         if(fixA.getUserData() instanceof Player){
-            if(fixB.getUserData() instanceof Slime){
+            if(fixB.getUserData() instanceof GroundEnemy){
                 System.out.println("hit slime");
                 ((Player) fixA.getUserData()).playerIsDead = true;
             }

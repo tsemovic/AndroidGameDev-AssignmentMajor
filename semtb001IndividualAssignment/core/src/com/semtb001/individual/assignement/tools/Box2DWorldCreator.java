@@ -32,7 +32,7 @@ public class Box2DWorldCreator {
     private Body body;
     private PlayScreen screen;
 
-    private Queue<Vector2> slimePositions;
+    private Queue<Vector2> groundEnemyPositions;
 
     public Box2DWorldCreator(PlayScreen playScreen) {
         world = playScreen.getWorld();
@@ -43,7 +43,7 @@ public class Box2DWorldCreator {
         shape = new PolygonShape();
         fixtureDef = new FixtureDef();
 
-        slimePositions = new LinkedList<Vector2>();
+        groundEnemyPositions = new LinkedList<Vector2>();
 
         //create map ground
         for (MapObject object : map.getLayers().get("groundObject").getObjects().getByType(RectangleMapObject.class)) {
@@ -78,12 +78,12 @@ public class Box2DWorldCreator {
         //get enemies
         for (MapObject object : map.getLayers().get("slimePositions").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            slimePositions.offer(new Vector2(rect.x, rect.y));
+            groundEnemyPositions.offer(new Vector2(rect.x, rect.y));
         }
     }
 
-    public Queue<Vector2> getSlimePositions(){
-        return slimePositions;
+    public Queue<Vector2> getGroundEnemyPositions(){
+        return groundEnemyPositions;
     }
 
 }

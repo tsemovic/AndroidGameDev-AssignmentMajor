@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 
-public class Slime extends Sprite{
+public class GroundEnemy extends Sprite{
 
     private World world;
     private PlayScreen playScreen;
@@ -30,7 +30,7 @@ public class Slime extends Sprite{
 
     public TextureRegion currentFrame;
 
-    public Slime(World world, PlayScreen playScreen, Vector2 pos) {
+    public GroundEnemy(World world, PlayScreen playScreen, Vector2 pos) {
         this.world = world;
         this.playScreen = playScreen;
         this.pos = pos;

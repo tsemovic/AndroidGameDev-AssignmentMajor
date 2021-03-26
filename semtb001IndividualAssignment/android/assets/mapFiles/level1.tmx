@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="9" nextobjectid="13">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="9" nextobjectid="19">
  <tileset firstgid="1" source="buildings_spritesheet.tsx"/>
  <tileset firstgid="99" source="tiles_spritesheet.tsx"/>
  <layer id="2" name="groundTiles" width="250" height="20">
@@ -30,10 +30,11 @@
   <object id="4" x="16660" y="842" width="68" height="66"/>
  </objectgroup>
  <objectgroup id="8" name="slimePositions">
-  <object id="8" x="16206" y="638" width="104" height="94"/>
+  <object id="17" x="4648" y="632" width="132" height="92"/>
+  <object id="18" x="6388" y="576" width="188" height="116"/>
  </objectgroup>
  <objectgroup id="3" name="groundObject">
   <object id="1" x="-12" y="920" width="3509.33" height="492"/>
-  <object id="12" x="3781.34" y="919.333" width="3509.33" height="492"/>
+  <object id="12" x="3781.34" y="919.333" width="13781.3" height="492"/>
  </objectgroup>
 </map>

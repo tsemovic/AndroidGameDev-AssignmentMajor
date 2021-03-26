@@ -1,7 +1,6 @@
 package com.semtb001.individual.assignement.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,12 +11,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.individual.assignement.scenes.GameOver;
@@ -25,14 +20,11 @@ import com.semtb001.individual.assignement.scenes.Hud;
 import com.semtb001.individual.assignement.scenes.Paused;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.sprites.Slime;
+import com.semtb001.individual.assignement.sprites.GroundEnemy;
 import com.semtb001.individual.assignement.tools.Box2DWorldCreator;
 import com.semtb001.individual.assignement.tools.WorldContactListener;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class PlayScreen implements Screen {
@@ -62,7 +54,7 @@ public class PlayScreen implements Screen {
     private GameOver gameOver;
 
     private Player player;
-    private Queue<Slime> slimes;
+    private Queue<GroundEnemy> groundEnemies;
 
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
         game = semtb001IndividualAssignment;
@@ -84,12 +76,12 @@ public class PlayScreen implements Screen {
         box2dWorldCreator = new Box2DWorldCreator(this);
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
-        textureAtlas = new TextureAtlas("texturepack/playerAndSlime.pack");
+        textureAtlas = new TextureAtlas("texturepack/playerAndEnemy.pack");
 
         player = new Player(world, this);
         player.box2dBody.applyLinearImpulse(new Vector2(15f, 0), player.box2dBody.getWorldCenter(), true);
 
-        slimes = new LinkedList<Slime>();
+        groundEnemies = new LinkedList<GroundEnemy>();
 
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
@@ -171,8 +163,8 @@ public class PlayScreen implements Screen {
         //draw player animation frames
         game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
 
-        //draw slime animation frames
-        for (Slime s : slimes) {
+        //draw ground enemy animation frames
+        for (GroundEnemy s : groundEnemies) {
             s.update(delta);
             game.batch.draw(s.currentFrame, s.box2dBody.getPosition().x - 1, (float) (s.box2dBody.getPosition().y - 1), 5, 5);
         }
@@ -224,17 +216,17 @@ public class PlayScreen implements Screen {
     }
 
     public void handleEnemies(float delta) {
-        if (box2dWorldCreator.getSlimePositions().size() > 0) {
-            if (getPlayerPos().x + 50 > box2dWorldCreator.getSlimePositions().element().x / 32) {
-                Slime newSlime = new Slime(world, this, box2dWorldCreator.getSlimePositions().element());
-                slimes.offer(newSlime);
-                box2dWorldCreator.getSlimePositions().remove();
+        if (box2dWorldCreator.getGroundEnemyPositions().size() > 0) {
+            if (getPlayerPos().x + 50 > box2dWorldCreator.getGroundEnemyPositions().element().x / 32) {
+                GroundEnemy newGroundEnemy = new GroundEnemy(world, this, box2dWorldCreator.getGroundEnemyPositions().element());
+                groundEnemies.offer(newGroundEnemy);
+                box2dWorldCreator.getGroundEnemyPositions().remove();
             }
         }
-        if (slimes.size() > 0) {
-            if (slimes.element().box2dBody.getPosition().x < getPlayerPos().x - 10) {
-                world.destroyBody(slimes.element().box2dBody);
-                slimes.remove();
+        if (groundEnemies.size() > 0) {
+            if (groundEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 10) {
+                world.destroyBody(groundEnemies.element().box2dBody);
+                groundEnemies.remove();
             }
         }
     }

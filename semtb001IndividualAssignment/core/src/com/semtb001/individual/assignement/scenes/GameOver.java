@@ -52,7 +52,6 @@ public class GameOver implements Disposable {
         viewport = new FitViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
 
-
         skin = new Skin(Gdx.files.internal("gui/uiskin.json"));
 
         pausedTable = new Table();
@@ -78,7 +77,6 @@ public class GameOver implements Disposable {
         tryAgainText = new Label("TRY AGAIN", buttonTextStyle);
         exitText = new Label("EXIT", buttonTextStyle);
 
-
         pausedTable.add(pausedText).pad(Semtb001IndividualAssignment.PPM*2);
         pausedTable.row();
         pausedTable.add(tryAgainText);
@@ -92,15 +90,12 @@ public class GameOver implements Disposable {
 
         pausedTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap))));
 
-
         Texture backgroundTexture = new Texture("gui/pausedBackground.png");
         backgroundSprite =new Sprite(backgroundTexture);
         backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
         backgroundSprite.setAlpha(400);
 
-
         stage.addActor(pausedTable);
-
 
         tryAgainText.addListener(new InputListener() {
             @Override
@@ -126,7 +121,7 @@ public class GameOver implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if(tryAgainTextActive) {
-                    playScreen.setPaused(false);
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game));
                 }
                 tryAgainText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
             }
@@ -165,7 +160,6 @@ public class GameOver implements Disposable {
     public Sprite getBackgroundSprite(){
         return backgroundSprite;
     }
-
 
     @Override
     public void dispose() {

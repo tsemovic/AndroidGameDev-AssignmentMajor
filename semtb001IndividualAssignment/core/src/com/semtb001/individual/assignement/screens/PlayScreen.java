@@ -12,15 +12,27 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.semtb001.individual.assignement.scenes.Hud;
+import com.semtb001.individual.assignement.scenes.Paused;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.sprites.Slime;
 import com.semtb001.individual.assignement.tools.Box2DWorldCreator;
 import com.semtb001.individual.assignement.tools.WorldContactListener;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class PlayScreen implements Screen {
 
@@ -37,22 +49,27 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer box2dRenderer;
     private Box2DWorldCreator box2dWorldCreator;
 
+    private float timeCount;
+
+    private float worldEndPosition;
+
     public TextureAtlas textureAtlas;
-    private Player player;
     public SpriteBatch batch;
+    private boolean isPaused;
+
+    private Paused paused;
+    private Hud hud;
+
+    private Player player;
+    private Queue<Slime> slimes;
 
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
         game = semtb001IndividualAssignment;
         gameCamera = new OrthographicCamera();
         batch = semtb001IndividualAssignment.batch;
-        gameCamera.setToOrtho(false, ( Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM);
-        //gameViewPort = new FitViewport((Gdx.graphics.getWidth() / Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Gdx.graphics.getHeight() / Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM, gameCamera);
 
         gameCamera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
-        //gameCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
         gameViewPort = new FitViewport((Gdx.graphics.getWidth() / Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Gdx.graphics.getHeight() / Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM, gameCamera);
-
 
         inputMultiplexer = new InputMultiplexer();
         mapLoader = new TmxMapLoader();
@@ -69,8 +86,16 @@ public class PlayScreen implements Screen {
         textureAtlas = new TextureAtlas("texturepack/playerAndSlime.pack");
 
         player = new Player(world, this);
+        player.box2dBody.applyLinearImpulse(new Vector2(15f, 0), player.box2dBody.getWorldCenter(), true);
+
+        slimes = new LinkedList<Slime>();
 
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
+
+        hud = new Hud(game.batch, this);
+        paused = new Paused(game.batch, this);
+        inputMultiplexer.addProcessor(paused.stage);
+        inputMultiplexer.addProcessor(hud.stage);
 
 
     }
@@ -80,60 +105,118 @@ public class PlayScreen implements Screen {
 
     }
 
-    public void inputHandler(float delta){
-        if (Gdx.input.isTouched()) {
-            if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2){
+    public void inputHandler(float delta) {
+
+        //if the screen is touched (excluding the pause button)
+        if (Gdx.input.isTouched() && !hud.pausedPressed) {
+
+            //if the top half of the screen is touched: player jump
+            if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
                 player.jump();
+
+            //if the bottom half of the screen is touched: player slide
             } else {
                 player.slide();
             }
         }
-//        if(Gdx.input.isTouched()){
-//            gameCamera.zoom += 0.1f;
-//        }
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         inputHandler(delta);
         world.step(1 / 60f, 6, 2);
 
         gameCamera.update();
         player.update(delta);
+        moveGameCamera();
+        movePlayer();
+        checkIfDead(delta);
+        handleEnemies(delta);
 
         renderer.setView(gameCamera);
-
     }
 
     @Override
     public void render(float delta) {
-        //separate our update logic from render
-        update(delta);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        game.batch.setProjectionMatrix(gameCamera.combined);
-        //player.batch.setProjectionMatrix(gameCamera.combined);
+        if (isPaused) {
+            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
+            paused.stage.draw();
+        } else {
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            update(delta);
 
+            game.batch.setProjectionMatrix(gameCamera.combined);
+            Gdx.input.setInputProcessor(inputMultiplexer);
+            renderer.render();
+            box2dRenderer.render(world, gameCamera.combined);
 
-        Gdx.input.setInputProcessor(inputMultiplexer);
+            //draw player and enemy animations
+            game.batch.begin();
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
 
-        renderer.render();
+            for (Slime s : slimes) {
+                s.update(delta);
+                game.batch.draw(s.currentFrame, s.box2dBody.getPosition().x - 1, (float) (s.box2dBody.getPosition().y - 1), 5, 5);
 
-        box2dRenderer.render(world, gameCamera.combined);
+            }
+            game.batch.end();
 
-        //make camera follow player
-        gameCamera.position.x = player.box2dBody.getPosition().x + 10;
-        gameCamera.position.y = 22;
-
-        if(player.box2dBody.getLinearVelocity().x <= 10f){
-            player.box2dBody.applyLinearImpulse(new Vector2(1f, 0), player.box2dBody.getWorldCenter(), true);
+            //draw the heads up display
+            game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+            hud.stage.draw();
         }
+    }
 
-        game.batch.begin();
-        game.batch.draw(player.currentFrame,player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.1), 10, 10);
-        game.batch.end();
+    private void moveGameCamera() {
+        if (!isPaused) {
+            gameCamera.position.y = 22;
+            if (player.box2dBody.getPosition().x <= worldEndPosition) {
+                gameCamera.position.x = player.box2dBody.getPosition().x + 8;
+            }
+        }
+    }
 
-        //System.out.println(player.getState());
+    private void movePlayer() {
+        if (!isPaused) {
+            if (player.box2dBody.getLinearVelocity().x <= 15f && player.playerIsDead == false) {
+                player.box2dBody.applyLinearImpulse(new Vector2(1f, 0), player.box2dBody.getWorldCenter(), true);
+            }
+        } else {
+            player.box2dBody.setLinearVelocity(new Vector2(0, 0));
+        }
+    }
 
+    private void checkIfDead(float delta) {
+        if (player.box2dBody.getLinearVelocity().x < 10) {
+            timeCount += delta;
+            if (timeCount >= 0.4) {
+                timeCount = 0;
+                player.playerIsDead = true;
+            }
+        }
+    }
+
+    public void handleEnemies(float delta) {
+        if (box2dWorldCreator.getSlimePositions().size() > 0) {
+            if (getPlayerPos().x + 50 > box2dWorldCreator.getSlimePositions().element().x / 32) {
+                Slime newSlime = new Slime(world, this, box2dWorldCreator.getSlimePositions().element());
+                slimes.offer(newSlime);
+                box2dWorldCreator.getSlimePositions().remove();
+            }
+        }
+        if (slimes.size() > 0) {
+            if (slimes.element().box2dBody.getPosition().x < getPlayerPos().x - 10) {
+                world.destroyBody(slimes.element().box2dBody);
+                slimes.remove();
+            }
+        }
+    }
+
+    private void checkIfPaused() {
+        if (isPaused) {
+            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
+            paused.stage.draw();
+        }
     }
 
     @Override
@@ -161,11 +244,11 @@ public class PlayScreen implements Screen {
 
     }
 
-    public TiledMap getMap(){
+    public TiledMap getMap() {
         return map;
     }
 
-    public World getWorld(){
+    public World getWorld() {
         return world;
     }
 
@@ -177,5 +260,17 @@ public class PlayScreen implements Screen {
 
     public TextureAtlas getTextureAtlas() {
         return textureAtlas;
+    }
+
+    public float getWorldEndPosition() {
+        return worldEndPosition;
+    }
+
+    public void setWorldEndPosition(float x) {
+        worldEndPosition = x / Semtb001IndividualAssignment.PPM;
+    }
+
+    public void setPaused(boolean value) {
+        isPaused = value;
     }
 }

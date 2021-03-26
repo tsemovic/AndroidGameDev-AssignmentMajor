@@ -25,6 +25,7 @@ public class WorldContactListener implements ContactListener {
         if(fixA.getUserData() instanceof Player){
             if(fixB.getUserData() instanceof Slime){
                 System.out.println("hit slime");
+                ((Player) fixA.getUserData()).playerIsDead = true;
 
             }
         }

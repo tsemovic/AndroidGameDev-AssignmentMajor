@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -19,33 +20,31 @@ public class Slime extends Sprite{
     private World world;
     private PlayScreen playScreen;
 
-    private enum State {RUN, JUMP, SLIDE, FAIL};
-    private State currentState;
     private float stateTimer;
 
     public Body box2dBody;
     public SpriteBatch batch;
 
-    private Animation running;
+    private Animation slimeSliding;
+    private Vector2 pos;
+
     public TextureRegion currentFrame;
 
-
-
-    public Slime(World world, PlayScreen playScreen) {
+    public Slime(World world, PlayScreen playScreen, Vector2 pos) {
         this.world = world;
         this.playScreen = playScreen;
+        this.pos = pos;
         stateTimer = 0;
-        currentState = State.RUN;
         batch = new SpriteBatch();
 
         definePlayer();
 
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
         //get run animation frames and add them to marioRun Animation
-        for(int i = 1; i < 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("running"),  i* 256, 0, 256, 256));
+        for(int i = 0; i < 2; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("slime"),  i* 160, 0, 160, 80));
         }
-        running = new Animation(0.1f, tempFrames);
+        slimeSliding = new Animation(0.1f, tempFrames);
 
         tempFrames.clear();
 
@@ -58,54 +57,33 @@ public class Slime extends Sprite{
         FixtureDef fixtureDef = new FixtureDef();
 
         fixtureDef.filter.categoryBits = Player.ENEMY;
-        //fixtureDef.filter.maskBits = Player.PLAYER | Player.WORLD;
+        fixtureDef.filter.maskBits = Player.PLAYER | Player.WORLD;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(160, 250);
+        bodyDef.position.set(pos.x / 32, pos.y / 32);
 
         box2dBody = world.createBody(bodyDef);
 
-        shape.setAsBox(40, 40);
-        //CircleShape cir = new CircleShape();
-        //cir.setRadius(15);
-        //shape.setAsBox(5/IslandSurvival.PPM, 5/IslandSurvival.PPM);
-        //shape.setAsBox((rect.getWidth() / 2), (rect.getHeight() / 2));
-        //fixtureDef.shape = cir;
+        shape.setAsBox(1, 1);
+
         fixtureDef.shape = shape;
+
         box2dBody.createFixture(fixtureDef).setUserData(this);
 
     }
 
     public void update(float delta){
         stateTimer += delta;
-        //setRegion(getFramesFromAnimation(delta));
-        currentFrame = (TextureRegion)running.getKeyFrame(stateTimer, true);
+        currentFrame = (TextureRegion)slimeSliding.getKeyFrame(stateTimer, true);
 
-        //setRegion((TextureRegion) running.getKeyFrame(stateTimer, true));
+        if (box2dBody.getLinearVelocity().x <= 1f) {
+            box2dBody.applyLinearImpulse(new Vector2(-0.5f, 0), box2dBody.getWorldCenter(), true);
+        }
     }
 
     private TextureRegion getFramesFromAnimation(float delta) {
         TextureRegion returnRegion = null;
-
-        switch(currentState){
-            case RUN:
-                returnRegion = (TextureRegion) running.getKeyFrame(stateTimer, true);
-        }
-
-
-
         return returnRegion;
     }
 
-    public void jump(){
-            box2dBody.applyLinearImpulse(new Vector2(0, 4f), box2dBody.getWorldCenter(), true);
-            //currentState = State.JUMPING;
-
-    }
-
-    public void slide(){
-        box2dBody.applyLinearImpulse(new Vector2(0, 4f), box2dBody.getWorldCenter(), true);
-            //currentState = State.JUMPING;
-
-    }
 }

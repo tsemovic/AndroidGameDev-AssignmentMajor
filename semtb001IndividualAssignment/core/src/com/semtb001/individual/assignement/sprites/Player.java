@@ -30,15 +30,13 @@ public class Player extends Sprite {
 
     private enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
 
-    ;
-    private boolean playerIsDead;
+    public boolean playerIsDead;
     private State currentState;
     private State previousState;
 
     private float stateTimer;
     private double slideStartTimer;
     private double slideEndTimer;
-
 
     public Body box2dBody;
     public SpriteBatch batch;
@@ -48,6 +46,8 @@ public class Player extends Sprite {
     private Animation jumpEnd;
     private Animation slideStart;
     private Animation slideEnd;
+    private Animation fail;
+
 
     public TextureRegion currentFrame;
 
@@ -94,18 +94,25 @@ public class Player extends Sprite {
 
         tempFrames.clear();
 
-        //slide
+        //slide start
         for (int i = 0; i <= 1; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sliding start"), i * 256, 0, 256, 256));
         }
         slideStart = new Animation(0.3f, tempFrames);
         tempFrames.clear();
 
+        //slide end
         for (int i = 0; i <= 1; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sliding end"), 0, 0, 256, 256));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sliding end"), i * 256, 0, 256, 256));
         }
         slideEnd = new Animation(0.3f, tempFrames);
+        tempFrames.clear();
 
+        //fail
+        for (int i = 0; i <= 2; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("deading"), i * 256, 0, 256, 256));
+        }
+        fail = new Animation(0.1f, tempFrames);
         tempFrames.clear();
 
     }
@@ -117,14 +124,14 @@ public class Player extends Sprite {
         fixtureDef = new FixtureDef();
 
         fixtureDef.filter.categoryBits = Player.PLAYER;
-        fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD;
+        fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(10, 18);
 
         box2dBody = world.createBody(bodyDef);
 
-        shape.setAsBox(1, 1);
+        shape.setAsBox(1, (float) 2.8);
         //CircleShape cir = new CircleShape();
         //cir.setRadius(15);
         //shape.setAsBox(5/IslandSurvival.PPM, 5/IslandSurvival.PPM);
@@ -135,15 +142,22 @@ public class Player extends Sprite {
     }
 
     public void update(float delta) {
+        updateBodyAndFixture();
         currentFrame = getFramesFromAnimation(delta);
-        System.out.println(slideStartTimer);
     }
 
     private TextureRegion getFramesFromAnimation(float delta) {
+
+        //store the current state as 'previous state'
+        previousState = currentState;
+
+        //update current state
         getState(delta);
         TextureRegion returnRegion = null;
 
-        if (currentState == State.JUMP_START) {
+        if(currentState == State.FAIL){
+            returnRegion = (TextureRegion) fail.getKeyFrame(stateTimer, false);
+        }else if (currentState == State.JUMP_START) {
             returnRegion = (TextureRegion) jumpStart.getKeyFrame(stateTimer, false);
         } else if (currentState == State.JUMP_END) {
             returnRegion = (TextureRegion) jumpEnd.getKeyFrame(stateTimer, false);
@@ -160,7 +174,6 @@ public class Player extends Sprite {
         } else {
             stateTimer += delta;
         }
-        previousState = currentState;
 
         return returnRegion;
     }
@@ -198,19 +211,49 @@ public class Player extends Sprite {
         }
     }
 
+    public void updateBodyAndFixture(){
+
+        //if currently sliding and previously wasn't (reduce box height to slide under enemies)
+        if((currentState == State.SLIDE_START || currentState == State.SLIDE_END) &&
+                (previousState != State.SLIDE_START && previousState != State.SLIDE_END)){
+            shape = new PolygonShape();
+            shape.setAsBox(1, (float) 1);
+            fixtureDef.shape = shape;
+            box2dBody.getFixtureList().clear();
+            box2dBody.createFixture(fixtureDef).setUserData(this);
+
+        //if currently running and was previously sliding (return to normal box height)
+        }else if((currentState == State.RUN || currentState == State.JUMP_START || currentState == State.JUMP_END) &&
+                (previousState == State.SLIDE_START || previousState == State.SLIDE_END)){
+            shape = new PolygonShape();
+            shape.setAsBox(1, (float) 2.8);
+            fixtureDef.shape = shape;
+            box2dBody.getFixtureList().clear();
+            box2dBody.createFixture(fixtureDef).setUserData(this);
+        }
+    }
 
     public void jump() {
-        if (currentState != State.JUMP_START && currentState != State.JUMP_END && currentState != State.SLIDE_START && currentState != State.SLIDE_END) {
+        if (currentState == State.RUN) {
             box2dBody.applyLinearImpulse(new Vector2(0, 40f), box2dBody.getWorldCenter(), true);
             currentState = State.JUMP_START;
         }
     }
 
     public void slide() {
-        if (currentState != State.JUMP_START && currentState != State.JUMP_END && currentState != State.SLIDE_START && currentState != State.SLIDE_END) {
+        if (currentState == State.RUN) {
             currentState = State.SLIDE_START;
             slideStartTimer = 1.3;
             slideEndTimer = 0.1;
         }
     }
+
+    public State getState(){
+        return currentState;
+    }
+
+    public FixtureDef getFixtureDef(){
+        return fixtureDef;
+    }
+
 }

@@ -55,6 +55,8 @@ public class PlayScreen implements Screen {
 
     private Player player;
     private Queue<GroundEnemy> groundEnemies;
+    private Queue<GroundEnemy> flyingEnemies;
+
 
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
         game = semtb001IndividualAssignment;
@@ -82,6 +84,7 @@ public class PlayScreen implements Screen {
         player.box2dBody.applyLinearImpulse(new Vector2(15f, 0), player.box2dBody.getWorldCenter(), true);
 
         groundEnemies = new LinkedList<GroundEnemy>();
+        flyingEnemies = new LinkedList<GroundEnemy>();
 
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 

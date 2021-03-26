@@ -28,9 +28,12 @@ public class Player extends Sprite {
     public static final int WORLD = 3;
     public static final int ENEMY = 3;
 
-    private enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
+    public enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
 
     public boolean playerIsDead;
+    public float deadTimer;
+
+    public boolean gameOver;
     private State currentState;
     private State previousState;
 
@@ -62,6 +65,9 @@ public class Player extends Sprite {
         stateTimer = 0;
         slideStartTimer = 0;
         slideEndTimer = 0;
+
+        deadTimer = 0;
+        gameOver = false;
 
         currentState = State.RUN;
         previousState = State.RUN;
@@ -144,6 +150,13 @@ public class Player extends Sprite {
     public void update(float delta) {
         updateBodyAndFixture();
         currentFrame = getFramesFromAnimation(delta);
+
+        if(playerIsDead){
+            deadTimer += delta;
+            if(deadTimer > 2){
+                gameOver = true;
+            }
+        }
     }
 
     private TextureRegion getFramesFromAnimation(float delta) {
@@ -262,6 +275,18 @@ public class Player extends Sprite {
 
     public FixtureDef getFixtureDef() {
         return fixtureDef;
+    }
+
+    public void setCurrentState(State state){
+        currentState = state;
+    }
+
+    public boolean getGameOver(){
+        return gameOver;
+    }
+
+    public boolean getPlayerIsDead(){
+        return playerIsDead;
     }
 
 }

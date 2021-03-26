@@ -28,10 +28,9 @@ public class Hud implements Disposable {
     private Viewport viewport;
     private PlayScreen playScreen;
 
-    private Skin skin;
-    private float percentageComplete;
-
+    private Label pause;
     public boolean pausedPressed;
+    private BitmapFont pauseFont;
 
 
     public Hud(SpriteBatch spriteBatch, final PlayScreen playScreen) {
@@ -48,59 +47,48 @@ public class Hud implements Disposable {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
-        BitmapFont font1 = generator.generateFont(parameter);
+        pauseFont = generator.generateFont(parameter);
         generator.dispose();
 
-        BitmapFont f = new BitmapFont();
-        Label.LabelStyle pausedTextStyle = new Label.LabelStyle(font1, Color.WHITE);
-        Label l = new Label("ii", pausedTextStyle);
+        final Label.LabelStyle pausedTextStyle = new Label.LabelStyle(pauseFont, Color.WHITE);
+        pause = new Label("ii", pausedTextStyle);
 
-        skin = new Skin(Gdx.files.internal("gui/uiskin.json"));
-        final TextButton button = new TextButton("ii", skin, "default");
-//        button.setWidth(600f);
-//        button.setHeight(400f);
-        hudTable.add(button);
-        hudTable.add(l);
+        hudTable.add(pause).padRight(Semtb001IndividualAssignment.PPM * 2);
 
+        stage.addActor(hudTable);
 
-//        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
-//        progressBarStyle.background = skin.getDrawable("default");
-//
-//        ProgressBar progressBar = new ProgressBar(0,100,1f,false, progressBarStyle);
-//        progressBar.setSize(500, 50);
-//        hudTable.add(progressBar);
-
-        button.addListener(new InputListener() {
+        //pause label click listener
+        pause.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                setPausedPressed(true);
-                playScreen.setPaused(true);
+                pause.setStyle(new Label.LabelStyle(pauseFont, Color.GRAY));
+                pausedPressed = true;
                 return true;
+            }
+
+            //allow the user to drag off the button to not activate a click
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                if (x > 0 && x < pause.getWidth() && y > 0 && y < pause.getHeight()) {
+                    pause.setStyle(new Label.LabelStyle(pauseFont, Color.GRAY));
+                    pausedPressed = true;
+                } else {
+                    pause.setStyle(new Label.LabelStyle(pauseFont, Color.WHITE));
+                    pausedPressed = false;
+                }
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                setPausedPressed(false);
+                if (pausedPressed) {
+                    playScreen.setPaused(true);
+
+                }
+                pause.setStyle(new Label.LabelStyle(pauseFont, Color.WHITE));
             }
         });
 
-        stage.addActor(hudTable);
-
     }
-
-    public void update(float delta){
-        percentageComplete = (playScreen.getPlayerPos().x / playScreen.getWorldEndPosition()) * 100;
-
-    }
-
-    public boolean isPausedPressed() {
-        return pausedPressed;
-    }
-
-    public void setPausedPressed(boolean pausedPressed) {
-        this.pausedPressed = pausedPressed;
-    }
-
 
     @Override
     public void dispose() {

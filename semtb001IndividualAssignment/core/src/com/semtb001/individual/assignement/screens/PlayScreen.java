@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.semtb001.individual.assignement.scenes.GameOver;
 import com.semtb001.individual.assignement.scenes.Hud;
 import com.semtb001.individual.assignement.scenes.Paused;
 import com.semtb001.individual.assignement.sprites.Player;
@@ -50,7 +51,6 @@ public class PlayScreen implements Screen {
     private Box2DWorldCreator box2dWorldCreator;
 
     private float timeCount;
-
     private float worldEndPosition;
 
     public TextureAtlas textureAtlas;
@@ -59,6 +59,7 @@ public class PlayScreen implements Screen {
 
     private Paused paused;
     private Hud hud;
+    private GameOver gameOver;
 
     private Player player;
     private Queue<Slime> slimes;
@@ -93,9 +94,12 @@ public class PlayScreen implements Screen {
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
         hud = new Hud(game.batch, this);
+        gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
-        inputMultiplexer.addProcessor(paused.stage);
+
         inputMultiplexer.addProcessor(hud.stage);
+        inputMultiplexer.addProcessor(gameOver.stage);
+        inputMultiplexer.addProcessor(paused.stage);
     }
 
     @Override
@@ -144,11 +148,15 @@ public class PlayScreen implements Screen {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
             delta = 0;
-
+        }
+        if (player.getGameOver()) {
+            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
+            gameOver.stage.draw();
+            delta = 0;
         }
 
         //if the game is not paused, update the game
-        if(!isPaused) {
+        if(!isPaused && !player.getGameOver()) {
             update(delta);
         }
 
@@ -172,6 +180,9 @@ public class PlayScreen implements Screen {
         //draw transparent background when the game is paused
         if (isPaused) {
             paused.getBackgroundSprite().draw(game.batch);
+        }
+        if (player.getGameOver()) {
+            gameOver.getBackgroundSprite().draw(game.batch);
         }
 
         //end the sprite batch for drawing everything
@@ -225,13 +236,6 @@ public class PlayScreen implements Screen {
                 world.destroyBody(slimes.element().box2dBody);
                 slimes.remove();
             }
-        }
-    }
-
-    private void checkIfPaused() {
-        if (isPaused) {
-            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
-            paused.stage.draw();
         }
     }
 

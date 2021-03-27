@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.individual.assignement.scenes.GameOver;
 import com.semtb001.individual.assignement.scenes.Hud;
 import com.semtb001.individual.assignement.scenes.Paused;
+import com.semtb001.individual.assignement.sprites.FlyingEnemy;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.sprites.GroundEnemy;
@@ -55,7 +56,7 @@ public class PlayScreen implements Screen {
 
     private Player player;
     private Queue<GroundEnemy> groundEnemies;
-    private Queue<GroundEnemy> flyingEnemies;
+    private Queue<FlyingEnemy> flyingEnemies;
 
 
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
@@ -68,7 +69,7 @@ public class PlayScreen implements Screen {
 
         inputMultiplexer = new InputMultiplexer();
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("mapFiles/level1.tmx");
+        map = mapLoader.load("mapFiles/level2.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001IndividualAssignment.MPP);
 
@@ -84,7 +85,7 @@ public class PlayScreen implements Screen {
         player.box2dBody.applyLinearImpulse(new Vector2(15f, 0), player.box2dBody.getWorldCenter(), true);
 
         groundEnemies = new LinkedList<GroundEnemy>();
-        flyingEnemies = new LinkedList<GroundEnemy>();
+        flyingEnemies = new LinkedList<FlyingEnemy>();
 
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
@@ -151,7 +152,7 @@ public class PlayScreen implements Screen {
         }
 
         //if the game is not paused, update the game
-        if(!isPaused && !player.getGameOver()) {
+        if (!isPaused && !player.getGameOver()) {
             update(delta);
         }
 
@@ -163,14 +164,8 @@ public class PlayScreen implements Screen {
         //begin the sprite batch for drawing everything
         game.batch.begin();
 
-        //draw player animation frames
-        game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
-
-        //draw ground enemy animation frames
-        for (GroundEnemy s : groundEnemies) {
-            s.update(delta);
-            game.batch.draw(s.currentFrame, s.box2dBody.getPosition().x - 1, (float) (s.box2dBody.getPosition().y - 1), 5, 5);
-        }
+        drawPlayer();
+        drawEnemies(delta);
 
         //draw transparent background when the game is paused
         if (isPaused) {
@@ -201,7 +196,7 @@ public class PlayScreen implements Screen {
     private void movePlayer() {
         if (!isPaused) {
             if (player.box2dBody.getLinearVelocity().x <= 15f && player.playerIsDead == false) {
-                player.box2dBody.applyLinearImpulse(new Vector2(1f, 0), player.box2dBody.getWorldCenter(), true);
+                player.box2dBody.applyLinearImpulse(new Vector2(0.5f, 0), player.box2dBody.getWorldCenter(), true);
             }
         } else {
             player.box2dBody.setLinearVelocity(new Vector2(0, 0));
@@ -209,16 +204,18 @@ public class PlayScreen implements Screen {
     }
 
     private void checkIfDead(float delta) {
-        if (player.box2dBody.getLinearVelocity().x < 10) {
-            timeCount += delta;
-            if (timeCount >= 0.4) {
-                timeCount = 0;
-                player.playerIsDead = true;
-            }
-        }
+//        if (player.box2dBody.getLinearVelocity().x < 10) {
+//            timeCount += delta;
+//            if (timeCount >= 0.4) {
+//                timeCount = 0;
+//                player.playerIsDead = true;
+//            }
+//        }
     }
 
     public void handleEnemies(float delta) {
+
+        //handle grounded enemies
         if (box2dWorldCreator.getGroundEnemyPositions().size() > 0) {
             if (getPlayerPos().x + 50 > box2dWorldCreator.getGroundEnemyPositions().element().x / 32) {
                 GroundEnemy newGroundEnemy = new GroundEnemy(world, this, box2dWorldCreator.getGroundEnemyPositions().element());
@@ -231,6 +228,47 @@ public class PlayScreen implements Screen {
                 world.destroyBody(groundEnemies.element().box2dBody);
                 groundEnemies.remove();
             }
+        }
+
+        //handle flying enemies
+        if (box2dWorldCreator.getFlyingEnemyPositions().size() > 0) {
+            if (getPlayerPos().x + 50 > box2dWorldCreator.getFlyingEnemyPositions().element().x / 32) {
+                FlyingEnemy newFlyingEnemy = new FlyingEnemy(world, this, box2dWorldCreator.getFlyingEnemyPositions().element());
+                flyingEnemies.offer(newFlyingEnemy);
+                box2dWorldCreator.getFlyingEnemyPositions().remove();
+            }
+        }
+        if (flyingEnemies.size() > 0) {
+            if (flyingEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 10) {
+                world.destroyBody(flyingEnemies.element().box2dBody);
+                flyingEnemies.remove();
+            }
+        }
+    }
+
+    public void drawEnemies(float delta) {
+        //draw ground enemy animation frames
+        for (GroundEnemy enemy : groundEnemies) {
+            enemy.update(delta);
+            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
+        }
+
+        for (FlyingEnemy enemy : flyingEnemies) {
+            enemy.update(delta);
+            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
+        }
+    }
+
+    public void drawPlayer() {
+        if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END || player.previousState == Player.State.JUMP_START || player.previousState == Player.State.JUMP_END)) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1), 10, 10);
+        } else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1), 10, 10);
+        } else if (player.getState() == Player.State.JUMP_START || player.getState() == Player.State.JUMP_END) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 2.2), 10, 10);
+        }else{
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
+
         }
     }
 

@@ -14,6 +14,7 @@ import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -33,6 +34,8 @@ public class Box2DWorldCreator {
     private PlayScreen screen;
 
     private Queue<Vector2> groundEnemyPositions;
+    private Queue<Vector2> flyingEnemyPositions;
+
 
     public Box2DWorldCreator(PlayScreen playScreen) {
         world = playScreen.getWorld();
@@ -44,6 +47,8 @@ public class Box2DWorldCreator {
         fixtureDef = new FixtureDef();
 
         groundEnemyPositions = new LinkedList<Vector2>();
+        flyingEnemyPositions = new LinkedList<Vector2>();
+
 
         //create map ground
         for (MapObject object : map.getLayers().get("groundObject").getObjects().getByType(RectangleMapObject.class)) {
@@ -75,15 +80,25 @@ public class Box2DWorldCreator {
             playScreen.setWorldEndPosition(rect.x);
         }
 
-        //get enemies
-        for (MapObject object : map.getLayers().get("slimePositions").getObjects().getByType(RectangleMapObject.class)) {
+        //get grounded enemies
+        for (MapObject object : map.getLayers().get("groundEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             groundEnemyPositions.offer(new Vector2(rect.x, rect.y));
         }
+
+        //get flying enemies
+        for (MapObject object : map.getLayers().get("flyingEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            flyingEnemyPositions.offer(new Vector2(rect.x, rect.y));
+        }
     }
 
-    public Queue<Vector2> getGroundEnemyPositions(){
+    public Queue<Vector2> getGroundEnemyPositions() {
         return groundEnemyPositions;
+    }
+
+    public Queue<Vector2> getFlyingEnemyPositions() {
+        return flyingEnemyPositions;
     }
 
 }

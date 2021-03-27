@@ -47,6 +47,10 @@ public class FlyingEnemy extends Sprite{
 
         tempFrames.clear();
 
+        box2dBody.setGravityScale(0f);
+        box2dBody.setLinearVelocity(new Vector2(-.1f, 0));
+
+
     }
 
     public void definePlayer(){

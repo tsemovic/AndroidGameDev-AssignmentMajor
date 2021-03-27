@@ -9,7 +9,7 @@
  </layer>
  <layer id="1" name="buildingsTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
+   eJzt08EJACAMBMH0X1cKs4MgSoLIzHO570UAAAAAAAAAAAAAv8mBBvTZ+WG1yYsGzOj4+ckOAAAAAAAAgPcswPwSYQ==
   </data>
  </layer>
  <layer id="6" name="objectTiles" width="250" height="20">

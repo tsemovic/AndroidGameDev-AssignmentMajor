@@ -35,7 +35,7 @@ public class Player extends Sprite {
 
     public boolean gameOver;
     private State currentState;
-    private State previousState;
+    public State previousState;
 
     private float stateTimer;
     private double slideStartTimer;
@@ -58,6 +58,9 @@ public class Player extends Sprite {
     private PolygonShape shape;
     private Rectangle rect;
     private BodyDef bodyDef;
+    private BodyDef newBodyDef;
+    Array<Body> bodies = new Array<Body>();
+
 
     public Player(World world, PlayScreen playScreen) {
         this.world = world;
@@ -121,6 +124,7 @@ public class Player extends Sprite {
         fail = new Animation(0.1f, tempFrames);
         tempFrames.clear();
 
+        box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
     }
 
     public void definePlayer() {
@@ -133,16 +137,12 @@ public class Player extends Sprite {
         fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(10, 18);
+        bodyDef.position.set(10, 16);
 
         box2dBody = world.createBody(bodyDef);
 
         shape.setAsBox(1, (float) 2.8);
-        //CircleShape cir = new CircleShape();
-        //cir.setRadius(15);
-        //shape.setAsBox(5/IslandSurvival.PPM, 5/IslandSurvival.PPM);
-        //shape.setAsBox((rect.getWidth() / 2), (rect.getHeight() / 2));
-        //fixtureDef.shape = cir;
+
         fixtureDef.shape = shape;
         box2dBody.createFixture(fixtureDef).setUserData(this);
     }
@@ -157,6 +157,7 @@ public class Player extends Sprite {
                 gameOver = true;
             }
         }
+
     }
 
     private TextureRegion getFramesFromAnimation(float delta) {
@@ -211,7 +212,6 @@ public class Player extends Sprite {
                         slideStartTimer = 0;
                         currentState = State.SLIDE_END;
                     }
-
                 } else if (currentState == State.SLIDE_END) {
                     if (slideEndTimer > 0) {
                         slideEndTimer -= delta;
@@ -229,29 +229,98 @@ public class Player extends Sprite {
         //if currently sliding and previously wasn't (reduce box height to slide under enemies)
         if ((currentState == State.SLIDE_START || currentState == State.SLIDE_END) &&
                 (previousState != State.SLIDE_START && previousState != State.SLIDE_END)) {
+
+            Vector2 currentPosition = box2dBody.getPosition();
+            world.destroyBody(box2dBody);
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.position.set(currentPosition);
+
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            box2dBody = world.createBody(bodyDef);
+
+            fixtureDef = new FixtureDef();
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 0.8);
+            fixtureDef.filter.categoryBits = Player.PLAYER;
+            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
             fixtureDef.shape = shape;
-            box2dBody.getFixtureList().clear();
+
             box2dBody.createFixture(fixtureDef).setUserData(this);
+            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
 
             //if currently running and was previously sliding or jumping (return to normal box height)
         } else if ((currentState == State.JUMP_START || currentState == State.JUMP_END) &&
                 (previousState != State.JUMP_START && previousState != State.JUMP_END)) {
+
+            Vector2 currentPosition = box2dBody.getPosition();
+            world.destroyBody(box2dBody);
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.position.set(currentPosition);
+
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            box2dBody = world.createBody(bodyDef);
+
+            fixtureDef = new FixtureDef();
             shape = new PolygonShape();
-            shape.setAsBox(1, (float) 1.3);
+            shape.setAsBox(1, (float) 1.8);
+            fixtureDef.filter.categoryBits = Player.PLAYER;
+            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
             fixtureDef.shape = shape;
-            box2dBody.getFixtureList().clear();
+
             box2dBody.createFixture(fixtureDef).setUserData(this);
+            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
 
         } else if ((currentState == State.RUN) &&
-                (previousState == State.SLIDE_START || previousState == State.SLIDE_END || previousState == State.JUMP_START || previousState == State.JUMP_END)) {
+                (previousState == State.SLIDE_START || previousState == State.SLIDE_END)) {
+
+            Vector2 currentPosition = box2dBody.getPosition();
+            currentPosition.y = currentPosition.y+2;
+            world.destroyBody(box2dBody);
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.position.set(currentPosition);
+
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            box2dBody = world.createBody(bodyDef);
+
+            fixtureDef = new FixtureDef();
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 2.8);
+            fixtureDef.filter.categoryBits = Player.PLAYER;
+            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
             fixtureDef.shape = shape;
-            box2dBody.getFixtureList().clear();
+
+            box2dBody.createFixture(fixtureDef).setUserData(this);
+            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
+
+        }else if ((currentState == State.RUN) &&
+                (previousState == State.JUMP_START || previousState == State.JUMP_END)) {
+
+            Vector2 currentPosition = box2dBody.getPosition();
+            Vector2 currentVelocity = new Vector2(15f, box2dBody.getLinearVelocity().y);
+
+            currentPosition.y = currentPosition.y+1;
+            world.destroyBody(box2dBody);
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.position.set(currentPosition);
+
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            box2dBody = world.createBody(bodyDef);
+            box2dBody.setLinearVelocity(currentVelocity);
+
+            fixtureDef = new FixtureDef();
+            shape = new PolygonShape();
+            shape.setAsBox(1, (float) 2.8);
+            fixtureDef.filter.categoryBits = Player.PLAYER;
+            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
+            fixtureDef.shape = shape;
+
             box2dBody.createFixture(fixtureDef).setUserData(this);
         }
+
     }
 
     public void jump() {

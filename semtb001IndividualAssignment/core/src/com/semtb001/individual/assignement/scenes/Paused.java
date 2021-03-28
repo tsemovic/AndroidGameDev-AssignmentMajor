@@ -91,22 +91,12 @@ public class Paused implements Disposable {
         pausedTable.row();
         pausedTable.add(exitText);
 
-        Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.Alpha);
-        bgPixmap.setBlending(Pixmap.Blending.None);
-        bgPixmap.setColor(1f, 1f, 1f, 1f);
-        bgPixmap.fillRectangle(0,0,32,32);
-
-        pausedTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap))));
-
-
         Texture backgroundTexture = new Texture("gui/pausedBackground.png");
         backgroundSprite =new Sprite(backgroundTexture);
         backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
         backgroundSprite.setAlpha(400);
 
-
         stage.addActor(pausedTable);
-
 
         continueText.addListener(new InputListener() {
             @Override

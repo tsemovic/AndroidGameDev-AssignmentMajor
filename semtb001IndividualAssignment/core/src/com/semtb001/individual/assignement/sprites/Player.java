@@ -1,10 +1,14 @@
 package com.semtb001.individual.assignement.sprites;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -17,6 +21,8 @@ import com.badlogic.gdx.utils.Array;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 import com.semtb001.individual.assignement.tools.Assets;
+
+import javax.swing.event.CellEditorListener;
 
 public class Player extends Sprite {
 
@@ -42,6 +48,10 @@ public class Player extends Sprite {
     private double slideStartTimer;
     private double slideEndTimer;
 
+    private TiledMapTile currentTile;
+    private TiledMapTile previousTile;
+
+
     public Body box2dBody;
     public SpriteBatch batch;
 
@@ -58,8 +68,12 @@ public class Player extends Sprite {
     private PolygonShape shape;
     private Rectangle rect;
     private BodyDef bodyDef;
-    private BodyDef newBodyDef;
-    Array<Body> bodies = new Array<Body>();
+
+    private Sound jumpSound;
+    private Sound slideSound;
+    private Sound runGrassSound;
+    private Sound runStoneSound;
+    private Sound failSound;
 
 
     public Player(World world, PlayScreen playScreen) {
@@ -73,7 +87,19 @@ public class Player extends Sprite {
         gameOver = false;
 
         currentState = State.RUN;
-        previousState = State.RUN;
+        previousState = State.SLIDE_END;
+
+        currentTile = null;
+        previousTile = null;
+
+        slideSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide);
+        jumpSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump);
+
+        runGrassSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.runGrass);
+        runStoneSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.runStone);
+
+        failSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.fail);
+
 
         batch = playScreen.batch;
         playerIsDead = false;
@@ -149,15 +175,72 @@ public class Player extends Sprite {
 
     public void update(float delta) {
         updateBodyAndFixture();
+        updateSounds();
         currentFrame = getFramesFromAnimation(delta);
 
-        if(playerIsDead){
+        if (playerIsDead) {
             deadTimer += delta;
-            if(deadTimer > 2){
+            if (deadTimer > 2) {
                 gameOver = true;
             }
         }
+    }
 
+    private void updateSounds() {
+
+        TiledMapTileLayer layer = (TiledMapTileLayer) playScreen.getMap().getLayers().get("groundTiles");
+        TiledMapTile groundTile = null;
+        try {
+            if (layer.getCell((int) ((int) box2dBody.getPosition().x / 2.2), (int) ((int) box2dBody.getPosition().y / 2.2) - 1).getTile() != null) {
+                groundTile = layer.getCell((int) ((int) box2dBody.getPosition().x / 2.2), (int) ((int) box2dBody.getPosition().y / 2.2) - 1).getTile();
+            }
+        } catch (Exception e) {
+
+        }
+
+        if (groundTile != null) {
+            previousTile = currentTile;
+            currentTile = groundTile;
+        }
+
+
+        if (currentState == State.RUN && currentTile != null && previousTile != null) {
+
+            if (currentTile.getId() != previousTile.getId() || (previousState == State.JUMP_END || previousState == State.SLIDE_END)) {
+                if (currentTile.getId() == 202) {
+                    runGrassSound.play();
+                    runGrassSound.loop();
+                } else if (currentTile.getId() == 134) {
+                    runStoneSound.play();
+                    runStoneSound.loop();
+                } else {
+                    runGrassSound.stop();
+                }
+            }
+
+        } else if (currentState != State.RUN) {
+            runGrassSound.stop();
+            runStoneSound.stop();
+        }
+
+        if (currentState == State.JUMP_START && previousState != State.JUMP_START) {
+            jumpSound.play();
+        }
+
+        if (currentState == State.SLIDE_START && previousState != State.SLIDE_START) {
+            slideSound.play();
+        }
+
+        if (currentState == State.FAIL && previousState != State.FAIL) {
+            failSound.play();
+        }
+
+    }
+
+    public void stopSounds() {
+
+        runGrassSound.stop();
+        runStoneSound.stop();
     }
 
     private TextureRegion getFramesFromAnimation(float delta) {
@@ -250,11 +333,11 @@ public class Player extends Sprite {
             box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
 
             //if currently running and was previously sliding or jumping (return to normal box height)
-        }else if ((currentState == State.RUN) &&
+        } else if ((currentState == State.RUN) &&
                 (previousState == State.SLIDE_START || previousState == State.SLIDE_END)) {
 
             Vector2 currentPosition = box2dBody.getPosition();
-            currentPosition.y = currentPosition.y+2;
+            currentPosition.y = currentPosition.y + 2;
 
             world.destroyBody(box2dBody);
 
@@ -274,7 +357,7 @@ public class Player extends Sprite {
             box2dBody.createFixture(fixtureDef).setUserData(this);
             box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
 
-        }else if ((currentState == State.RUN) &&
+        } else if ((currentState == State.RUN) &&
                 (previousState == State.JUMP_START || previousState == State.JUMP_END)) {
 
             Vector2 currentPosition = box2dBody.getPosition();
@@ -302,7 +385,6 @@ public class Player extends Sprite {
 
     public void jump() {
         if (currentState == State.RUN) {
-            Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump).play();
             box2dBody.applyLinearImpulse(new Vector2(0, 40f), box2dBody.getWorldCenter(), true);
             currentState = State.JUMP_START;
         }
@@ -310,7 +392,6 @@ public class Player extends Sprite {
 
     public void slide() {
         if (currentState == State.RUN) {
-            Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide).play();
             currentState = State.SLIDE_START;
             slideStartTimer = 1.3;
             slideEndTimer = 0.1;
@@ -326,16 +407,21 @@ public class Player extends Sprite {
         return fixtureDef;
     }
 
-    public void setCurrentState(State state){
+    public void setCurrentState(State state) {
         currentState = state;
     }
 
-    public boolean getGameOver(){
+    public boolean getGameOver() {
         return gameOver;
     }
 
-    public boolean getPlayerIsDead(){
+    public boolean getPlayerIsDead() {
         return playerIsDead;
+    }
+
+    public TiledMapTileLayer.Cell getCellPlayerIsOn(String layerName) {
+        TiledMapTileLayer layer = (TiledMapTileLayer) playScreen.getMap().getLayers().get(layerName);
+        return layer.getCell((int) 10, (int) 15);
     }
 
 }

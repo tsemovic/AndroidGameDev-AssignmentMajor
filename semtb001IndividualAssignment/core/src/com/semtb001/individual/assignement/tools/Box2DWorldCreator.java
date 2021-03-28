@@ -84,6 +84,8 @@ public class Box2DWorldCreator {
         for (MapObject object : map.getLayers().get("groundEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             groundEnemyPositions.offer(new Vector2(rect.x, rect.y));
+            System.out.println("XYC");
+
         }
 
         //get flying enemies

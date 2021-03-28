@@ -17,12 +17,25 @@ public class Assets {
     public static final AssetDescriptor<Sound> slide =
             new AssetDescriptor<Sound>("audio/sounds/slide.ogg", Sound.class);
 
+    public static final AssetDescriptor<Sound> runGrass =
+            new AssetDescriptor<Sound>("audio/sounds/runGrass.ogg", Sound.class);
+
+
+    public static final AssetDescriptor<Sound> runStone =
+            new AssetDescriptor<Sound>("audio/sounds/runStone.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> fail =
+            new AssetDescriptor<Sound>("audio/sounds/fail.ogg", Sound.class);
+
 
     public void load() {
         manager.load(music);
         manager.load(jump);
         manager.load(slide);
+        manager.load(runGrass);
+        manager.load(runStone);
 
+        manager.load(fail);
 
     }
 

@@ -82,8 +82,8 @@ public class Hud implements Disposable {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (pausedPressed) {
                     playScreen.setPaused(true);
-
                 }
+                pausedPressed = false;
                 pause.setStyle(new Label.LabelStyle(pauseFont, Color.WHITE));
             }
         });

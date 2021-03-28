@@ -29,7 +29,7 @@ public class GameOver implements Disposable {
     private Viewport viewport;
     private PlayScreen playScreen;
 
-    private Label pausedText;
+    private Label headerText;
     private Label tryAgainText;
     public boolean tryAgainTextActive;
     private Label exitText;
@@ -63,32 +63,35 @@ public class GameOver implements Disposable {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         parameter.size = (int) (Semtb001IndividualAssignment.PPM * 4);
-        BitmapFont pausedFont = generator.generateFont(parameter);
+        BitmapFont gameOverFont = generator.generateFont(parameter);
+
+        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 3);
+        BitmapFont lvlCompleteFont = generator.generateFont(parameter);
 
         parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
         buttonFont = generator.generateFont(parameter);
         generator.dispose();
 
-        Label.LabelStyle pausedTextStyle = new Label.LabelStyle(pausedFont, Color.WHITE);
+        Label.LabelStyle gameOverStyle = new Label.LabelStyle(gameOverFont, Color.WHITE);
+        Label.LabelStyle lvlCompleteStyle = new Label.LabelStyle(lvlCompleteFont, Color.WHITE);
+
 
         Label.LabelStyle buttonTextStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
 
-        pausedText = new Label("GAME OVER", pausedTextStyle);
         tryAgainText = new Label("TRY AGAIN", buttonTextStyle);
         exitText = new Label("EXIT", buttonTextStyle);
 
-        pausedTable.add(pausedText).pad(Semtb001IndividualAssignment.PPM*2);
+        if(playScreen.getPlayer().playerIsDead){
+            headerText = new Label("GAME OVER", gameOverStyle);
+        }else{
+            headerText = new Label("LEVEL COMPLETE", lvlCompleteStyle);
+        }
+
+        pausedTable.add(headerText).pad(Semtb001IndividualAssignment.PPM*2);
         pausedTable.row();
         pausedTable.add(tryAgainText);
         pausedTable.row();
         pausedTable.add(exitText);
-
-        Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.Alpha);
-        bgPixmap.setBlending(Pixmap.Blending.None);
-        bgPixmap.setColor(1f, 1f, 1f, 1f);
-        bgPixmap.fillRectangle(0,0,32,32);
-
-        pausedTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap))));
 
         Texture backgroundTexture = new Texture("gui/pausedBackground.png");
         backgroundSprite =new Sprite(backgroundTexture);

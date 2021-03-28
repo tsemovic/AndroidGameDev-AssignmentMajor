@@ -4,7 +4,7 @@
  <tileset firstgid="99" source="tiles_spritesheet.tsx"/>
  <layer id="2" name="groundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt0yEKgEAQhlHvHzySXbtWo9EDWFQwCYaVXXYZ3oOPqVP+rgMAAAAAAAAAAABKWms/APySst2t2BdASSnbtXPIYwrQcDVezc+9Wxr4S2qlI0j9q9r/SC21N/BDjuxcip+dS/Gzcyl+di7Fz86l7065VH6K
+   eJzt0zEOglAQRVFWb+mS7KG3prRkATRiYmFMPgpxMjI5J7mhoJlfvK4DAAAAAAAAAAAAIo3ZBwC7bNnuLewKINKW7Wbs/NQIjmwo0GWpX7o+v49ae40o+/3Sp+Yind96/Re17+w3S982/cENvyh659nvk7S+c0k1snOpfnYu1c/OpXZ3jXxoow==
   </data>
  </layer>
  <layer id="1" name="buildingsTiles" width="250" height="20">

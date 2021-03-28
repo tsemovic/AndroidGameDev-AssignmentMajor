@@ -48,7 +48,7 @@ public class FlyingEnemy extends Sprite{
         tempFrames.clear();
 
         box2dBody.setGravityScale(0f);
-        box2dBody.setLinearVelocity(new Vector2(-.1f, 0));
+        box2dBody.setLinearVelocity(new Vector2(-.01f, 0));
 
 
     }
@@ -79,7 +79,7 @@ public class FlyingEnemy extends Sprite{
         stateTimer += delta;
         currentFrame = (TextureRegion)slimeSliding.getKeyFrame(stateTimer, true);
 
-        if (box2dBody.getLinearVelocity().x <= 1f) {
+        if (box2dBody.getLinearVelocity().x <= -7f) {
             box2dBody.applyLinearImpulse(new Vector2(-0.5f, 0), box2dBody.getWorldCenter(), true);
         }
     }

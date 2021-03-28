@@ -51,7 +51,7 @@ public class PlayScreen implements Screen {
 
     public TextureAtlas textureAtlas;
     public SpriteBatch batch;
-    private boolean isPaused;
+    public boolean isPaused;
 
     private Paused paused;
     private Hud hud;
@@ -74,7 +74,7 @@ public class PlayScreen implements Screen {
 
         inputMultiplexer = new InputMultiplexer();
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("mapFiles/level2.tmx");
+        map = mapLoader.load("mapFiles/level1.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001IndividualAssignment.MPP);
 
@@ -102,9 +102,9 @@ public class PlayScreen implements Screen {
         inputMultiplexer.addProcessor(gameOver.stage);
         inputMultiplexer.addProcessor(paused.stage);
 
-        music = Semtb001IndividualAssignment.assetManager.manager.get(Assets.music);
-        music.setLooping(true);
-        music.play();
+//        music = Semtb001IndividualAssignment.assetManager.manager.get(Assets.music);
+//        music.setLooping(true);
+//        music.play();
     }
 
     @Override
@@ -116,7 +116,6 @@ public class PlayScreen implements Screen {
 
         //if the screen is touched (excluding the pause button)
         if (Gdx.input.isTouched() && !hud.pausedPressed && !isPaused) {
-
             //if the top half of the screen is touched: player jump
             if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
                 player.jump();
@@ -148,18 +147,6 @@ public class PlayScreen implements Screen {
         //clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //if the game is paused, draw the pause menu
-        if (isPaused) {
-            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
-            paused.stage.draw();
-            delta = 0;
-        }
-        if (player.getGameOver()) {
-            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
-            gameOver.stage.draw();
-            delta = 0;
-        }
-
         //if the game is not paused, update the game
         if (!isPaused && !player.getGameOver()) {
             update(delta);
@@ -169,6 +156,8 @@ public class PlayScreen implements Screen {
         Gdx.input.setInputProcessor(inputMultiplexer);
         renderer.render();
         box2dRenderer.render(world, gameCamera.combined);
+
+
 
         //begin the sprite batch for drawing everything
         game.batch.begin();
@@ -186,6 +175,20 @@ public class PlayScreen implements Screen {
 
         //end the sprite batch for drawing everything
         game.batch.end();
+
+        if (isPaused) {
+            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
+            paused.stage.draw();
+            player.stopSounds();
+        }else if (player.getGameOver()) {
+            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
+            gameOver.stage.draw();
+            player.stopSounds();
+        }else if(getPlayerPos().x >= worldEndPosition){
+            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
+            gameOver.stage.draw();
+            player.stopSounds();
+        }
 
         //draw the heads up display
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -213,20 +216,22 @@ public class PlayScreen implements Screen {
     }
 
     private void checkIfDead(float delta) {
-//        if (player.box2dBody.getLinearVelocity().x < 10) {
-//            timeCount += delta;
-//            if (timeCount >= 0.4) {
-//                timeCount = 0;
-//                player.playerIsDead = true;
-//            }
-//        }
+        if (player.box2dBody.getLinearVelocity().x < 10) {
+            timeCount += delta;
+            if (timeCount >= 0.4) {
+                gameOver = new GameOver(game.batch, game, this);
+                inputMultiplexer.addProcessor(gameOver.stage);
+                timeCount = 0;
+                player.playerIsDead = true;
+            }
+        }
     }
 
     public void handleEnemies(float delta) {
 
         //handle grounded enemies
         if (box2dWorldCreator.getGroundEnemyPositions().size() > 0) {
-            if (getPlayerPos().x + 50 > box2dWorldCreator.getGroundEnemyPositions().element().x / 32) {
+            if (getPlayerPos().x + 100 > box2dWorldCreator.getGroundEnemyPositions().element().x / 32) {
                 GroundEnemy newGroundEnemy = new GroundEnemy(world, this, box2dWorldCreator.getGroundEnemyPositions().element());
                 groundEnemies.offer(newGroundEnemy);
                 box2dWorldCreator.getGroundEnemyPositions().remove();
@@ -241,7 +246,7 @@ public class PlayScreen implements Screen {
 
         //handle flying enemies
         if (box2dWorldCreator.getFlyingEnemyPositions().size() > 0) {
-            if (getPlayerPos().x + 50 > box2dWorldCreator.getFlyingEnemyPositions().element().x / 32) {
+            if (getPlayerPos().x + 100 > box2dWorldCreator.getFlyingEnemyPositions().element().x / 32) {
                 FlyingEnemy newFlyingEnemy = new FlyingEnemy(world, this, box2dWorldCreator.getFlyingEnemyPositions().element());
                 flyingEnemies.offer(newFlyingEnemy);
                 box2dWorldCreator.getFlyingEnemyPositions().remove();
@@ -280,15 +285,6 @@ public class PlayScreen implements Screen {
         }else{
             game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
         }
-
-//        if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END || player.previousState == Player.State.JUMP_START || player.previousState == Player.State.JUMP_END)) {
-//            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1), 10, 10);
-//        } else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
-//            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1), 10, 10);
-//        }else{
-//            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
-//
-//        }
     }
 
     @Override
@@ -344,6 +340,10 @@ public class PlayScreen implements Screen {
 
     public void setPaused(boolean value) {
         isPaused = value;
+    }
+
+    public Player getPlayer(){
+        return player;
     }
 
 }

@@ -134,11 +134,11 @@
             "scaleInEditor": 1
         },
         "level1.tmx": {
-            "scale": 0.25,
-            "selectedLayer": 8,
+            "scale": 0.33,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 2260,
-                "y": 902
+                "x": 4240.909090909091,
+                "y": 1134.8484848484848
             }
         },
         "tiles_spritesheet.tsx": {

@@ -3,6 +3,8 @@ package com.semtb001.individual.assignement.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,6 +24,7 @@ import com.semtb001.individual.assignement.sprites.FlyingEnemy;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.sprites.GroundEnemy;
+import com.semtb001.individual.assignement.tools.Assets;
 import com.semtb001.individual.assignement.tools.Box2DWorldCreator;
 import com.semtb001.individual.assignement.tools.WorldContactListener;
 
@@ -57,6 +60,8 @@ public class PlayScreen implements Screen {
     private Player player;
     private Queue<GroundEnemy> groundEnemies;
     private Queue<FlyingEnemy> flyingEnemies;
+
+    private Music music;
 
 
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
@@ -96,6 +101,10 @@ public class PlayScreen implements Screen {
         inputMultiplexer.addProcessor(hud.stage);
         inputMultiplexer.addProcessor(gameOver.stage);
         inputMultiplexer.addProcessor(paused.stage);
+
+        music = Semtb001IndividualAssignment.assetManager.manager.get(Assets.music);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
@@ -260,16 +269,26 @@ public class PlayScreen implements Screen {
     }
 
     public void drawPlayer() {
-        if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END || player.previousState == Player.State.JUMP_START || player.previousState == Player.State.JUMP_END)) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1), 10, 10);
-        } else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1), 10, 10);
-        } else if (player.getState() == Player.State.JUMP_START || player.getState() == Player.State.JUMP_END) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 2.2), 10, 10);
+        if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END )) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.5), 10, 10);
+        }else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.5), 10, 10);
+        }else if (player.getState() == Player.State.JUMP_START) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.5), 10, 10);
+        }else if (player.getState() == Player.State.JUMP_END) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3), 10, 10);
         }else{
             game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
-
         }
+
+//        if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END || player.previousState == Player.State.JUMP_START || player.previousState == Player.State.JUMP_END)) {
+//            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1), 10, 10);
+//        } else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
+//            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1), 10, 10);
+//        }else{
+//            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
+//
+//        }
     }
 
     @Override

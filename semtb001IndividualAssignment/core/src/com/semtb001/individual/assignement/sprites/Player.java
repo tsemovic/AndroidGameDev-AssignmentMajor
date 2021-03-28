@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
+import com.semtb001.individual.assignement.tools.Assets;
 
 public class Player extends Sprite {
 
@@ -50,7 +51,6 @@ public class Player extends Sprite {
     private Animation slideStart;
     private Animation slideEnd;
     private Animation fail;
-
 
     public TextureRegion currentFrame;
 
@@ -141,7 +141,7 @@ public class Player extends Sprite {
 
         box2dBody = world.createBody(bodyDef);
 
-        shape.setAsBox(1, (float) 2.8);
+        shape.setAsBox(1, (float) 2.6);
 
         fixtureDef.shape = shape;
         box2dBody.createFixture(fixtureDef).setUserData(this);
@@ -250,33 +250,12 @@ public class Player extends Sprite {
             box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
 
             //if currently running and was previously sliding or jumping (return to normal box height)
-        } else if ((currentState == State.JUMP_START || currentState == State.JUMP_END) &&
-                (previousState != State.JUMP_START && previousState != State.JUMP_END)) {
-
-            Vector2 currentPosition = box2dBody.getPosition();
-            world.destroyBody(box2dBody);
-
-            BodyDef bodyDef = new BodyDef();
-            bodyDef.position.set(currentPosition);
-
-            bodyDef.type = BodyDef.BodyType.DynamicBody;
-            box2dBody = world.createBody(bodyDef);
-
-            fixtureDef = new FixtureDef();
-            shape = new PolygonShape();
-            shape.setAsBox(1, (float) 1.8);
-            fixtureDef.filter.categoryBits = Player.PLAYER;
-            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
-            fixtureDef.shape = shape;
-
-            box2dBody.createFixture(fixtureDef).setUserData(this);
-            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
-
-        } else if ((currentState == State.RUN) &&
+        }else if ((currentState == State.RUN) &&
                 (previousState == State.SLIDE_START || previousState == State.SLIDE_END)) {
 
             Vector2 currentPosition = box2dBody.getPosition();
             currentPosition.y = currentPosition.y+2;
+
             world.destroyBody(box2dBody);
 
             BodyDef bodyDef = new BodyDef();
@@ -287,7 +266,7 @@ public class Player extends Sprite {
 
             fixtureDef = new FixtureDef();
             shape = new PolygonShape();
-            shape.setAsBox(1, (float) 2.8);
+            shape.setAsBox(1, (float) 2.6);
             fixtureDef.filter.categoryBits = Player.PLAYER;
             fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
             fixtureDef.shape = shape;
@@ -299,9 +278,7 @@ public class Player extends Sprite {
                 (previousState == State.JUMP_START || previousState == State.JUMP_END)) {
 
             Vector2 currentPosition = box2dBody.getPosition();
-            Vector2 currentVelocity = new Vector2(15f, box2dBody.getLinearVelocity().y);
 
-            currentPosition.y = currentPosition.y+1;
             world.destroyBody(box2dBody);
 
             BodyDef bodyDef = new BodyDef();
@@ -309,22 +286,23 @@ public class Player extends Sprite {
 
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             box2dBody = world.createBody(bodyDef);
-            box2dBody.setLinearVelocity(currentVelocity);
 
             fixtureDef = new FixtureDef();
             shape = new PolygonShape();
-            shape.setAsBox(1, (float) 2.8);
+            shape.setAsBox(1, (float) 2.6);
             fixtureDef.filter.categoryBits = Player.PLAYER;
             fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
             fixtureDef.shape = shape;
 
             box2dBody.createFixture(fixtureDef).setUserData(this);
+            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
         }
 
     }
 
     public void jump() {
         if (currentState == State.RUN) {
+            Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump).play();
             box2dBody.applyLinearImpulse(new Vector2(0, 40f), box2dBody.getWorldCenter(), true);
             currentState = State.JUMP_START;
         }
@@ -332,9 +310,11 @@ public class Player extends Sprite {
 
     public void slide() {
         if (currentState == State.RUN) {
+            Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide).play();
             currentState = State.SLIDE_START;
             slideStartTimer = 1.3;
             slideEndTimer = 0.1;
+
         }
     }
 

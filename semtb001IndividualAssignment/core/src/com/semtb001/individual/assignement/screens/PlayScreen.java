@@ -21,6 +21,7 @@ import com.semtb001.individual.assignement.scenes.GameOver;
 import com.semtb001.individual.assignement.scenes.Hud;
 import com.semtb001.individual.assignement.scenes.Paused;
 import com.semtb001.individual.assignement.sprites.FlyingEnemy;
+import com.semtb001.individual.assignement.sprites.Jewel;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.sprites.GroundEnemy;
@@ -60,6 +61,8 @@ public class PlayScreen implements Screen {
     private Player player;
     private Queue<GroundEnemy> groundEnemies;
     private Queue<FlyingEnemy> flyingEnemies;
+    private Queue<Jewel> jewels;
+
 
     private Music music;
 
@@ -87,10 +90,12 @@ public class PlayScreen implements Screen {
         textureAtlas = new TextureAtlas("texturepack/playerAndEnemy.pack");
 
         player = new Player(world, this);
-        player.box2dBody.applyLinearImpulse(new Vector2(15f, 0), player.box2dBody.getWorldCenter(), true);
+        //player.box2dBody.applyLinearImpulse(new Vector2(15f, 0), player.box2dBody.getWorldCenter(), true);
 
         groundEnemies = new LinkedList<GroundEnemy>();
         flyingEnemies = new LinkedList<FlyingEnemy>();
+        jewels = new LinkedList<Jewel>();
+
 
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
@@ -134,8 +139,8 @@ public class PlayScreen implements Screen {
         gameCamera.update();
         player.update(delta);
         moveGameCamera();
-        movePlayer();
-        checkIfDead(delta);
+        //movePlayer();
+        //checkIfDead(delta);
         handleEnemies(delta);
 
         renderer.setView(gameCamera);
@@ -158,12 +163,12 @@ public class PlayScreen implements Screen {
         box2dRenderer.render(world, gameCamera.combined);
 
 
-
         //begin the sprite batch for drawing everything
         game.batch.begin();
 
         drawPlayer();
         drawEnemies(delta);
+        drawJewels(delta);
 
         //draw transparent background when the game is paused
         if (isPaused) {
@@ -180,11 +185,11 @@ public class PlayScreen implements Screen {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
             player.stopSounds();
-        }else if (player.getGameOver()) {
+        } else if (player.getGameOver()) {
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
             player.stopSounds();
-        }else if(getPlayerPos().x >= worldEndPosition){
+        } else if (getPlayerPos().x >= worldEndPosition) {
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
             player.stopSounds();
@@ -273,18 +278,32 @@ public class PlayScreen implements Screen {
         }
     }
 
-    public void drawPlayer() {
-        if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END )) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.5), 10, 10);
-        }else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.5), 10, 10);
-        }else if (player.getState() == Player.State.JUMP_START) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.5), 10, 10);
-        }else if (player.getState() == Player.State.JUMP_END) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3), 10, 10);
-        }else{
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 10, 10);
+    public void drawJewels(float delta) {
+        for (Jewel jewel : box2dWorldCreator.getJewels()) {
+            jewel.update(delta);
+            if (!jewel.collected) {
+                game.batch.draw(jewel.currentFrame, jewel.box2dBody.getPosition().x - 1, (float) (jewel.box2dBody.getPosition().y - 1), 2, 2);
+            }
         }
+    }
+
+    public void drawPlayer() {
+        if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END)) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
+        } else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
+        } else if (player.getState() == Player.State.JUMP_START) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.5), 8, 8);
+        } else if (player.getState() == Player.State.JUMP_END) {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3), 8, 8);
+        } else {
+            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 8, 8);
+        }
+    }
+
+    public void updateCollectedJewels() {
+        hud.update();
+
     }
 
     @Override
@@ -342,8 +361,9 @@ public class PlayScreen implements Screen {
         isPaused = value;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
+
 
 }

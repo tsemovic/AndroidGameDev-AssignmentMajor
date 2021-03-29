@@ -76,7 +76,7 @@ public class GroundEnemy extends Sprite{
         stateTimer += delta;
         currentFrame = (TextureRegion)slimeSliding.getKeyFrame(stateTimer, true);
 
-        if (box2dBody.getLinearVelocity().x <= 1f) {
+        if (box2dBody.getLinearVelocity().x >= -5f) {
             box2dBody.applyLinearImpulse(new Vector2(-0.5f, 0), box2dBody.getWorldCenter(), true);
         }
     }

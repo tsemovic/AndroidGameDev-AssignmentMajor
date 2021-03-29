@@ -29,6 +29,11 @@ public class Hud implements Disposable {
     private PlayScreen playScreen;
 
     private Label pause;
+    private Label jewels;
+    private Label jewelCountLabel;
+    private Integer jewelCount;
+
+
     public boolean pausedPressed;
     private BitmapFont pauseFont;
 
@@ -38,8 +43,10 @@ public class Hud implements Disposable {
         viewport = new FitViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
 
+        jewelCount = 0;
+
         Table hudTable = new Table();
-        hudTable.top().right();
+        hudTable.top();
         hudTable.setFillParent(true);
 
         //https://github.com/libgdx/libgdx/wiki/Gdx-freetype
@@ -53,6 +60,13 @@ public class Hud implements Disposable {
         final Label.LabelStyle pausedTextStyle = new Label.LabelStyle(pauseFont, Color.WHITE);
         pause = new Label("ii", pausedTextStyle);
 
+        jewels = new Label("JEWELS: ", pausedTextStyle);
+        jewelCountLabel = new Label(Integer.toString(jewelCount), pausedTextStyle);
+
+        hudTable.add(jewels);
+        hudTable.add(jewelCountLabel);
+
+        hudTable.row();
         hudTable.add(pause).padRight(Semtb001IndividualAssignment.PPM * 2);
 
         stage.addActor(hudTable);
@@ -88,6 +102,11 @@ public class Hud implements Disposable {
             }
         });
 
+    }
+
+    public void update(){
+        jewelCount++;
+        jewelCountLabel.setText(jewelCount);
     }
 
     @Override

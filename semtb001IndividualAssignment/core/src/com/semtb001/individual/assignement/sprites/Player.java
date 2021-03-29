@@ -29,11 +29,13 @@ public class Player extends Sprite {
     private World world;
     private PlayScreen playScreen;
 
-    public static final int DESTROYED = 0;
-    public static final int DEFAULT = 1;
-    public static final int PLAYER = 2;
-    public static final int WORLD = 3;
-    public static final int ENEMY = 3;
+    public static final short DESTROYED = 0;
+    public static final short DEFAULT = 1;
+    public static final short PLAYER = 2;
+    public static final short WORLD = 4;
+    public static final short ENEMY = 8;
+    public static final short JEWEL = 4;
+
 
     public enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
 
@@ -160,7 +162,7 @@ public class Player extends Sprite {
         fixtureDef = new FixtureDef();
 
         fixtureDef.filter.categoryBits = Player.PLAYER;
-        fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
+        fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(10, 16);
@@ -326,7 +328,7 @@ public class Player extends Sprite {
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 0.8);
             fixtureDef.filter.categoryBits = Player.PLAYER;
-            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
+            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
             fixtureDef.shape = shape;
 
             box2dBody.createFixture(fixtureDef).setUserData(this);
@@ -351,7 +353,7 @@ public class Player extends Sprite {
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 2.6);
             fixtureDef.filter.categoryBits = Player.PLAYER;
-            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
+            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
             fixtureDef.shape = shape;
 
             box2dBody.createFixture(fixtureDef).setUserData(this);
@@ -374,7 +376,7 @@ public class Player extends Sprite {
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 2.6);
             fixtureDef.filter.categoryBits = Player.PLAYER;
-            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY;
+            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
             fixtureDef.shape = shape;
 
             box2dBody.createFixture(fixtureDef).setUserData(this);

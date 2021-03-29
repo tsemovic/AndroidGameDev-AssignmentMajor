@@ -12,16 +12,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
+import com.semtb001.individual.assignement.sprites.Jewel;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Stack;
-
-import sun.awt.image.ImageWatched;
 
 public class Box2DWorldCreator {
 
@@ -35,6 +31,8 @@ public class Box2DWorldCreator {
 
     private Queue<Vector2> groundEnemyPositions;
     private Queue<Vector2> flyingEnemyPositions;
+    private List<Jewel> jewels;
+
 
 
     public Box2DWorldCreator(PlayScreen playScreen) {
@@ -48,7 +46,7 @@ public class Box2DWorldCreator {
 
         groundEnemyPositions = new LinkedList<Vector2>();
         flyingEnemyPositions = new LinkedList<Vector2>();
-
+        jewels = new ArrayList<Jewel>();
 
         //create map ground
         for (MapObject object : map.getLayers().get("groundObject").getObjects().getByType(RectangleMapObject.class)) {
@@ -72,6 +70,16 @@ public class Box2DWorldCreator {
             shape.setAsBox((rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
             fixtureDef.shape = shape;
             body.createFixture(fixtureDef).setUserData("OBJECT");
+        }
+
+        //create map jewels
+        for (MapObject object : map.getLayers().get("jewelObject").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
+
+            Jewel newJewel = new Jewel(rect, playScreen);
+            jewels.add(newJewel);
         }
 
         //set world end position
@@ -102,5 +110,10 @@ public class Box2DWorldCreator {
     public Queue<Vector2> getFlyingEnemyPositions() {
         return flyingEnemyPositions;
     }
+
+    public List<Jewel> getJewels() {
+        return jewels;
+    }
+
 
 }

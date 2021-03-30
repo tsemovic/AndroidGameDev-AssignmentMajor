@@ -41,8 +41,10 @@ public class MainMenu implements Screen {
     private BitmapFont buttonFont;
     private Label title;
     private Label play;
-    private boolean playActive;
+    private Label highscores;
     private Label exit;
+    private boolean playActive;
+    private boolean highscoresActive;
     private boolean exitActive;
 
     private Sprite backgroundSprite;
@@ -86,18 +88,20 @@ public class MainMenu implements Screen {
         generator.dispose();
 
         Label.LabelStyle titleTextStyle = new Label.LabelStyle(titleFont, Color.WHITE);
-
         Label.LabelStyle buttonTextStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
 
         title = new Label("GAME TITLE", titleTextStyle);
         play = new Label("PLAY", buttonTextStyle);
+        highscores = new Label("HIGHSCORES", buttonTextStyle);
         exit = new Label("EXIT", buttonTextStyle);
 
         mainTable.add(title).pad(Semtb001IndividualAssignment.PPM / 2);
         mainTable.row();
-        mainTable.add(play).pad(Semtb001IndividualAssignment.PPM / 2);
+        mainTable.add(play).pad(Semtb001IndividualAssignment.PPM / 4);
         mainTable.row();
-        mainTable.add(exit).pad(Semtb001IndividualAssignment.PPM / 2);
+        mainTable.add(highscores).pad(Semtb001IndividualAssignment.PPM / 4);
+        mainTable.row();
+        mainTable.add(exit).pad(Semtb001IndividualAssignment.PPM / 4);
 
 
         //sprite for background image
@@ -133,6 +137,35 @@ public class MainMenu implements Screen {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game));
                 }
                 play.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+            }
+        });
+
+        highscores.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                highscores.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                highscoresActive = true;
+                return true;
+            }
+
+            //allow the user to drag off the button to not activate a click
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                if (x > 0 && x < highscores.getWidth() && y > 0 && y < highscores.getHeight()) {
+                    highscores.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    highscoresActive = true;
+                } else {
+                    highscores.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    highscoresActive = false;
+                }
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (highscoresActive) {
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new HighScores(game));
+                }
+                highscores.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
             }
         });
 

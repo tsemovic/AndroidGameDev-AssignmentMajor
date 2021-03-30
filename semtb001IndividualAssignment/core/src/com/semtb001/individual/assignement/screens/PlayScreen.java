@@ -139,8 +139,8 @@ public class PlayScreen implements Screen {
         gameCamera.update();
         player.update(delta);
         moveGameCamera();
-        //movePlayer();
-        //checkIfDead(delta);
+        movePlayer();
+        checkIfDead(delta);
         handleEnemies(delta);
 
         renderer.setView(gameCamera);
@@ -181,6 +181,21 @@ public class PlayScreen implements Screen {
         //end the sprite batch for drawing everything
         game.batch.end();
 
+
+        //draw the heads up display
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+
+        //draw transparent background when the game is paused
+        game.batch.begin();
+        if (isPaused) {
+            paused.getBackgroundSprite().draw(game.batch);
+        }else if (player.getGameOver()) {
+            gameOver.getBackgroundSprite().draw(game.batch);
+        }
+        game.batch.end();
+
+        //draw pause/game over display
         if (isPaused) {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
@@ -194,10 +209,6 @@ public class PlayScreen implements Screen {
             gameOver.stage.draw();
             player.stopSounds();
         }
-
-        //draw the heads up display
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
 
     }
 

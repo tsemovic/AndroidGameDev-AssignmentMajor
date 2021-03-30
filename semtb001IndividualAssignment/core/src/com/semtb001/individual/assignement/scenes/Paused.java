@@ -91,7 +91,7 @@ public class Paused implements Disposable {
         pausedTable.row();
         pausedTable.add(exitText);
 
-        Texture backgroundTexture = new Texture("gui/pausedBackground.png");
+        Texture backgroundTexture = new Texture("gui/backgroundTint.png");
         backgroundSprite =new Sprite(backgroundTexture);
         backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
         backgroundSprite.setAlpha(400);

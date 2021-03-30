@@ -77,7 +77,7 @@ public class Jewel {
             fixtureDef.filter.maskBits = Player.DESTROYED;
             collected = true;
             playScreen.updateCollectedJewels();
-            
+
         }
     }
 }

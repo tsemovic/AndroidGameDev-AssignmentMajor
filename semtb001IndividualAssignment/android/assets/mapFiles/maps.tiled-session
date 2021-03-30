@@ -139,23 +139,24 @@
             "scaleInEditor": 1
         },
         "level1.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 5,
+            "scale": 0.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 913.6363636363637,
-                "y": 646.9696969696969
+                "x": 495,
+                "y": 433
             }
         },
         "level2.tmx": {
-            "scale": 0.25,
-            "selectedLayer": 4,
+            "scale": 0.5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 1514,
-                "y": 554
+                "x": 2723,
+                "y": 871
             }
         },
         "platformPack_tilesheet.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInEditor": 1
         },
         "tiles_spritesheet.tsx": {
             "scaleInDock": 0.25,
@@ -172,8 +173,9 @@
     ],
     "project": "maps.tiled-project",
     "recentFiles": [
-        "background_tilesheet.tsx",
         "level2.tmx",
+        "platformPack_tilesheet.tsx",
+        "background_tilesheet.tsx",
         "level1.tmx",
         "buildings_spritesheet.tsx",
         "tiles_spritesheet.tsx",
@@ -182,8 +184,7 @@
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/tiles_spritesheet.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mapFiles/level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/island1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/level1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/Island Survival/android/assets/iso-64x64-outside.tsx"
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/level1.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

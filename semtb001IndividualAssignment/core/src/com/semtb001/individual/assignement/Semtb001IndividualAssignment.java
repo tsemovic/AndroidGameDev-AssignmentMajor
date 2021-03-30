@@ -25,7 +25,7 @@ public class Semtb001IndividualAssignment extends Game {
 	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
 	public static final int NUMBER_OF_LEVELS = 2;
 	public Preferences scoresPref;
-	public Preferences levelsPref;
+	public static Preferences levelsPref;
 	public static Assets assetManager;
 
 	@Override
@@ -37,6 +37,9 @@ public class Semtb001IndividualAssignment extends Game {
 
 		scoresPref = Gdx.app.getPreferences("scores");
 		levelsPref = Gdx.app.getPreferences("levels");
+
+		levelsPref.clear();
+		levelsPref.flush();
 
 		levelsPref.putBoolean("LEVEL: 1", true);
 		levelsPref.flush();

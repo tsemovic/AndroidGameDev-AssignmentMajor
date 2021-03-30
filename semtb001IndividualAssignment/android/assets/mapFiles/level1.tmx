@@ -21,7 +21,7 @@
   <object id="2" x="-88" y="716" width="1876" height="620"/>
   <object id="3" x="1986" y="718" width="1789" height="620"/>
   <object id="8" x="3968" y="710" width="128" height="32"/>
-  <object id="9" x="4288" y="715" width="1344" height="563"/>
+  <object id="9" x="4288" y="715" width="11872" height="563"/>
   <object id="11" x="5247" y="513" width="258" height="39"/>
  </objectgroup>
  <objectgroup id="10" name="jewelObject">

@@ -33,10 +33,8 @@ public class Hud implements Disposable {
     private Label jewelCountLabel;
     private Integer jewelCount;
 
-
     public boolean pausedPressed;
     private BitmapFont hudFont;
-
 
     public Hud(SpriteBatch spriteBatch, final PlayScreen playScreen) {
         this.playScreen = playScreen;
@@ -109,5 +107,9 @@ public class Hud implements Disposable {
     @Override
     public void dispose() {
 
+    }
+
+    public Integer getJewelCount(){
+        return jewelCount;
     }
 }

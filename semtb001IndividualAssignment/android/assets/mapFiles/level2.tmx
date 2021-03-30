@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="10" nextobjectid="22">
- <tileset firstgid="1" source="buildings_spritesheet.tsx"/>
- <tileset firstgid="99" source="tiles_spritesheet.tsx"/>
- <layer id="2" name="groundTiles" width="250" height="20">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="19">
+ <tileset firstgid="1" source="platformPack_tilesheet.tsx"/>
+ <tileset firstgid="99" source="background_tilesheet.tsx"/>
+ <layer id="9" name="backgroundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt0yEKgEAQhlHvHzySXbtWo9EDWFQwCYaVXXYZ3oOPqVP+rgMAAAAAAAAAAABKWms/APySst2t2BdASSnbtXPIYwrQcDVezc+9Wxr4S2qlI0j9q9r/SC21N/BDjuxcip+dS/Gzcyl+di7Fz86l7065VH6K
+   eJzt2+f3z2Ucx/GP/L4/JCUS0VQZJSFJQ9pDMkKLqJRZKlqkoaJoiEqljIaMkmgYDdpJZkiRMlI0RNkjj3P8BbrDdXrfeJzrzvU857pz3Xx1KZhlt3Ibt3MHd9KVbtxFd+7mHu7lPnpwP12ijz76Pb5/mVcYxqsMZwQjGcVrvM5o3mAMbzKWcdFHH30S/TfMZR7z+ZYFfMf3LGQRP7CYH/mJJSyNPvrok+gL5mVZHjnyKURhirA3RdmHYuzLfhRnf0rkRR999Cn0J1CTE6nFSdTmZE7hVE6jDqdTlzM4k7Oijz76JPrWXMf1tKEt7WhPBzpyAzfSiZu4mVvoHH300SfRP8lTPM0AnuFZnmMgz/MCgxjMEIbyIi9FH330SfSf8Cmf8Tlf8CVT+YppfM10ZjCTWcxmTvTRR59E/zf/sI71bGAjm9jMFrayje38S5bLsgLslYs++uhT6I909yiOpgIVqURljuFYqnAcVTmealSnRi766KNPoW9CU5pxKZdxOVdwJc1pwVW0pBVXcw3XRh999En0D/AgPenFQzxMb/rwCI/yGI/TlyfoR/+E+5LZTqm+P/rod6V/i7d5h3cZzwQmMon3eJ8S/sSHzslM4SM+3oX+g1z00Ue/u/plLOdnVvALv7KSVfzG7/zBn6zmL9awNvroo0+iL5mfZQdQigMpTRkOoizlOJhDOJTDOJwjKJ8fffTRp9CfzTmcy3mczwVcSD0uoj4X04CGNKIxl0QfffRJ9KnsZ6OPPvrYn0cfffSxP48++v9zn8p+Nvroo//v/Q6HCBWX
   </data>
  </layer>
- <layer id="1" name="buildingsTiles" width="250" height="20">
+ <layer id="8" name="objectTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt08EJACAMBMH0X1cKs4MgSoLIzHO570UAAAAAAAAAAAAAv8mBBvTZ+WG1yYsGzOj4+ckOAAAAAAAAgPcswPwSYQ==
+   eJzt07ENACAMA8HMRcMA7L8PTVaIEsGd5N7NRwAAAAAAAAAAE60c0K+qx5MD+lX1qHNes7sPAAAAAAAAAADABy6RNQLq
   </data>
  </layer>
- <layer id="6" name="objectTiles" width="250" height="20">
+ <layer id="1" name="groundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJztzgENAAAEADD9xVDUpoSxP8EjAAAAAAAAAAAAAADgltwOAKO2AwAAAAAAAPBQA7eSAS8=
+   eJzt0zEKwkAURdEE1FYwtduKG3WBNhaDDJiE8Eke58BtM/nFGwYAACDN+7ZPwHHZOeSzc8hn55DPziGfnffNP8GZ2Tnks3M4n3tx16axuPbt57et//NaWPWNUq9HcVPTpbjpT2u+tfTe6hulXnZu58rPzu1c+dm5nSs/O7dz5Wfndq787NzOlZ+d27ny+wDDC6U7
   </data>
  </layer>
- <layer id="4" name="buildingsFixturesTiles" width="250" height="20">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
-  </data>
- </layer>
- <objectgroup id="5" name="objectObject">
-  <object id="9" x="1961.33" y="814.667" width="69.3333" height="94.6667"/>
-  <object id="10" x="2729.33" y="744" width="70.6667" height="166.667"/>
+ <objectgroup id="2" name="groundObject">
+  <object id="2" x="-88" y="716" width="1876" height="620"/>
+  <object id="3" x="1986" y="718" width="1789" height="620"/>
+  <object id="8" x="3968" y="710" width="128" height="32"/>
+  <object id="9" x="4288" y="715" width="1344" height="563"/>
+  <object id="11" x="5247" y="513" width="258" height="39"/>
  </objectgroup>
- <objectgroup id="7" name="worldEndPosition">
-  <object id="4" x="16660" y="842" width="68" height="66"/>
+ <objectgroup id="10" name="jewelObject">
+  <object id="12" x="4552" y="671" width="31" height="17"/>
+  <object id="13" x="4647" y="672" width="22" height="15"/>
+  <object id="14" x="4750" y="678" width="20" height="11"/>
+  <object id="15" x="4831" y="669" width="27" height="21"/>
+  <object id="16" x="550" y="646" width="31" height="30"/>
  </objectgroup>
- <objectgroup id="8" name="groundEnemyPositions">
-  <object id="17" x="4648" y="632" width="132" height="92"/>
+ <objectgroup id="4" name="flyingEnemyPositions"/>
+ <objectgroup id="5" name="groundEnemyPositions">
+  <object id="5" x="3746.36" y="637.03" width="38" height="36"/>
+  <object id="10" x="5607" y="651" width="26" height="28"/>
  </objectgroup>
- <objectgroup id="9" name="flyingEnemyPositions">
-  <object id="19" x="6231.33" y="649.333" width="114" height="88"/>
+ <objectgroup id="6" name="worldEndPosition">
+  <object id="1" x="13960" y="576" width="96" height="76"/>
  </objectgroup>
- <objectgroup id="3" name="groundObject">
-  <object id="1" x="-12" y="910" width="3509.33" height="502"/>
-  <object id="12" x="3781.34" y="919.333" width="13781.3" height="492"/>
-  <object id="21" x="1218.18" y="688.394" width="115.152" height="78.7879"/>
+ <objectgroup id="7" name="objectObject">
+  <object id="6" x="2369.33" y="513.333" width="124" height="208"/>
+  <object id="7" x="961.333" y="574.667" width="124" height="160"/>
  </objectgroup>
 </map>

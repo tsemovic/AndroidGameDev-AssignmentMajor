@@ -3,12 +3,10 @@ package com.semtb001.individual.assignement.scenes;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -16,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -30,8 +27,8 @@ public class GameOver implements Disposable {
     private PlayScreen playScreen;
 
     private Label headerText;
-    private Label tryAgainText;
-    public boolean tryAgainTextActive;
+    private Label subHeaderText;
+    public boolean subHeaderTextActive;
     private Label exitText;
     public boolean exitTextActive;
 
@@ -78,18 +75,38 @@ public class GameOver implements Disposable {
 
         Label.LabelStyle buttonTextStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
 
-        tryAgainText = new Label("TRY AGAIN", buttonTextStyle);
         exitText = new Label("EXIT", buttonTextStyle);
 
         if(playScreen.getPlayer().playerIsDead){
             headerText = new Label("GAME OVER", gameOverStyle);
+            subHeaderText = new Label("TRY AGAIN", buttonTextStyle);
         }else{
             headerText = new Label("LEVEL COMPLETE", lvlCompleteStyle);
+            subHeaderText = new Label("TRY AGAIN", buttonTextStyle);
+
+            if(playScreen.getHud().getJewelCount() == playScreen.getBox2dWorldCreator().getJewels().size()){
+                if(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS){
+                    String newLevel = "LEVEL: " + Integer.toString(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) + 1);
+                    Semtb001IndividualAssignment.levelsPref.putBoolean(newLevel, true);
+                    Semtb001IndividualAssignment.levelsPref.flush();
+                    System.out.println(newLevel + " unlcoked");
+                    subHeaderText = new Label("NEXT LEVEL", buttonTextStyle);
+
+                }else{
+                    subHeaderText = new Label("TRY AGAIN", buttonTextStyle);
+
+                }
+            }
+            System.out.println("JEWELSSSS");
+
+            System.out.println(playScreen.getHud().getJewelCount());
+            System.out.println(playScreen.getBox2dWorldCreator().getJewels().size());
+
         }
 
         pausedTable.add(headerText).pad(Semtb001IndividualAssignment.PPM*2);
         pausedTable.row();
-        pausedTable.add(tryAgainText);
+        pausedTable.add(subHeaderText);
         pausedTable.row();
         pausedTable.add(exitText);
 
@@ -100,11 +117,11 @@ public class GameOver implements Disposable {
 
         stage.addActor(pausedTable);
 
-        tryAgainText.addListener(new InputListener() {
+        subHeaderText.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                tryAgainText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
-                tryAgainTextActive = true;
+                subHeaderText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                subHeaderTextActive = true;
 
                 return true;
             }
@@ -112,21 +129,21 @@ public class GameOver implements Disposable {
             //allow the user to drag off the button to not activate a click
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer){
-                if(x > 0 && x < tryAgainText.getWidth() && y > 0 && y < tryAgainText.getHeight()){
-                    tryAgainText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
-                    tryAgainTextActive = true;
+                if(x > 0 && x < subHeaderText.getWidth() && y > 0 && y < subHeaderText.getHeight()){
+                    subHeaderText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    subHeaderTextActive = true;
                 }else{
-                    tryAgainText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
-                    tryAgainTextActive = false;
+                    subHeaderText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    subHeaderTextActive = false;
                 }
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if(tryAgainTextActive) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game));
+                if(subHeaderTextActive) {
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
                 }
-                tryAgainText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                subHeaderText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
             }
         });
 
@@ -162,6 +179,19 @@ public class GameOver implements Disposable {
 
     public Sprite getBackgroundSprite(){
         return backgroundSprite;
+    }
+
+    public String getNextLevel(){
+        String level = null;
+
+        if(Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS){
+            level = "LEVEL: " + playScreen.currentLevel.substring(7, 8);
+        }else{
+            level = playScreen.currentLevel;
+        }
+
+        return level;
+
     }
 
     @Override

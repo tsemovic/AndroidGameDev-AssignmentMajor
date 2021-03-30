@@ -1,4 +1,4 @@
-package com.island.survival.screens;
+package com.semtb001.individual.assignement.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -17,15 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.island.survival.IslandSurvival;
+import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class LevelSelect implements Screen {
 
-    public IslandSurvival game;
+    public Semtb001IndividualAssignment game;
     private SpriteBatch batch;
     protected Stage stage;
     private Viewport viewport;
@@ -40,12 +39,14 @@ public class LevelSelect implements Screen {
     private Sprite backgroundSprite;
     private MainMenu mainMenu;
 
-    public LevelSelect(IslandSurvival islandSurvival) {
-        game = islandSurvival;
+    public LevelSelect(Semtb001IndividualAssignment semtb001IndividualAssignment) {
+        game = semtb001IndividualAssignment;
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, IslandSurvival.WORLD_WIDTH, IslandSurvival.WORLD_HEIGHT);
-        viewport = new FillViewport(IslandSurvival.WORLD_WIDTH * IslandSurvival.PPM, IslandSurvival.WORLD_HEIGHT * IslandSurvival.PPM);
+
+        camera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
+
+        viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM, Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
 
         camera.update();
 
@@ -58,7 +59,7 @@ public class LevelSelect implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         //sprite for background image
-        Texture backgroundTexture = new Texture("background.PNG");
+        Texture backgroundTexture = new Texture("gui/mainMenuBackground.png");
         backgroundSprite = new Sprite(backgroundTexture);
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
         backgroundSprite.setAlpha(400);
@@ -87,7 +88,7 @@ public class LevelSelect implements Screen {
 
         backTable.add(back);
 
-        numberOfLevels = IslandSurvival.numberOfLevels;
+        numberOfLevels = Semtb001IndividualAssignment.NUMBER_OF_LEVELS;
         levels = new ArrayList<Label>();
 
         levelLabelTable.add(levelsLabel);
@@ -121,7 +122,8 @@ public class LevelSelect implements Screen {
                 currentLevel.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        ((Game) Gdx.app.getApplicationListener()).setScreen(new LevelBrief(game, currentLevel.getText().toString()));
+                        //((Game) Gdx.app.getApplicationListener()).setScreen(new LevelBrief(game, currentLevel.getText().toString()));
+                        ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, currentLevel.getText().toString()));
                     }
                 });
             }

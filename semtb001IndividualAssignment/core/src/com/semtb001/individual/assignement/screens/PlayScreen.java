@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,7 +24,6 @@ import com.semtb001.individual.assignement.sprites.Jewel;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.sprites.GroundEnemy;
-import com.semtb001.individual.assignement.tools.Assets;
 import com.semtb001.individual.assignement.tools.Box2DWorldCreator;
 import com.semtb001.individual.assignement.tools.WorldContactListener;
 
@@ -53,6 +51,8 @@ public class PlayScreen implements Screen {
     public TextureAtlas textureAtlas;
     public SpriteBatch batch;
     public boolean isPaused;
+    public boolean isGameOverCreated;
+
 
     private Paused paused;
     private Hud hud;
@@ -63,21 +63,24 @@ public class PlayScreen implements Screen {
     private Queue<FlyingEnemy> flyingEnemies;
     private Queue<Jewel> jewels;
 
-
     private Music music;
 
+    public String currentLevel;
 
-    public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment) {
+    public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment, String currentLevel) {
         game = semtb001IndividualAssignment;
         gameCamera = new OrthographicCamera();
         batch = semtb001IndividualAssignment.batch;
+        this.currentLevel = currentLevel;
 
         gameCamera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
         gameViewPort = new FitViewport((Gdx.graphics.getWidth() / Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Gdx.graphics.getHeight() / Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM, gameCamera);
 
         inputMultiplexer = new InputMultiplexer();
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("mapFiles/level1.tmx");
+
+        //load map level
+        map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001IndividualAssignment.MPP);
 
@@ -110,6 +113,7 @@ public class PlayScreen implements Screen {
 //        music = Semtb001IndividualAssignment.assetManager.manager.get(Assets.music);
 //        music.setLooping(true);
 //        music.play();
+        isGameOverCreated = false;
     }
 
     @Override
@@ -200,14 +204,16 @@ public class PlayScreen implements Screen {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
             player.stopSounds();
-        } else if (player.getGameOver()) {
+        } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
+            if(!isGameOverCreated){
+                gameOver = new GameOver(game.batch, game, this);
+                inputMultiplexer.addProcessor(gameOver.stage);
+                isGameOverCreated = true;
+            }
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
             player.stopSounds();
-        } else if (getPlayerPos().x >= worldEndPosition) {
-            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
-            gameOver.stage.draw();
-            player.stopSounds();
+
         }
 
     }
@@ -374,6 +380,14 @@ public class PlayScreen implements Screen {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Hud getHud(){
+        return hud;
+    }
+
+    public Box2DWorldCreator getBox2dWorldCreator(){
+        return box2dWorldCreator;
     }
 
 

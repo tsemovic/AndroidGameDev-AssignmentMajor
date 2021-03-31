@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
+import com.semtb001.individual.assignement.tools.Assets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +32,12 @@ public class LevelSelect implements Screen {
     private OrthographicCamera camera;
 
     private Label back;
-    private List<Label> levels;
-    public Integer numberOfLevels;
-    private Label blank;
     private Label levelsLabel;
 
+    private List<Label> levels;
+    public Integer numberOfLevels;
+
     private Sprite backgroundSprite;
-    private MainMenu mainMenu;
 
     public LevelSelect(Semtb001IndividualAssignment semtb001IndividualAssignment) {
         game = semtb001IndividualAssignment;
@@ -59,8 +59,7 @@ public class LevelSelect implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         //sprite for background image
-        Texture backgroundTexture = new Texture("gui/mainMenuBackground.png");
-        backgroundSprite = new Sprite(backgroundTexture);
+        backgroundSprite = new Sprite(Semtb001IndividualAssignment.assetManager.manager.get(Assets.menuBackground));
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
         backgroundSprite.setAlpha(400);
 
@@ -76,14 +75,11 @@ public class LevelSelect implements Screen {
         //Create Table
         Table mainTable = new Table();
 
-        //Create label style
-        Label.LabelStyle style1 = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
-
-        blank = new Label("", style1);
-        levelsLabel = new Label("LEVELS", style1);
+        //Create labels
+        levelsLabel = new Label("LEVELS", Semtb001IndividualAssignment.mediumFontFontWhite);
         levelsLabel.setColor(Color.WHITE);
 
-        back = new Label("<BACK", style1);
+        back = new Label("<BACK", Semtb001IndividualAssignment.smallFontFontWhite);
         back.setColor(Color.WHITE);
 
         backTable.add(back);
@@ -93,12 +89,10 @@ public class LevelSelect implements Screen {
 
         levelLabelTable.add(levelsLabel);
         levelLabelTable.row();
-        levelLabelTable.add(blank);
-        levelLabelTable.row();
 
         for (int i = 1; i <= numberOfLevels; i++) {
 
-            Label currentLevel = new Label("LEVEL: " + Integer.toString(i), style1);
+            Label currentLevel = new Label("LEVEL: " + Integer.toString(i), Semtb001IndividualAssignment.tinyFontFontWhite);
             if (game.levelsPref.getBoolean("LEVEL: " + Integer.toString(i))) {
                 currentLevel.setColor(Color.WHITE);
             } else {
@@ -110,7 +104,7 @@ public class LevelSelect implements Screen {
             }
 
             levels.add(currentLevel);
-            mainTable.add(currentLevel).pad(10);
+            mainTable.add(currentLevel).pad(Semtb001IndividualAssignment.PPM);
 
         }
 

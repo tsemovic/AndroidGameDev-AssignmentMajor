@@ -27,7 +27,7 @@ import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.MainMenu;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-
+import com.semtb001.individual.assignement.tools.Assets;
 
 
 public class Paused implements Disposable {
@@ -42,14 +42,11 @@ public class Paused implements Disposable {
     public boolean exitTextActive;
 
     private Semtb001IndividualAssignment game;
-    private Skin skin;
-    private BitmapFont buttonFont;
     private Table pausedTable;
 
     public Sprite backgroundSprite;
 
     public SpriteBatch batch;
-    BitmapFont font;
 
     public Paused(SpriteBatch spriteBatch, final Semtb001IndividualAssignment game, final PlayScreen playScreen) {
         this.game = game;
@@ -58,32 +55,13 @@ public class Paused implements Disposable {
         viewport = new FitViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
 
-
-        skin = new Skin(Gdx.files.internal("gui/uiskin.json"));
-
         pausedTable = new Table();
         pausedTable.top();
         pausedTable.setFillParent(true);
 
-        //https://github.com/libgdx/libgdx/wiki/Gdx-freetype
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/poxel.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 4);
-        BitmapFont pausedFont = generator.generateFont(parameter);
-
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
-        buttonFont = generator.generateFont(parameter);
-        generator.dispose();
-
-        Label.LabelStyle pausedTextStyle = new Label.LabelStyle(pausedFont, Color.WHITE);
-
-        Label.LabelStyle buttonTextStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
-
-        pausedText = new Label("PAUSED", pausedTextStyle);
-        continueText = new Label("CONTINUE", buttonTextStyle);
-        exitText = new Label("EXIT", buttonTextStyle);
-
+        pausedText = new Label("PAUSED", Semtb001IndividualAssignment.largeFontWhite);
+        continueText = new Label("CONTINUE", Semtb001IndividualAssignment.smallFontFontWhite);
+        exitText = new Label("EXIT", Semtb001IndividualAssignment.smallFontFontWhite);
 
         pausedTable.add(pausedText).pad(Semtb001IndividualAssignment.PPM*2);
         pausedTable.row();
@@ -91,8 +69,7 @@ public class Paused implements Disposable {
         pausedTable.row();
         pausedTable.add(exitText);
 
-        Texture backgroundTexture = new Texture("gui/backgroundTint.png");
-        backgroundSprite =new Sprite(backgroundTexture);
+        backgroundSprite = new Sprite(Semtb001IndividualAssignment.assetManager.manager.get(Assets.backgroundTint));
         backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
         backgroundSprite.setAlpha(400);
 
@@ -101,7 +78,7 @@ public class Paused implements Disposable {
         continueText.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                continueText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                continueText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                 continueTextActive = true;
 
                 return true;
@@ -111,10 +88,10 @@ public class Paused implements Disposable {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer){
                 if(x > 0 && x < continueText.getWidth() && y > 0 && y < continueText.getHeight()){
-                    continueText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    continueText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     continueTextActive = true;
                 }else{
-                    continueText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    continueText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     continueTextActive = false;
                 }
             }
@@ -124,14 +101,14 @@ public class Paused implements Disposable {
                 if(continueTextActive) {
                     playScreen.setPaused(false);
                 }
-                continueText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                continueText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
         });
 
         exitText.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                exitText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                exitText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                 exitTextActive = true;
                 return true;
             }
@@ -140,10 +117,10 @@ public class Paused implements Disposable {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer){
                 if(x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()){
-                    exitText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    exitText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     exitTextActive = true;
                 }else{
-                    exitText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     exitTextActive = false;
                 }
             }
@@ -153,7 +130,7 @@ public class Paused implements Disposable {
                 if(exitTextActive) {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
                 }
-                exitText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
         });
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 
 public class Assets {
     public AssetManager manager = new AssetManager();
@@ -27,16 +28,24 @@ public class Assets {
     public static final AssetDescriptor<Sound> fail =
             new AssetDescriptor<Sound>("audio/sounds/fail.ogg", Sound.class);
 
+    public static final AssetDescriptor<Texture> backgroundTint =
+            new AssetDescriptor<Texture>("gui/backgroundTint.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> menuBackground =
+            new AssetDescriptor<Texture>("gui/mainMenuBackground.png", Texture.class);
 
     public void load() {
+        //load music and sounds
         manager.load(music);
         manager.load(jump);
         manager.load(slide);
         manager.load(runGrass);
         manager.load(runStone);
-
         manager.load(fail);
 
+        //load texture images
+        manager.load(backgroundTint);
+        manager.load(menuBackground);
     }
 
     public void dispose() {

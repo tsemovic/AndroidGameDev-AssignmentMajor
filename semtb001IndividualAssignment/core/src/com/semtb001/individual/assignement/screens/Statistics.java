@@ -23,7 +23,7 @@ import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HighScores implements Screen {
+public class Statistics implements Screen {
 
     public Semtb001IndividualAssignment game;
     private SpriteBatch batch;
@@ -35,13 +35,12 @@ public class HighScores implements Screen {
     private List<Label> levels;
     private Integer numberOfLevels;
     private Label levelsLabel;
-
-    private BitmapFont buttonFont;
+    private Label descriptionLabel;
 
 
     private Sprite backgroundSprite;
 
-    public HighScores(Semtb001IndividualAssignment semtb001IndividualAssignment){
+    public Statistics(Semtb001IndividualAssignment semtb001IndividualAssignment){
         game = semtb001IndividualAssignment;
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -75,37 +74,28 @@ public class HighScores implements Screen {
 
         Table mainTable = new Table();
 
-        //https://github.com/libgdx/libgdx/wiki/Gdx-freetype
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/poxel.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
-        BitmapFont titleFont = generator.generateFont(parameter);
-
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 1);
-        buttonFont = generator.generateFont(parameter);
-        generator.dispose();
-
-        Label.LabelStyle titleTextStyle = new Label.LabelStyle(titleFont, Color.WHITE);
-        Label.LabelStyle buttonTextStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
-
-        levelsLabel = new Label("HIGHSCORES" ,titleTextStyle);
+        levelsLabel = new Label("STATISTICS" ,Semtb001IndividualAssignment.largeFontWhite);
         levelsLabel.setColor(Color.WHITE);
 
-        back = new Label("<BACK", buttonTextStyle);
+        descriptionLabel = new Label("LEVEL COMPLETION PERCENTAGE", Semtb001IndividualAssignment.tinyFontFontWhite);
+        descriptionLabel.setColor(Color.WHITE);
+
+        back = new Label("<BACK", Semtb001IndividualAssignment.smallFontFontWhite);
         back.setColor(Color.WHITE);
 
         numberOfLevels = Semtb001IndividualAssignment.NUMBER_OF_LEVELS;
         levels = new ArrayList<Label>();
 
-        levelLabelTable.add(levelsLabel).padBottom(Semtb001IndividualAssignment.PPM * 2);
+        levelLabelTable.add(levelsLabel).padBottom(Semtb001IndividualAssignment.PPM);
+        levelLabelTable.row();
+        levelLabelTable.add(descriptionLabel);
         levelLabelTable.row();
 
         backTable.add(back);
 
         for(int i = 1; i <= numberOfLevels; i++){
             Label currentLevel = new Label("LEVEL: " + Integer.toString(i) + " = " +
-                    game.scoresPref.getInteger("LEVEL: " + Integer.toString(i)), buttonTextStyle);
+                    game.scoresPref.getInteger("LEVEL: " + Integer.toString(i)) + "%", Semtb001IndividualAssignment.tinyFontFontWhite);
             currentLevel.setColor(Color.WHITE);
 
             mainTable.row();

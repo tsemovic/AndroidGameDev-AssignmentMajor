@@ -34,7 +34,6 @@ public class Hud implements Disposable {
     private Integer jewelCount;
 
     public boolean pausedPressed;
-    private BitmapFont hudFont;
 
     public Hud(SpriteBatch spriteBatch, final PlayScreen playScreen) {
         this.playScreen = playScreen;
@@ -47,18 +46,9 @@ public class Hud implements Disposable {
         hudTable.top();
         hudTable.setFillParent(true);
 
-        //https://github.com/libgdx/libgdx/wiki/Gdx-freetype
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/poxel.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
-        hudFont = generator.generateFont(parameter);
-        generator.dispose();
-
-        final Label.LabelStyle hudTextStyle = new Label.LabelStyle(hudFont, Color.WHITE);
-
-        pause = new Label("ii", hudTextStyle);
-        jewels = new Label("JEWELS: ", hudTextStyle);
-        jewelCountLabel = new Label(Integer.toString(jewelCount), hudTextStyle);
+        pause = new Label("ii", Semtb001IndividualAssignment.smallFontFontWhite);
+        jewels = new Label("JEWELS: ", Semtb001IndividualAssignment.smallFontFontWhite);
+        jewelCountLabel = new Label(Integer.toString(jewelCount), Semtb001IndividualAssignment.smallFontFontWhite);
 
         hudTable.add(jewels).padLeft(Semtb001IndividualAssignment.PPM * 2);
         hudTable.add(jewelCountLabel);
@@ -70,7 +60,7 @@ public class Hud implements Disposable {
         pause.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                pause.setStyle(new Label.LabelStyle(hudFont, Color.GRAY));
+                pause.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                 pausedPressed = true;
                 return true;
             }
@@ -79,10 +69,10 @@ public class Hud implements Disposable {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 if (x > 0 && x < pause.getWidth() && y > 0 && y < pause.getHeight()) {
-                    pause.setStyle(new Label.LabelStyle(hudFont, Color.GRAY));
+                    pause.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     pausedPressed = true;
                 } else {
-                    pause.setStyle(new Label.LabelStyle(hudFont, Color.WHITE));
+                    pause.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     pausedPressed = false;
                 }
             }
@@ -93,7 +83,7 @@ public class Hud implements Disposable {
                     playScreen.setPaused(true);
                 }
                 pausedPressed = false;
-                pause.setStyle(new Label.LabelStyle(hudFont, Color.WHITE));
+                pause.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
         });
 

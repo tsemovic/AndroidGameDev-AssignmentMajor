@@ -20,6 +20,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.MainMenu;
 import com.semtb001.individual.assignement.screens.PlayScreen;
+import com.semtb001.individual.assignement.tools.Assets;
+
+import java.text.DecimalFormat;
 
 public class GameOver implements Disposable {
     public Stage stage;
@@ -34,19 +37,17 @@ public class GameOver implements Disposable {
 
     private Semtb001IndividualAssignment game;
     private Skin skin;
-    private BitmapFont buttonFont;
     private Table pausedTable;
 
     public Sprite backgroundSprite;
 
     public SpriteBatch batch;
-    BitmapFont font;
 
     public GameOver(SpriteBatch spriteBatch, final Semtb001IndividualAssignment game, final PlayScreen playScreen) {
         this.game = game;
         this.playScreen = playScreen;
         batch = spriteBatch;
-        viewport = new FitViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
+        viewport = new FitViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM, Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
 
         skin = new Skin(Gdx.files.internal("gui/uiskin.json"));
@@ -55,63 +56,60 @@ public class GameOver implements Disposable {
         pausedTable.top();
         pausedTable.setFillParent(true);
 
-        //https://github.com/libgdx/libgdx/wiki/Gdx-freetype
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/poxel.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 4);
-        BitmapFont gameOverFont = generator.generateFont(parameter);
+        Label.LabelStyle gameOverStyle = new Label.LabelStyle(Semtb001IndividualAssignment.largeFont, Color.WHITE);
+        Label.LabelStyle lvlCompleteStyle = new Label.LabelStyle(Semtb001IndividualAssignment.mediumFont, Color.WHITE);
+        Label.LabelStyle buttonTextStyle = new Label.LabelStyle(Semtb001IndividualAssignment.smallFont, Color.WHITE);
 
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 3);
-        BitmapFont lvlCompleteFont = generator.generateFont(parameter);
+        exitText = new Label("EXIT", Semtb001IndividualAssignment.smallFontFontWhite);
 
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
-        buttonFont = generator.generateFont(parameter);
-        generator.dispose();
+        if (playScreen.getPlayer().playerIsDead) {
+            headerText = new Label("GAME OVER", Semtb001IndividualAssignment.largeFontWhite);
+            subHeaderText = new Label("TRY AGAIN", Semtb001IndividualAssignment.smallFontFontWhite);
 
-        Label.LabelStyle gameOverStyle = new Label.LabelStyle(gameOverFont, Color.WHITE);
-        Label.LabelStyle lvlCompleteStyle = new Label.LabelStyle(lvlCompleteFont, Color.WHITE);
-
-
-        Label.LabelStyle buttonTextStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
-
-        exitText = new Label("EXIT", buttonTextStyle);
-
-        if(playScreen.getPlayer().playerIsDead){
-            headerText = new Label("GAME OVER", gameOverStyle);
-            subHeaderText = new Label("TRY AGAIN", buttonTextStyle);
-        }else{
-            headerText = new Label("LEVEL COMPLETE", lvlCompleteStyle);
+            pausedTable.add(headerText).pad(Semtb001IndividualAssignment.PPM * 2);
+            pausedTable.row();
+            pausedTable.add(subHeaderText);
+            pausedTable.row();
+            pausedTable.add(exitText);
+        } else {
+            headerText = new Label("LEVEL PASSED", lvlCompleteStyle);
             subHeaderText = new Label("TRY AGAIN", buttonTextStyle);
 
-            if(playScreen.getHud().getJewelCount() == playScreen.getBox2dWorldCreator().getJewels().size()){
-                if(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS){
+            if (playScreen.getHud().getJewelCount() == playScreen.getBox2dWorldCreator().getJewels().size()) {
+                if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
                     String newLevel = "LEVEL: " + Integer.toString(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) + 1);
                     Semtb001IndividualAssignment.levelsPref.putBoolean(newLevel, true);
                     Semtb001IndividualAssignment.levelsPref.flush();
                     System.out.println(newLevel + " unlcoked");
                     subHeaderText = new Label("NEXT LEVEL", buttonTextStyle);
 
-                }else{
-                    subHeaderText = new Label("TRY AGAIN", buttonTextStyle);
-
+                } else {
+                    subHeaderText = new Label("ALL LEVELS COMPLETE!", buttonTextStyle);
                 }
             }
-            System.out.println("JEWELSSSS");
 
-            System.out.println(playScreen.getHud().getJewelCount());
-            System.out.println(playScreen.getBox2dWorldCreator().getJewels().size());
+            float jewelCount = playScreen.getHud().getJewelCount();
+            float jewelTotal = playScreen.getBox2dWorldCreator().getJewels().size();
+            Label levelCompletion = new Label("LEVEL COMPLETION: " + (int) ((jewelCount / jewelTotal) * 100) + "%", buttonTextStyle);
 
+            //if percentage completed is greater than values in the stats: update to show completion percentage
+            if ((int) ((jewelCount / jewelTotal) * 100) > Semtb001IndividualAssignment.scoresPref.getInteger(playScreen.currentLevel)) {
+                Semtb001IndividualAssignment.scoresPref.putInteger(playScreen.currentLevel, (int) ((jewelCount / jewelTotal) * 100));
+                Semtb001IndividualAssignment.scoresPref.flush();
+            }
+
+            pausedTable.add(headerText).pad(Semtb001IndividualAssignment.PPM * 2);
+            pausedTable.row();
+            pausedTable.add(levelCompletion);
+            pausedTable.row();
+            pausedTable.add(subHeaderText);
+            pausedTable.row();
+            pausedTable.add(exitText);
         }
 
-        pausedTable.add(headerText).pad(Semtb001IndividualAssignment.PPM*2);
-        pausedTable.row();
-        pausedTable.add(subHeaderText);
-        pausedTable.row();
-        pausedTable.add(exitText);
 
-        Texture backgroundTexture = new Texture("gui/backgroundTint.png");
-        backgroundSprite =new Sprite(backgroundTexture);
+        backgroundSprite = new Sprite(Semtb001IndividualAssignment.assetManager.manager.get(Assets.backgroundTint));
         backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
         backgroundSprite.setAlpha(400);
 
@@ -120,7 +118,7 @@ public class GameOver implements Disposable {
         subHeaderText.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                subHeaderText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                 subHeaderTextActive = true;
 
                 return true;
@@ -128,70 +126,72 @@ public class GameOver implements Disposable {
 
             //allow the user to drag off the button to not activate a click
             @Override
-            public void touchDragged(InputEvent event, float x, float y, int pointer){
-                if(x > 0 && x < subHeaderText.getWidth() && y > 0 && y < subHeaderText.getHeight()){
-                    subHeaderText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                if (x > 0 && x < subHeaderText.getWidth() && y > 0 && y < subHeaderText.getHeight()) {
+                    subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     subHeaderTextActive = true;
-                }else{
-                    subHeaderText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                } else {
+                    subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     subHeaderTextActive = false;
                 }
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if(subHeaderTextActive) {
+                if (subHeaderTextActive) {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
                 }
-                subHeaderText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
         });
 
         exitText.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                exitText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                exitText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                 exitTextActive = true;
                 return true;
             }
 
             //allow the user to drag off the button to not activate a click
             @Override
-            public void touchDragged(InputEvent event, float x, float y, int pointer){
-                if(x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()){
-                    exitText.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                if (x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()) {
+                    exitText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     exitTextActive = true;
-                }else{
-                    exitText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                } else {
+                    exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     exitTextActive = false;
                 }
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if(exitTextActive) {
+                if (exitTextActive) {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
                 }
-                exitText.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
         });
     }
 
-    public Sprite getBackgroundSprite(){
+    public void update(){
+
+    }
+
+    public Sprite getBackgroundSprite() {
         return backgroundSprite;
     }
 
-    public String getNextLevel(){
+    public String getNextLevel() {
         String level = null;
 
-        if(Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS){
+        if (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
             level = "LEVEL: " + playScreen.currentLevel.substring(7, 8);
-        }else{
+        } else {
             level = playScreen.currentLevel;
         }
-
         return level;
-
     }
 
     @Override

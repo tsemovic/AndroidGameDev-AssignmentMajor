@@ -7,27 +7,17 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-
-import java.util.logging.Level;
+import com.semtb001.individual.assignement.tools.Assets;
 
 public class MainMenu implements Screen {
 
@@ -38,7 +28,6 @@ public class MainMenu implements Screen {
     private Viewport viewport;
     private OrthographicCamera camera;
 
-    private BitmapFont buttonFont;
     private Label title;
     private Label play;
     private Label highscores;
@@ -75,25 +64,10 @@ public class MainMenu implements Screen {
         //Set alignment of contents in the table.
         mainTable.center();
 
-
-        //https://github.com/libgdx/libgdx/wiki/Gdx-freetype
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/poxel.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 4);
-        BitmapFont titleFont = generator.generateFont(parameter);
-
-        parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
-        buttonFont = generator.generateFont(parameter);
-        generator.dispose();
-
-        Label.LabelStyle titleTextStyle = new Label.LabelStyle(titleFont, Color.WHITE);
-        Label.LabelStyle buttonTextStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
-
-        title = new Label("GAME TITLE", titleTextStyle);
-        play = new Label("PLAY", buttonTextStyle);
-        highscores = new Label("HIGHSCORES", buttonTextStyle);
-        exit = new Label("EXIT", buttonTextStyle);
+        title = new Label("GAME TITLE", Semtb001IndividualAssignment.largeFontWhite);
+        play = new Label("PLAY", Semtb001IndividualAssignment.smallFontFontWhite);
+        highscores = new Label("STATISTICS", Semtb001IndividualAssignment.smallFontFontWhite);
+        exit = new Label("EXIT", Semtb001IndividualAssignment.smallFontFontWhite);
 
         mainTable.add(title).pad(Semtb001IndividualAssignment.PPM / 2);
         mainTable.row();
@@ -105,8 +79,7 @@ public class MainMenu implements Screen {
 
 
         //sprite for background image
-        Texture backgroundTexture = new Texture("gui/mainMenuBackground.png");
-        backgroundSprite = new Sprite(backgroundTexture);
+        backgroundSprite = new Sprite(Semtb001IndividualAssignment.assetManager.manager.get(Assets.menuBackground));
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
         backgroundSprite.setAlpha(400);
 
@@ -114,7 +87,7 @@ public class MainMenu implements Screen {
         play.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                play.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                play.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                 playActive = true;
                 return true;
             }
@@ -123,10 +96,10 @@ public class MainMenu implements Screen {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 if (x > 0 && x < play.getWidth() && y > 0 && y < play.getHeight()) {
-                    play.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    play.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     playActive = true;
                 } else {
-                    play.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    play.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     playActive = false;
                 }
             }
@@ -137,14 +110,14 @@ public class MainMenu implements Screen {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new LevelSelect(game));
 
                 }
-                play.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                play.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
         });
 
         highscores.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                highscores.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                highscores.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                 highscoresActive = true;
                 return true;
             }
@@ -153,10 +126,10 @@ public class MainMenu implements Screen {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 if (x > 0 && x < highscores.getWidth() && y > 0 && y < highscores.getHeight()) {
-                    highscores.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    highscores.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     highscoresActive = true;
                 } else {
-                    highscores.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    highscores.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     highscoresActive = false;
                 }
             }
@@ -164,16 +137,16 @@ public class MainMenu implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (highscoresActive) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new HighScores(game));
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new Statistics(game));
                 }
-                highscores.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                highscores.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
         });
 
         exit.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                exit.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                exit.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                 exitActive = true;
                 return true;
             }
@@ -182,10 +155,10 @@ public class MainMenu implements Screen {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 if (x > 0 && x < exit.getWidth() && y > 0 && y < exit.getHeight()) {
-                    exit.setStyle(new Label.LabelStyle(buttonFont, Color.GRAY));
+                    exit.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     exitActive = true;
                 } else {
-                    exit.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                    exit.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     exitActive = false;
                 }
             }
@@ -196,12 +169,11 @@ public class MainMenu implements Screen {
                     Gdx.app.exit();
                     System.exit(0);
                 }
-                exit.setStyle(new Label.LabelStyle(buttonFont, Color.WHITE));
+                exit.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
             }
         });
 
         stage.addActor(mainTable);
-
     }
 
     @Override

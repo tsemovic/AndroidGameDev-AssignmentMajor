@@ -194,7 +194,7 @@ public class PlayScreen implements Screen {
         game.batch.begin();
         if (isPaused) {
             paused.getBackgroundSprite().draw(game.batch);
-        }else if (player.getGameOver()) {
+        }else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
             gameOver.getBackgroundSprite().draw(game.batch);
         }
         game.batch.end();
@@ -213,7 +213,6 @@ public class PlayScreen implements Screen {
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
             player.stopSounds();
-
         }
 
     }

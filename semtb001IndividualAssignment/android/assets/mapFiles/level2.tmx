@@ -2,19 +2,20 @@
 <map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="19">
  <tileset firstgid="1" source="platformPack_tilesheet.tsx"/>
  <tileset firstgid="99" source="background_tilesheet.tsx"/>
- <layer id="9" name="backgroundTiles" width="250" height="20">
+ <tileset firstgid="2403" source="ground.tsx"/>
+ <layer id="9" name="backgroundTiles" width="250" height="20" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt2+f3z2Ucx/GP/L4/JCUS0VQZJSFJQ9pDMkKLqJRZKlqkoaJoiEqljIaMkmgYDdpJZkiRMlI0RNkjj3P8BbrDdXrfeJzrzvU857pz3Xx1KZhlt3Ibt3MHd9KVbtxFd+7mHu7lPnpwP12ijz76Pb5/mVcYxqsMZwQjGcVrvM5o3mAMbzKWcdFHH30S/TfMZR7z+ZYFfMf3LGQRP7CYH/mJJSyNPvrok+gL5mVZHjnyKURhirA3RdmHYuzLfhRnf0rkRR999Cn0J1CTE6nFSdTmZE7hVE6jDqdTlzM4k7Oijz76JPrWXMf1tKEt7WhPBzpyAzfSiZu4mVvoHH300SfRP8lTPM0AnuFZnmMgz/MCgxjMEIbyIi9FH330SfSf8Cmf8Tlf8CVT+YppfM10ZjCTWcxmTvTRR59E/zf/sI71bGAjm9jMFrayje38S5bLsgLslYs++uhT6I909yiOpgIVqURljuFYqnAcVTmealSnRi766KNPoW9CU5pxKZdxOVdwJc1pwVW0pBVXcw3XRh999En0D/AgPenFQzxMb/rwCI/yGI/TlyfoR/+E+5LZTqm+P/rod6V/i7d5h3cZzwQmMon3eJ8S/sSHzslM4SM+3oX+g1z00Ue/u/plLOdnVvALv7KSVfzG7/zBn6zmL9awNvroo0+iL5mfZQdQigMpTRkOoizlOJhDOJTDOJwjKJ8fffTRp9CfzTmcy3mczwVcSD0uoj4X04CGNKIxl0QfffRJ9KnsZ6OPPvrYn0cfffSxP48++v9zn8p+Nvroo//v/Q6HCBWX
   </data>
  </layer>
- <layer id="8" name="objectTiles" width="250" height="20">
+ <layer id="8" name="objectTiles" width="250" height="20" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt07ENACAMA8HMRcMA7L8PTVaIEsGd5N7NRwAAAAAAAAAAE60c0K+qx5MD+lX1qHNes7sPAAAAAAAAAADABy6RNQLq
   </data>
  </layer>
  <layer id="1" name="groundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt0zEKwkAURdEE1FYwtduKG3WBNhaDDJiE8Eke58BtM/nFGwYAACDN+7ZPwHHZOeSzc8hn55DPziGfnffNP8GZ2Tnks3M4n3tx16axuPbt57et//NaWPWNUq9HcVPTpbjpT2u+tfTe6hulXnZu58rPzu1c+dm5nSs/O7dz5Wfndq787NzOlZ+d27ny+wDDC6U7
+   eJzt07ENwCAQBMGPLNGgG6BFF0iOCB3wp1lpStgqSZIkSWl9zz8k3ZvPpfx8LuXncyk/n0v5+fzcu5E653OpX3MAAAAAAAAAAABAfwvOvXvR
   </data>
  </layer>
  <objectgroup id="2" name="groundObject">

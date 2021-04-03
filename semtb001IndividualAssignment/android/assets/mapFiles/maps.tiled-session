@@ -130,7 +130,7 @@
             "scaleInEditor": 5.5
         },
         "background_tilesheet.tsx": {
-            "scaleInDock": 0.125,
+            "scaleInDock": 0.0625,
             "scaleInEditor": 1
         },
         "buildings_spritesheet.tsx": {
@@ -138,29 +138,42 @@
             "scaleInDock": 0.5,
             "scaleInEditor": 1
         },
+        "buildings_trees_tilesheet.tsx": {
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        },
+        "ground.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4
+        },
         "level1.tmx": {
-            "scale": 0.5,
+            "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 495,
-                "y": 433
+                "x": 716.666666666667,
+                "y": 534.848484848485
             }
         },
         "level2.tmx": {
             "scale": 0.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 2723,
-                "y": 871
+                "x": 621,
+                "y": 629
             }
         },
         "platformPack_tilesheet.tsx": {
             "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "spritesheet_retina.tsx": {
+            "scaleInDock": 0.33,
             "scaleInEditor": 1
         },
         "tiles_spritesheet.tsx": {
             "scaleInDock": 0.25,
-            "scaleInEditor": 1
+            "scaleInEditor": 4
         }
     },
     "map.height": 20,
@@ -173,20 +186,21 @@
     ],
     "project": "maps.tiled-project",
     "recentFiles": [
-        "level2.tmx",
-        "platformPack_tilesheet.tsx",
-        "background_tilesheet.tsx",
         "level1.tmx",
-        "buildings_spritesheet.tsx",
         "tiles_spritesheet.tsx",
+        "background_tilesheet.tsx",
+        "ground.tsx",
+        "platformPack_tilesheet.tsx",
+        "level2.tmx",
+        "buildings_trees_tilesheet.tsx",
+        "spritesheet_retina.tsx",
+        "buildings_spritesheet.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/buildings_spritesheet.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/tiles_spritesheet.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mapFiles/level1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/island1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/level1.tmx"
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/tiles_spritesheet.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
+    "tileset.spacing": 5,
     "tileset.tileSize": {
         "height": 64,
         "width": 64

@@ -305,15 +305,15 @@ public class PlayScreen implements Screen {
 
     public void drawPlayer() {
         if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END)) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
+            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
         } else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
+            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
         } else if (player.getState() == Player.State.JUMP_START) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.5), 8, 8);
+            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 3), 8, 8);
         } else if (player.getState() == Player.State.JUMP_END) {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3), 8, 8);
+            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 2), 8, 8);
         } else {
-            game.batch.draw(player.currentFrame, player.box2dBody.getPosition().x - 5, (float) (player.box2dBody.getPosition().y - 3.2), 8, 8);
+            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 2.6), 8, 8);
         }
     }
 

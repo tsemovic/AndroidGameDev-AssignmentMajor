@@ -113,7 +113,7 @@ public class Player extends Sprite {
         for (int i = 1; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("running"), i * 256, 0, 256, 256));
         }
-        running = new Animation(0.1f, tempFrames);
+        running = new Animation(0.2f, tempFrames);
         tempFrames.clear();
 
         //jump start
@@ -169,7 +169,7 @@ public class Player extends Sprite {
 
         box2dBody = world.createBody(bodyDef);
 
-        shape.setAsBox(1, (float) 2.6);
+        shape.setAsBox(1, (float) 2.1);
 
         fixtureDef.shape = shape;
         box2dBody.createFixture(fixtureDef).setUserData(this);
@@ -351,7 +351,7 @@ public class Player extends Sprite {
 
             fixtureDef = new FixtureDef();
             shape = new PolygonShape();
-            shape.setAsBox(1, (float) 2.6);
+            shape.setAsBox(1, (float) 2.1);
             fixtureDef.filter.categoryBits = Player.PLAYER;
             fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
             fixtureDef.shape = shape;
@@ -374,7 +374,7 @@ public class Player extends Sprite {
 
             fixtureDef = new FixtureDef();
             shape = new PolygonShape();
-            shape.setAsBox(1, (float) 2.6);
+            shape.setAsBox(1, (float) 2.1);
             fixtureDef.filter.categoryBits = Player.PLAYER;
             fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
             fixtureDef.shape = shape;

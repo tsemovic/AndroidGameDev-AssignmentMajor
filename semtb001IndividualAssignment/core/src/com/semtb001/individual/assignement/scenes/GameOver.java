@@ -141,6 +141,7 @@ public class GameOver implements Disposable {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (subHeaderTextActive) {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
+                    System.out.println(getNextLevel());
                 }
                 subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }

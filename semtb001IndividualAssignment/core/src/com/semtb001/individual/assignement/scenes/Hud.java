@@ -44,12 +44,12 @@ public class Hud implements Disposable {
 
         //table setup
         Table hudTable = new Table();
-        hudTable.top();
+        hudTable.top().padTop(30);
         hudTable.setFillParent(true);
 
         pause = new Label("ii", Semtb001IndividualAssignment.smallFontFontWhite);
-        jewels = new Label("JEWELS: ", Semtb001IndividualAssignment.smallFontFontWhite);
-        jewelCountLabel = new Label(Integer.toString(jewelCount), Semtb001IndividualAssignment.smallFontFontWhite);
+        jewels = new Label("JEWELS: ", Semtb001IndividualAssignment.tinyFontFontWhite);
+        jewelCountLabel = new Label(Integer.toString(jewelCount), Semtb001IndividualAssignment.tinyFontFontWhite);
 
         hudTable.add(jewels).padLeft(Semtb001IndividualAssignment.PPM * 2);
         hudTable.add(jewelCountLabel);

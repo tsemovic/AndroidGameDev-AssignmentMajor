@@ -12,8 +12,14 @@ public class Assets {
     public static final AssetDescriptor<Music> music =
             new AssetDescriptor<Music>("audio/music/Airship Serenity.mp3", Music.class);
 
-    public static final AssetDescriptor<Sound> jump =
-            new AssetDescriptor<Sound>("audio/sounds/jump.ogg", Sound.class);
+    public static final AssetDescriptor<Sound> jump1 =
+            new AssetDescriptor<Sound>("audio/sounds/jump1.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> jump2 =
+            new AssetDescriptor<Sound>("audio/sounds/jump2.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> jump3 =
+            new AssetDescriptor<Sound>("audio/sounds/jump3.ogg", Sound.class);
 
     public static final AssetDescriptor<Sound> slide =
             new AssetDescriptor<Sound>("audio/sounds/slide.ogg", Sound.class);
@@ -36,7 +42,10 @@ public class Assets {
     public void load() {
         //load music and sounds
         manager.load(music);
-        manager.load(jump);
+        manager.load(jump1);
+        manager.load(jump2);
+        manager.load(jump3);
+
         manager.load(slide);
         manager.load(fail);
         manager.load(jewel);

@@ -22,6 +22,8 @@ import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 import com.semtb001.individual.assignement.tools.Assets;
 
+import java.util.Random;
+
 import javax.swing.event.CellEditorListener;
 
 public class Player extends Sprite {
@@ -68,7 +70,9 @@ public class Player extends Sprite {
     private Rectangle rect;
     private BodyDef bodyDef;
 
-    private Sound jumpSound;
+    private Sound jumpSound1;
+    private Sound jumpSound2;
+    private Sound jumpSound3;
     private Sound slideSound;
     private Sound failSound;
 
@@ -87,7 +91,10 @@ public class Player extends Sprite {
         previousState = State.SLIDE_END;
 
         slideSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide);
-        jumpSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump);
+        jumpSound1 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump1);
+        jumpSound2 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump2);
+        jumpSound3 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump3);
+
         failSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.fail);
 
 
@@ -182,7 +189,18 @@ public class Player extends Sprite {
     private void updateSounds() {
 
         if (currentState == State.JUMP_START && previousState != State.JUMP_START) {
-            jumpSound.play();
+
+            Random r = new Random();
+            int result = r.nextInt(4-1) + 1;
+            System.out.println(result);
+
+            if(result == 1){
+                jumpSound1.play();
+            }else if(result == 2){
+                jumpSound2.play();
+            }else if(result == 3){
+                jumpSound3.play();
+            }
         }
 
         if (currentState == State.SLIDE_START && previousState != State.SLIDE_START) {

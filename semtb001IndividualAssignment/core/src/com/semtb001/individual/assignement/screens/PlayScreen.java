@@ -219,7 +219,7 @@ public class PlayScreen implements Screen {
 
     private void moveGameCamera() {
         if (!isPaused) {
-            gameCamera.position.y = 22;
+            gameCamera.position.y = 23;
             if (player.box2dBody.getPosition().x <= worldEndPosition) {
                 gameCamera.position.x = player.box2dBody.getPosition().x + 8;
             }

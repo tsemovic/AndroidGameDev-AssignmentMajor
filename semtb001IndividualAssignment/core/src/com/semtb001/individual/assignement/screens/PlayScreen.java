@@ -31,6 +31,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class PlayScreen implements Screen {
+    private static final float dt = (float) 0.01; // this is your fixed frame rate, in this case ~60fps
+    private float t = (float) 0.0; // total elapsed time
+    double accumulator = 0.0; // elapsed time since last call to updateWorld
 
     private Semtb001IndividualAssignment game;
     private OrthographicCamera gameCamera;
@@ -136,58 +139,54 @@ public class PlayScreen implements Screen {
         }
     }
 
-    public void update(float delta) {
-        inputHandler(delta);
-        world.step(Math.min(Gdx.graphics.getDeltaTime(), 0.15f), 6, 2);
-
-        gameCamera.update();
-        renderer.setView(gameCamera);
-
-        player.update(delta);
-        moveGameCamera();
-        movePlayer();
-        checkIfDead(delta);
-        handleEnemies(delta);
-
-    }
-
     @Override
     public void render(float delta) {
 
+        //https://www.reddit.com/r/libgdx/comments/5ib2q3/trying_to_get_my_head_around_fixed_timestep_in/
+        accumulator += delta;
+
+        while (accumulator >= dt ){
+            updateWorld(t, dt);
+            accumulator -= dt;
+            t += dt;
+        }
+
+        renderWorld(delta);
+    }
+
+    private void renderWorld(float delta) {
         //clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //if the game is not paused, update the game
-        if (!isPaused && !player.getGameOver()) {
-            update(delta);
-        }
-
         //render the world and object fixtures
+        gameCamera.update();
+        renderer.setView(gameCamera);
         renderer.render();
+
         box2dRenderer.render(world, gameCamera.combined);
         game.batch.setProjectionMatrix(gameCamera.combined);
 
-        //set the input processer for multiple input (screen touch for jump/slide as well as pause button
+        //set input processor
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         //begin the sprite batch for drawing everything
         game.batch.begin();
 
+        //draw player, jewels and enemies
         drawPlayer();
         drawEnemies(delta);
         drawJewels(delta);
 
-        //draw transparent background when the game is paused
-        if (isPaused) {
-            paused.getBackgroundSprite().draw(game.batch);
-        }
-        if (player.getGameOver()) {
-            gameOver.getBackgroundSprite().draw(game.batch);
-        }
+//        //draw transparent background when the game paused or game over
+//        if (isPaused) {
+//            paused.getBackgroundSprite().draw(game.batch);
+//        }
+//        if (player.getGameOver()) {
+//            gameOver.getBackgroundSprite().draw(game.batch);
+//        }
 
         //end the sprite batch for drawing everything
         game.batch.end();
-
 
         //draw the heads up display
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -217,7 +216,16 @@ public class PlayScreen implements Screen {
             gameOver.stage.draw();
             player.stopSounds();
         }
+    }
 
+    private void updateWorld(float t, float deltaTime) {
+        world.step(deltaTime, 6, 2);
+        inputHandler(deltaTime);
+        player.update(deltaTime);
+        moveGameCamera();
+        movePlayer();
+        checkIfDead(deltaTime);
+        handleEnemies(deltaTime);
     }
 
     private void moveGameCamera() {

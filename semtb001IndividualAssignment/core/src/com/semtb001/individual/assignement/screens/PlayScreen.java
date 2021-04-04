@@ -117,6 +117,7 @@ public class PlayScreen implements Screen {
 //        music.setLooping(true);
 //        music.play();
         isGameOverCreated = false;
+
     }
 
     @Override
@@ -163,7 +164,9 @@ public class PlayScreen implements Screen {
         renderer.setView(gameCamera);
         renderer.render();
 
+        //this is the render for debugging
         box2dRenderer.render(world, gameCamera.combined);
+
         game.batch.setProjectionMatrix(gameCamera.combined);
 
         //set input processor
@@ -192,7 +195,7 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
-        //draw transparent background when the game is paused
+        //draw transparent background when the game is paused or game over
         game.batch.begin();
         if (isPaused) {
             paused.getBackgroundSprite().draw(game.batch);
@@ -219,13 +222,15 @@ public class PlayScreen implements Screen {
     }
 
     private void updateWorld(float t, float deltaTime) {
-        world.step(deltaTime, 6, 2);
-        inputHandler(deltaTime);
-        player.update(deltaTime);
-        moveGameCamera();
-        movePlayer();
-        checkIfDead(deltaTime);
-        handleEnemies(deltaTime);
+        if(!isPaused) {
+            world.step(deltaTime, 6, 2);
+            inputHandler(deltaTime);
+            player.update(deltaTime);
+            moveGameCamera();
+            movePlayer();
+            checkIfDead(deltaTime);
+            handleEnemies(deltaTime);
+        }
     }
 
     private void moveGameCamera() {

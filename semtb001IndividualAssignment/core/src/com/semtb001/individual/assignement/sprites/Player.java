@@ -390,7 +390,7 @@ public class Player extends Sprite {
 
     public void jump() {
         if (currentState == State.RUN) {
-            box2dBody.applyLinearImpulse(new Vector2(0, 38f), box2dBody.getWorldCenter(), true);
+            box2dBody.applyLinearImpulse(new Vector2(0, 39f), box2dBody.getWorldCenter(), true);
             currentState = State.JUMP_START;
         }
     }

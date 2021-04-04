@@ -32,7 +32,7 @@ public class WorldContactListener implements ContactListener {
                 System.out.println("hit fly");
                 ((Player) fixA.getUserData()).playerIsDead = true;
             }else if(fixB.getUserData() instanceof Jewel){
-                System.out.println("HIT JEWEL");
+                //System.out.println("HIT JEWEL");
                 Jewel hitJewel = (Jewel) fixB.getUserData();
                 hitJewel.hit();
 
@@ -47,7 +47,7 @@ public class WorldContactListener implements ContactListener {
                 System.out.println("hit fly");
                 ((Player) fixB.getUserData()).playerIsDead = true;
             }else if(fixA.getUserData() instanceof Jewel){
-                System.out.println("HIT JEWEL");
+                //System.out.println("HIT JEWEL");
                 Jewel hitJewel = (Jewel) fixB.getUserData();
                 hitJewel.hit();
             }

@@ -26,14 +26,7 @@
   <object id="26" x="5696" y="576" width="192" height="44"/>
   <object id="27" x="-250" y="906"/>
  </objectgroup>
- <objectgroup id="10" name="jewelObject">
-  <object id="36" x="2624" y="576" width="64" height="64"/>
-  <object id="37" x="2688" y="576" width="64" height="64"/>
-  <object id="38" x="2816" y="576" width="64" height="64"/>
-  <object id="39" x="2880" y="576" width="64" height="64"/>
-  <object id="40" x="3008" y="576" width="64" height="64"/>
-  <object id="41" x="3072" y="576" width="64" height="64"/>
- </objectgroup>
+ <objectgroup id="10" name="jewelObject"/>
  <objectgroup id="4" name="flyingEnemyPositions"/>
  <objectgroup id="5" name="groundEnemyPositions">
   <object id="21" x="3648" y="576" width="64" height="64"/>

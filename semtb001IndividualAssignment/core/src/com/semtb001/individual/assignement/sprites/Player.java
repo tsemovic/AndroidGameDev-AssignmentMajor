@@ -73,7 +73,9 @@ public class Player extends Sprite {
     private Sound jumpSound1;
     private Sound jumpSound2;
     private Sound jumpSound3;
-    private Sound slideSound;
+    private Sound slideSound1;
+    private Sound slideSound2;
+    private Sound slideSound3;
     private Sound failSound;
 
 
@@ -90,7 +92,10 @@ public class Player extends Sprite {
         currentState = State.RUN;
         previousState = State.SLIDE_END;
 
-        slideSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide);
+        slideSound1 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide1);
+        slideSound2 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide2);
+        slideSound3 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide3);
+
         jumpSound1 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump1);
         jumpSound2 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump2);
         jumpSound3 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump3);
@@ -183,16 +188,15 @@ public class Player extends Sprite {
             if (deadTimer > 2) {
                 gameOver = true;
             }
+            currentState = State.FAIL;
         }
     }
 
     private void updateSounds() {
 
         if (currentState == State.JUMP_START && previousState != State.JUMP_START) {
-
             Random r = new Random();
             int result = r.nextInt(4-1) + 1;
-            System.out.println(result);
 
             if(result == 1){
                 jumpSound1.play();
@@ -204,7 +208,16 @@ public class Player extends Sprite {
         }
 
         if (currentState == State.SLIDE_START && previousState != State.SLIDE_START) {
-            slideSound.play();
+            Random r = new Random();
+            int result = r.nextInt(4-1) + 1;
+
+            if(result == 1){
+                slideSound1.play();
+            }else if(result == 2){
+                slideSound2.play();
+            }else if(result == 3){
+                slideSound3.play();
+            }
         }
 
         if (currentState == State.FAIL && previousState != State.FAIL) {

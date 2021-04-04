@@ -36,7 +36,7 @@ public class FlyingEnemy extends Sprite{
         stateTimer = 0;
         batch = new SpriteBatch();
 
-        definePlayer();
+        defineEnemy();
 
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
         //get run animation frames and add them to marioRun Animation
@@ -53,7 +53,7 @@ public class FlyingEnemy extends Sprite{
 
     }
 
-    public void definePlayer(){
+    public void defineEnemy(){
         BodyDef bodyDef = new BodyDef();
         Rectangle rect = new Rectangle();
         PolygonShape shape = new PolygonShape();

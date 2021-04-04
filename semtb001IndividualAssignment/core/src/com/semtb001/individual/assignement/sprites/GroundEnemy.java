@@ -1,5 +1,7 @@
 package com.semtb001.individual.assignement.sprites;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +15,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
+import com.semtb001.individual.assignement.tools.Assets;
 
 public class GroundEnemy extends Sprite{
 
@@ -30,6 +34,8 @@ public class GroundEnemy extends Sprite{
 
     public TextureRegion currentFrame;
 
+    private Music enemySound;
+
     public GroundEnemy(World world, PlayScreen playScreen, Vector2 pos) {
         this.world = world;
         this.playScreen = playScreen;
@@ -37,7 +43,7 @@ public class GroundEnemy extends Sprite{
         stateTimer = 0;
         batch = new SpriteBatch();
 
-        definePlayer();
+        defineEnemy();
 
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
         //get run animation frames and add them to marioRun Animation
@@ -48,16 +54,16 @@ public class GroundEnemy extends Sprite{
 
         tempFrames.clear();
 
+        enemySound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slime);
+        enemySound.play();
+        enemySound.setLooping(true);
     }
 
-    public void definePlayer(){
+    public void defineEnemy(){
         BodyDef bodyDef = new BodyDef();
         Rectangle rect = new Rectangle();
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
-
-
-
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(pos.x / 32, pos.y / 32);
@@ -73,6 +79,7 @@ public class GroundEnemy extends Sprite{
 
         box2dBody.createFixture(fixtureDef).setUserData(this);
 
+
     }
 
     public void update(float delta){
@@ -82,6 +89,35 @@ public class GroundEnemy extends Sprite{
         if (box2dBody.getLinearVelocity().x >= -5f) {
             box2dBody.applyLinearImpulse(new Vector2(-0.5f, 0), box2dBody.getWorldCenter(), true);
         }
+
+        if(playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x) {
+            if (playScreen.getPlayer().box2dBody.getPosition().x + 10 > box2dBody.getPosition().x) {
+                enemySound.play();
+                enemySound.setVolume(1f);
+            } else if (playScreen.getPlayer().box2dBody.getPosition().x + 20 > box2dBody.getPosition().x) {
+                enemySound.play();
+                enemySound.setVolume(0.7f);
+            } else if (playScreen.getPlayer().box2dBody.getPosition().x + 30 > box2dBody.getPosition().x) {
+                enemySound.play();
+                enemySound.setVolume(0.4f);
+            } else if (playScreen.getPlayer().box2dBody.getPosition().x + 40 > box2dBody.getPosition().x) {
+                enemySound.play();
+                enemySound.setVolume(0.1f);
+            }else{
+                enemySound.pause();
+            }
+        }else{
+            if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 2) {
+                enemySound.play();
+                enemySound.setVolume(0.5f);
+            }else if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 10) {
+                enemySound.play();
+                enemySound.setVolume(0.2f);
+            }else if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 30) {
+                enemySound.stop();
+            }
+        }
+
     }
 
     private TextureRegion getFramesFromAnimation(float delta) {

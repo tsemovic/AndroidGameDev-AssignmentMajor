@@ -21,11 +21,20 @@ public class Assets {
     public static final AssetDescriptor<Sound> jump3 =
             new AssetDescriptor<Sound>("audio/sounds/jump3.ogg", Sound.class);
 
-    public static final AssetDescriptor<Sound> slide =
-            new AssetDescriptor<Sound>("audio/sounds/slide.ogg", Sound.class);
+    public static final AssetDescriptor<Sound> slide1 =
+            new AssetDescriptor<Sound>("audio/sounds/slide1.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> slide2 =
+            new AssetDescriptor<Sound>("audio/sounds/slide2.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> slide3 =
+            new AssetDescriptor<Sound>("audio/sounds/slide3.ogg", Sound.class);
 
     public static final AssetDescriptor<Sound> fail =
             new AssetDescriptor<Sound>("audio/sounds/fail.ogg", Sound.class);
+
+    public static final AssetDescriptor<Music> slime =
+            new AssetDescriptor<Music>("audio/sounds/slime.ogg", Music.class);
 
     public static final AssetDescriptor<Sound> jewel =
             new AssetDescriptor<Sound>("audio/sounds/jewel.ogg", Sound.class);
@@ -46,8 +55,13 @@ public class Assets {
         manager.load(jump2);
         manager.load(jump3);
 
-        manager.load(slide);
+        manager.load(slide1);
+        manager.load(slide2);
+        manager.load(slide3);
+
         manager.load(fail);
+
+        manager.load(slime);
         manager.load(jewel);
         manager.load(menuClick);
 

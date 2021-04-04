@@ -141,13 +141,14 @@ public class PlayScreen implements Screen {
         world.step(1 / 60f, 6, 2);
 
         gameCamera.update();
+        renderer.setView(gameCamera);
+
         player.update(delta);
         moveGameCamera();
         movePlayer();
         checkIfDead(delta);
         handleEnemies(delta);
 
-        renderer.setView(gameCamera);
     }
 
     @Override
@@ -161,11 +162,13 @@ public class PlayScreen implements Screen {
             update(delta);
         }
 
-        game.batch.setProjectionMatrix(gameCamera.combined);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        //render the world and object fixtures
         renderer.render();
         box2dRenderer.render(world, gameCamera.combined);
+        game.batch.setProjectionMatrix(gameCamera.combined);
 
+        //set the input processer for multiple input (screen touch for jump/slide as well as pause button
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         //begin the sprite batch for drawing everything
         game.batch.begin();

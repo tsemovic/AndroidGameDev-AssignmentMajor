@@ -125,4 +125,7 @@ public class GroundEnemy extends Sprite{
         return returnRegion;
     }
 
+    public void stopSound() {
+        enemySound.pause();
+    }
 }

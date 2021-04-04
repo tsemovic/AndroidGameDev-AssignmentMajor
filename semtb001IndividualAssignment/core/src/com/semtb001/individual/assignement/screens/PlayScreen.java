@@ -180,14 +180,6 @@ public class PlayScreen implements Screen {
         drawEnemies(delta);
         drawJewels(delta);
 
-//        //draw transparent background when the game paused or game over
-//        if (isPaused) {
-//            paused.getBackgroundSprite().draw(game.batch);
-//        }
-//        if (player.getGameOver()) {
-//            gameOver.getBackgroundSprite().draw(game.batch);
-//        }
-
         //end the sprite batch for drawing everything
         game.batch.end();
 
@@ -214,6 +206,7 @@ public class PlayScreen implements Screen {
                 inputMultiplexer.addProcessor(gameOver.stage);
                 isGameOverCreated = true;
             }
+            stopSounds();
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
         }
@@ -228,6 +221,17 @@ public class PlayScreen implements Screen {
             movePlayer();
             checkIfDead(deltaTime);
             handleEnemies(deltaTime);
+        }else {
+            stopSounds();
+        }
+    }
+
+    public void stopSounds(){
+        for (FlyingEnemy enemy : flyingEnemies) {
+            enemy.stopSound();
+        }
+        for (GroundEnemy enemy : groundEnemies) {
+            enemy.stopSound();
         }
     }
 
@@ -251,15 +255,15 @@ public class PlayScreen implements Screen {
     }
 
     private void checkIfDead(float delta) {
-//        if (player.box2dBody.getLinearVelocity().x < 10) {
-//            timeCount += delta;
-//            if (timeCount >= 0.4) {
-//                gameOver = new GameOver(game.batch, game, this);
-//                inputMultiplexer.addProcessor(gameOver.stage);
-//                timeCount = 0;
-//                player.playerIsDead = true;
-//            }
-//        }
+        if (player.box2dBody.getLinearVelocity().x < 10) {
+            timeCount += delta;
+            if (timeCount >= 0.4) {
+                gameOver = new GameOver(game.batch, game, this);
+                inputMultiplexer.addProcessor(gameOver.stage);
+                timeCount = 0;
+                player.playerIsDead = true;
+            }
+        }
     }
 
     public void handleEnemies(float delta) {
@@ -304,7 +308,7 @@ public class PlayScreen implements Screen {
 
         for (FlyingEnemy enemy : flyingEnemies) {
             enemy.update(delta);
-            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
+            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 2, 2);
         }
     }
 

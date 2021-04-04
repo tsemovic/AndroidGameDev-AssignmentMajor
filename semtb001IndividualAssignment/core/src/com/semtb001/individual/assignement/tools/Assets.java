@@ -36,6 +36,9 @@ public class Assets {
     public static final AssetDescriptor<Music> slime =
             new AssetDescriptor<Music>("audio/sounds/slime.ogg", Music.class);
 
+    public static final AssetDescriptor<Music> bee =
+            new AssetDescriptor<Music>("audio/sounds/bee.ogg", Music.class);
+
     public static final AssetDescriptor<Sound> jewel =
             new AssetDescriptor<Sound>("audio/sounds/jewel.ogg", Sound.class);
 
@@ -49,7 +52,8 @@ public class Assets {
             new AssetDescriptor<Texture>("gui/mainMenuBackground.png", Texture.class);
 
     public void load() {
-        //load music and sounds
+
+        //load player sounds
         manager.load(music);
         manager.load(jump1);
         manager.load(jump2);
@@ -61,10 +65,12 @@ public class Assets {
 
         manager.load(fail);
 
+        //load enemy sounds
         manager.load(slime);
+        manager.load(bee);
+
         manager.load(jewel);
         manager.load(menuClick);
-
 
         //load texture images
         manager.load(backgroundTint);

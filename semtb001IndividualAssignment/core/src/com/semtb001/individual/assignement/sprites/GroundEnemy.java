@@ -56,11 +56,14 @@ public class GroundEnemy extends Sprite{
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
 
-        fixtureDef.filter.categoryBits = Player.ENEMY;
-        fixtureDef.filter.maskBits = Player.PLAYER | Player.WORLD;
+
+
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(pos.x / 32, pos.y / 32);
+
+        fixtureDef.filter.categoryBits = Player.ENEMY;
+        fixtureDef.filter.maskBits = Player.PLAYER | Player.WORLD | Player.DEFAULT;
 
         box2dBody = world.createBody(bodyDef);
 
@@ -75,7 +78,7 @@ public class GroundEnemy extends Sprite{
     public void update(float delta){
         stateTimer += delta;
         currentFrame = (TextureRegion)slimeSliding.getKeyFrame(stateTimer, true);
-
+        
         if (box2dBody.getLinearVelocity().x >= -5f) {
             box2dBody.applyLinearImpulse(new Vector2(-0.5f, 0), box2dBody.getWorldCenter(), true);
         }

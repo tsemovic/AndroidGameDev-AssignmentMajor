@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 import com.semtb001.individual.assignement.sprites.Jewel;
+import com.semtb001.individual.assignement.sprites.Player;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -92,6 +93,7 @@ public class Box2DWorldCreator {
         for (MapObject object : map.getLayers().get("groundEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             groundEnemyPositions.offer(new Vector2(rect.x, rect.y));
+            System.out.println("ZZZ");
         }
 
         //get flying enemies

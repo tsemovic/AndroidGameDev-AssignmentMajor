@@ -20,11 +20,11 @@ import com.semtb001.individual.assignement.tools.Assets;
 public class Semtb001IndividualAssignment extends Game {
 	public SpriteBatch batch;
 
-	public static final float PPM = 64; // PPM = Pixel per Meter
+	public static final float PPM = 32; // PPM = Pixel per Meter
 	public static final float MPP = 1 / PPM; // MPP = Meter per Pixel
 
-	public static final int WORLD_PIXEL_WIDTH = 1920;
-	public static final int WORLD_PIXEL_HEIGHT = 1080;
+	public static final int WORLD_PIXEL_WIDTH = 1920/2;
+	public static final int WORLD_PIXEL_HEIGHT = 1080/2;
 	public static final float WORLD_WIDTH = WORLD_PIXEL_WIDTH / PPM; //in meter
 	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
 	public static final int NUMBER_OF_LEVELS = 2;

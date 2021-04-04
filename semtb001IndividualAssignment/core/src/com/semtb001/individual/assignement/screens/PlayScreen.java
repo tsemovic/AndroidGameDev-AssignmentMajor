@@ -87,7 +87,7 @@ public class PlayScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001IndividualAssignment.MPP);
 
-        world = new World(new Vector2(0, -100f), true);
+        world = new World(new Vector2(0, -100), true);
 
         box2dRenderer = new Box2DDebugRenderer();
         box2dWorldCreator = new Box2DWorldCreator(this);
@@ -268,7 +268,7 @@ public class PlayScreen implements Screen {
 
         //handle grounded enemies
         if (box2dWorldCreator.getGroundEnemyPositions().size() > 0) {
-            if (getPlayerPos().x + 100 > box2dWorldCreator.getGroundEnemyPositions().element().x / 32) {
+            if (getPlayerPos().x + 100 > box2dWorldCreator.getGroundEnemyPositions().element().x / 64) {
                 GroundEnemy newGroundEnemy = new GroundEnemy(world, this, box2dWorldCreator.getGroundEnemyPositions().element());
                 groundEnemies.offer(newGroundEnemy);
                 box2dWorldCreator.getGroundEnemyPositions().remove();
@@ -300,6 +300,8 @@ public class PlayScreen implements Screen {
     public void drawEnemies(float delta) {
         //draw ground enemy animation frames
         for (GroundEnemy enemy : groundEnemies) {
+            System.out.println(enemy.box2dBody.getPosition().y);
+
             enemy.update(delta);
             game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
         }

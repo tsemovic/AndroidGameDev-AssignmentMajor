@@ -138,7 +138,7 @@ public class PlayScreen implements Screen {
 
     public void update(float delta) {
         inputHandler(delta);
-        world.step(1 / 60f, 6, 2);
+        world.step(Math.min(Gdx.graphics.getDeltaTime(), 0.15f), 6, 2);
 
         gameCamera.update();
         renderer.setView(gameCamera);
@@ -240,15 +240,15 @@ public class PlayScreen implements Screen {
     }
 
     private void checkIfDead(float delta) {
-        if (player.box2dBody.getLinearVelocity().x < 10) {
-            timeCount += delta;
-            if (timeCount >= 0.4) {
-                gameOver = new GameOver(game.batch, game, this);
-                inputMultiplexer.addProcessor(gameOver.stage);
-                timeCount = 0;
-                player.playerIsDead = true;
-            }
-        }
+//        if (player.box2dBody.getLinearVelocity().x < 10) {
+//            timeCount += delta;
+//            if (timeCount >= 0.4) {
+//                gameOver = new GameOver(game.batch, game, this);
+//                inputMultiplexer.addProcessor(gameOver.stage);
+//                timeCount = 0;
+//                player.playerIsDead = true;
+//            }
+//        }
     }
 
     public void handleEnemies(float delta) {

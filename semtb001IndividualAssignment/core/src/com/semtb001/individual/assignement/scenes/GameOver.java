@@ -189,7 +189,7 @@ public class GameOver implements Disposable {
         String level = null;
 
         if (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
-            level = "LEVEL: " + playScreen.currentLevel.substring(7, 8);
+            level = "LEVEL: " + (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) + 1);
         } else {
             level = playScreen.currentLevel;
         }

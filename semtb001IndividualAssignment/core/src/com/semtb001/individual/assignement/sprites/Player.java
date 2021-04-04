@@ -110,10 +110,13 @@ public class Player extends Sprite {
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
         //run
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("running"), i * 256, 0, 256, 256));
         }
-        running = new Animation(0.2f, tempFrames);
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("running"), i * 256, 256, 256, 256));
+        }
+        running = new Animation(0.1f, tempFrames);
         tempFrames.clear();
 
         //jump start
@@ -387,7 +390,7 @@ public class Player extends Sprite {
 
     public void jump() {
         if (currentState == State.RUN) {
-            box2dBody.applyLinearImpulse(new Vector2(0, 40f), box2dBody.getWorldCenter(), true);
+            box2dBody.applyLinearImpulse(new Vector2(0, 30f), box2dBody.getWorldCenter(), true);
             currentState = State.JUMP_START;
         }
     }

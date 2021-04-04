@@ -28,7 +28,7 @@
  </objectgroup>
  <objectgroup id="10" name="jewelObject"/>
  <objectgroup id="4" name="flyingEnemyPositions">
-  <object id="42" x="4541.33" y="450.667" width="64" height="64"/>
+  <object id="42" x="5193.33" y="450.667" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="5" name="groundEnemyPositions">
   <object id="21" x="3648" y="576" width="64" height="64"/>

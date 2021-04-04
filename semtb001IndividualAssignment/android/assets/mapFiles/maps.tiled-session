@@ -147,11 +147,11 @@
             "scaleInEditor": 4
         },
         "level1.tmx": {
-            "scale": 1,
-            "selectedLayer": 2,
+            "scale": 0.75,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 817.5,
-                "y": 581.5
+                "x": 5079.333333333333,
+                "y": 607.3333333333333
             }
         },
         "level2.tmx": {
@@ -186,9 +186,9 @@
     ],
     "project": "maps.tiled-project",
     "recentFiles": [
+        "level1.tmx",
         "level2.tmx",
         "ground.tsx",
-        "level1.tmx",
         "tiles_spritesheet.tsx",
         "background_tilesheet.tsx",
         "platformPack_tilesheet.tsx",

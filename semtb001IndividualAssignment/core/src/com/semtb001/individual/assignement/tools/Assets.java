@@ -10,7 +10,7 @@ public class Assets {
     public AssetManager manager = new AssetManager();
 
     public static final AssetDescriptor<Music> music =
-            new AssetDescriptor<Music>("audio/music/Airship Serenity.mp3", Music.class);
+            new AssetDescriptor<Music>("audio/music/music.ogg", Music.class);
 
     public static final AssetDescriptor<Sound> jump1 =
             new AssetDescriptor<Sound>("audio/sounds/jump1.ogg", Sound.class);

@@ -24,6 +24,7 @@ import com.semtb001.individual.assignement.sprites.Jewel;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.sprites.GroundEnemy;
+import com.semtb001.individual.assignement.tools.Assets;
 import com.semtb001.individual.assignement.tools.Box2DWorldCreator;
 import com.semtb001.individual.assignement.tools.WorldContactListener;
 
@@ -113,9 +114,9 @@ public class PlayScreen implements Screen {
         inputMultiplexer.addProcessor(gameOver.stage);
         inputMultiplexer.addProcessor(paused.stage);
 
-//        music = Semtb001IndividualAssignment.assetManager.manager.get(Assets.music);
-//        music.setLooping(true);
-//        music.play();
+        music = Semtb001IndividualAssignment.assetManager.manager.get(Assets.music);
+        music.setLooping(true);
+        music.play();
         isGameOverCreated = false;
 
     }
@@ -221,6 +222,7 @@ public class PlayScreen implements Screen {
             movePlayer();
             checkIfDead(deltaTime);
             handleEnemies(deltaTime);
+            music.play();
         }else {
             stopSounds();
         }
@@ -233,6 +235,8 @@ public class PlayScreen implements Screen {
         for (GroundEnemy enemy : groundEnemies) {
             enemy.stopSound();
         }
+
+        music.pause();
     }
 
     private void moveGameCamera() {

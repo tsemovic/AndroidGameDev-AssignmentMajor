@@ -147,18 +147,18 @@
             "scaleInEditor": 4
         },
         "level1.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 1,
+            "scale": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 719.6969696969697,
-                "y": 540.9090909090909
+                "x": 817.5,
+                "y": 581.5
             }
         },
         "level2.tmx": {
             "scale": 0.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 621,
+                "x": 1521,
                 "y": 629
             }
         },
@@ -186,8 +186,8 @@
     ],
     "project": "maps.tiled-project",
     "recentFiles": [
-        "ground.tsx",
         "level2.tmx",
+        "ground.tsx",
         "level1.tmx",
         "tiles_spritesheet.tsx",
         "background_tilesheet.tsx",

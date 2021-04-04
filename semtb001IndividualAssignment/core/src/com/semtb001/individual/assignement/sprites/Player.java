@@ -39,20 +39,17 @@ public class Player extends Sprite {
 
     public enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
 
+    private State currentState;
+    public State previousState;
+
     public boolean playerIsDead;
     public float deadTimer;
 
     public boolean gameOver;
-    private State currentState;
-    public State previousState;
 
     private float stateTimer;
     private double slideStartTimer;
     private double slideEndTimer;
-
-    private TiledMapTile currentTile;
-    private TiledMapTile previousTile;
-
 
     public Body box2dBody;
     public SpriteBatch batch;
@@ -73,8 +70,6 @@ public class Player extends Sprite {
 
     private Sound jumpSound;
     private Sound slideSound;
-    private Sound runGrassSound;
-    private Sound runStoneSound;
     private Sound failSound;
 
 
@@ -91,15 +86,8 @@ public class Player extends Sprite {
         currentState = State.RUN;
         previousState = State.SLIDE_END;
 
-        currentTile = null;
-        previousTile = null;
-
         slideSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide);
         jumpSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump);
-
-        runGrassSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.runGrass);
-        runStoneSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.runStone);
-
         failSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.fail);
 
 
@@ -193,41 +181,6 @@ public class Player extends Sprite {
 
     private void updateSounds() {
 
-        TiledMapTileLayer layer = (TiledMapTileLayer) playScreen.getMap().getLayers().get("groundTiles");
-        TiledMapTile groundTile = null;
-        try {
-            if (layer.getCell((int) ((int) box2dBody.getPosition().x / 2.2), (int) ((int) box2dBody.getPosition().y / 2.2) - 1).getTile() != null) {
-                groundTile = layer.getCell((int) ((int) box2dBody.getPosition().x / 2.2), (int) ((int) box2dBody.getPosition().y / 2.2) - 1).getTile();
-            }
-        } catch (Exception e) {
-
-        }
-
-        if (groundTile != null) {
-            previousTile = currentTile;
-            currentTile = groundTile;
-        }
-
-
-        if (currentState == State.RUN && currentTile != null && previousTile != null) {
-
-            if (currentTile.getId() != previousTile.getId() || (previousState == State.JUMP_END || previousState == State.SLIDE_END)) {
-                if (currentTile.getId() == 202) {
-                    runGrassSound.play();
-                    runGrassSound.loop();
-                } else if (currentTile.getId() == 134) {
-                    runStoneSound.play();
-                    runStoneSound.loop();
-                } else {
-                    runGrassSound.stop();
-                }
-            }
-
-        } else if (currentState != State.RUN) {
-            runGrassSound.stop();
-            runStoneSound.stop();
-        }
-
         if (currentState == State.JUMP_START && previousState != State.JUMP_START) {
             jumpSound.play();
         }
@@ -240,12 +193,6 @@ public class Player extends Sprite {
             failSound.play();
         }
 
-    }
-
-    public void stopSounds() {
-
-        runGrassSound.stop();
-        runStoneSound.stop();
     }
 
     private TextureRegion getFramesFromAnimation(float delta) {

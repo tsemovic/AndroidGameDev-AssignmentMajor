@@ -208,7 +208,6 @@ public class PlayScreen implements Screen {
         if (isPaused) {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
-            player.stopSounds();
         } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
             if(!isGameOverCreated){
                 gameOver = new GameOver(game.batch, game, this);
@@ -217,7 +216,6 @@ public class PlayScreen implements Screen {
             }
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
-            player.stopSounds();
         }
     }
 
@@ -300,8 +298,6 @@ public class PlayScreen implements Screen {
     public void drawEnemies(float delta) {
         //draw ground enemy animation frames
         for (GroundEnemy enemy : groundEnemies) {
-            System.out.println(enemy.box2dBody.getPosition().y);
-
             enemy.update(delta);
             game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
         }

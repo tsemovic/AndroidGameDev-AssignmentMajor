@@ -1,6 +1,7 @@
 package com.semtb001.individual.assignement.sprites;
 
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,7 +14,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
+import com.semtb001.individual.assignement.tools.Assets;
 
 public class Jewel {
 
@@ -77,7 +80,8 @@ public class Jewel {
             fixtureDef.filter.maskBits = Player.DESTROYED;
             collected = true;
             playScreen.updateCollectedJewels();
-
+            Sound jewel = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jewel);
+            jewel.play();
         }
     }
 }

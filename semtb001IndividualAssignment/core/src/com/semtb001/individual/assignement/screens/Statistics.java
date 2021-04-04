@@ -111,6 +111,7 @@ public class Statistics implements Screen {
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Semtb001IndividualAssignment.playMenuClick();
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
             }
         });

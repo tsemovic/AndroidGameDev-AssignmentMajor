@@ -3,6 +3,7 @@ package com.semtb001.individual.assignement.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -107,8 +108,8 @@ public class MainMenu implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (playActive) {
+                    Semtb001IndividualAssignment.playMenuClick();
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new LevelSelect(game));
-
                 }
                 play.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
@@ -137,6 +138,7 @@ public class MainMenu implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (highscoresActive) {
+                    Semtb001IndividualAssignment.playMenuClick();
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new Statistics(game));
                 }
                 highscores.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
@@ -166,6 +168,7 @@ public class MainMenu implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (exitActive) {
+                    Semtb001IndividualAssignment.playMenuClick();
                     Gdx.app.exit();
                     System.exit(0);
                 }

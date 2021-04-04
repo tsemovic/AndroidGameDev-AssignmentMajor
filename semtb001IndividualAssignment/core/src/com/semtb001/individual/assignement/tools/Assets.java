@@ -18,15 +18,14 @@ public class Assets {
     public static final AssetDescriptor<Sound> slide =
             new AssetDescriptor<Sound>("audio/sounds/slide.ogg", Sound.class);
 
-    public static final AssetDescriptor<Sound> runGrass =
-            new AssetDescriptor<Sound>("audio/sounds/runGrass.ogg", Sound.class);
-
-
-    public static final AssetDescriptor<Sound> runStone =
-            new AssetDescriptor<Sound>("audio/sounds/runStone.ogg", Sound.class);
-
     public static final AssetDescriptor<Sound> fail =
             new AssetDescriptor<Sound>("audio/sounds/fail.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> jewel =
+            new AssetDescriptor<Sound>("audio/sounds/jewel.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> menuClick =
+            new AssetDescriptor<Sound>("audio/sounds/menuClick.ogg", Sound.class);
 
     public static final AssetDescriptor<Texture> backgroundTint =
             new AssetDescriptor<Texture>("gui/backgroundTint.png", Texture.class);
@@ -39,9 +38,10 @@ public class Assets {
         manager.load(music);
         manager.load(jump);
         manager.load(slide);
-        manager.load(runGrass);
-        manager.load(runStone);
         manager.load(fail);
+        manager.load(jewel);
+        manager.load(menuClick);
+
 
         //load texture images
         manager.load(backgroundTint);

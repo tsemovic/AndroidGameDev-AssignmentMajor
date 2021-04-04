@@ -97,6 +97,11 @@ public class Semtb001IndividualAssignment extends Game {
 		setScreen(new MainMenu(this));
 	}
 
+	public static void playMenuClick(){
+		Sound menuClick = assetManager.manager.get(Assets.menuClick);
+		menuClick.play();
+	}
+
 	@Override
 	public void render () {
 		super.render();

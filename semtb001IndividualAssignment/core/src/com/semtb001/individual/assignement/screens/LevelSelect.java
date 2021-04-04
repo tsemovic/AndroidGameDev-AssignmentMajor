@@ -116,7 +116,7 @@ public class LevelSelect implements Screen {
                 currentLevel.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        //((Game) Gdx.app.getApplicationListener()).setScreen(new LevelBrief(game, currentLevel.getText().toString()));
+                        Semtb001IndividualAssignment.playMenuClick();
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, currentLevel.getText().toString()));
                     }
                 });
@@ -126,6 +126,7 @@ public class LevelSelect implements Screen {
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Semtb001IndividualAssignment.playMenuClick();
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
             }
         });

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="26">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="42">
  <tileset firstgid="1" source="platformPack_tilesheet.tsx"/>
  <tileset firstgid="99" source="background_tilesheet.tsx"/>
  <layer id="9" name="backgroundTiles" width="250" height="20">
@@ -14,7 +14,7 @@
  </layer>
  <layer id="1" name="groundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt0zsKg1AURVEF4wBi7bTiRB1gmhQSXqEhXPWwFuz2fYrTdQAAQJp1/E/Addk55LNzyGfnkM/OIZ+dt72+gjuzc8hn53A/fXGPTWfePX/69T3Lzqr/KLUaips2nXl3qyNnPXdW/UfpCtm5lJ+dS/nZuZSfnUv52bmUn51L+dm5VN8bcWWXcw==
+   eJzt0zEKwlAQRdEI6gK0dlu6URdoYxEkTUT+zH+eA7dNQpi3LAAAQJrn+TcBfdk55LNzyGfnkM/OIZ+db7t/BDOz8/3sn9nYOcznMLjTqsp33959+z2PyRv971XbcXDXVZXv3mrPsy6TN/rf67+y8x5V34Gys/MeVd+BsrPzHlXfgbKz8x5V34Gys/MeVd+BsrPzHlXfgbKz8x5V34HG9gKeP7XZ
   </data>
  </layer>
  <objectgroup id="2" name="groundObject">
@@ -23,14 +23,20 @@
   <object id="8" x="3968" y="710" width="128" height="32"/>
   <object id="9" x="4288" y="715" width="11872" height="563"/>
   <object id="11" x="5247" y="513" width="258" height="39"/>
+  <object id="26" x="5696" y="576" width="192" height="44"/>
+  <object id="27" x="-250" y="906"/>
  </objectgroup>
- <objectgroup id="10" name="jewelObject"/>
+ <objectgroup id="10" name="jewelObject">
+  <object id="36" x="2624" y="576" width="64" height="64"/>
+  <object id="37" x="2688" y="576" width="64" height="64"/>
+  <object id="38" x="2816" y="576" width="64" height="64"/>
+  <object id="39" x="2880" y="576" width="64" height="64"/>
+  <object id="40" x="3008" y="576" width="64" height="64"/>
+  <object id="41" x="3072" y="576" width="64" height="64"/>
+ </objectgroup>
  <objectgroup id="4" name="flyingEnemyPositions"/>
  <objectgroup id="5" name="groundEnemyPositions">
   <object id="21" x="3648" y="576" width="64" height="64"/>
-  <object id="23" x="1387.88" y="536.364" width="127.273" height="93.9394"/>
-  <object id="24" x="740" y="534" width="70" height="64"/>
-  <object id="25" x="706" y="222" width="60" height="54"/>
  </objectgroup>
  <objectgroup id="6" name="worldEndPosition">
   <object id="1" x="13960" y="576" width="96" height="76"/>

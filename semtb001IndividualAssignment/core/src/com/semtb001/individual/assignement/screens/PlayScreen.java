@@ -131,7 +131,7 @@ public class PlayScreen implements Screen {
     public void inputHandler(float delta) {
 
         //if the screen is touched (excluding the pause button)
-        if (Gdx.input.isTouched() && !hud.pausedPressed && !isPaused) {
+        if (Gdx.input.isTouched() && !hud.pausedPressed && !isPaused && !isGameOverCreated) {
             //if the top half of the screen is touched: player jump
             if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
                 player.jump();
@@ -263,6 +263,7 @@ public class PlayScreen implements Screen {
         }
     }
 
+    //check if the player is dead (edge of the screen)
     private void checkIfDead(float delta) {
         if (player.box2dBody.getPosition().x <= gameCamera.position.x - 15 && !player.playerIsDead) {
             gameOver = new GameOver(game.batch, game, this);

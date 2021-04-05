@@ -264,7 +264,7 @@ public class PlayScreen implements Screen {
     }
 
     private void checkIfDead(float delta) {
-        if (player.box2dBody.getPosition().x <= gameCamera.position.x - 10 && !player.playerIsDead) {
+        if (player.box2dBody.getPosition().x <= gameCamera.position.x - 15 && !player.playerIsDead) {
             gameOver = new GameOver(game.batch, game, this);
             inputMultiplexer.addProcessor(gameOver.stage);
             timeCount = 0;

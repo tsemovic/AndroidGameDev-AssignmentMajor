@@ -119,6 +119,8 @@ public class PlayScreen implements Screen {
         music.play();
         isGameOverCreated = false;
 
+        gameCamera.position.x = player.box2dBody.getPosition().x + 9;
+
     }
 
     @Override
@@ -147,7 +149,7 @@ public class PlayScreen implements Screen {
         //https://www.reddit.com/r/libgdx/comments/5ib2q3/trying_to_get_my_head_around_fixed_timestep_in/
         accumulator += delta;
 
-        while (accumulator >= dt ){
+        while (accumulator >= dt) {
             updateWorld(t, dt);
             accumulator -= dt;
             t += dt;
@@ -192,7 +194,7 @@ public class PlayScreen implements Screen {
         game.batch.begin();
         if (isPaused) {
             paused.getBackgroundSprite().draw(game.batch);
-        }else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
+        } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
             gameOver.getBackgroundSprite().draw(game.batch);
         }
         game.batch.end();
@@ -202,7 +204,7 @@ public class PlayScreen implements Screen {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
         } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
-            if(!isGameOverCreated){
+            if (!isGameOverCreated) {
                 gameOver = new GameOver(game.batch, game, this);
                 inputMultiplexer.addProcessor(gameOver.stage);
                 isGameOverCreated = true;
@@ -214,7 +216,7 @@ public class PlayScreen implements Screen {
     }
 
     private void updateWorld(float t, float deltaTime) {
-        if(!isPaused) {
+        if (!isPaused) {
             world.step(deltaTime, 6, 2);
             inputHandler(deltaTime);
             player.update(deltaTime);
@@ -223,12 +225,12 @@ public class PlayScreen implements Screen {
             checkIfDead(deltaTime);
             handleEnemies(deltaTime);
             music.play();
-        }else {
+        } else {
             stopSounds();
         }
     }
 
-    public void stopSounds(){
+    public void stopSounds() {
         for (FlyingEnemy enemy : flyingEnemies) {
             enemy.stopSound();
         }
@@ -240,10 +242,13 @@ public class PlayScreen implements Screen {
     }
 
     private void moveGameCamera() {
-        if (!isPaused) {
+        if (!isPaused && !player.playerIsDead) {
             gameCamera.position.y = 23;
             if (player.box2dBody.getPosition().x <= worldEndPosition) {
-                gameCamera.position.x = player.box2dBody.getPosition().x + 8;
+                //gameCamera.position.x = player.box2dBody.getPosition().x + 8;
+                //gameCamera.position.x = (float) (gameCamera.position.x + (player.box2dBody.getLinearVelocity().x * 0.01));
+                gameCamera.position.x += 0.15003;
+
             }
         }
     }
@@ -259,14 +264,11 @@ public class PlayScreen implements Screen {
     }
 
     private void checkIfDead(float delta) {
-        if (player.box2dBody.getLinearVelocity().x < 10) {
-            timeCount += delta;
-            if (timeCount >= 0.4) {
-                gameOver = new GameOver(game.batch, game, this);
-                inputMultiplexer.addProcessor(gameOver.stage);
-                timeCount = 0;
-                player.playerIsDead = true;
-            }
+        if (player.box2dBody.getPosition().x <= gameCamera.position.x - 10 && !player.playerIsDead) {
+            gameOver = new GameOver(game.batch, game, this);
+            inputMultiplexer.addProcessor(gameOver.stage);
+            timeCount = 0;
+            player.playerIsDead = true;
         }
     }
 
@@ -403,11 +405,11 @@ public class PlayScreen implements Screen {
         return player;
     }
 
-    public Hud getHud(){
+    public Hud getHud() {
         return hud;
     }
 
-    public Box2DWorldCreator getBox2dWorldCreator(){
+    public Box2DWorldCreator getBox2dWorldCreator() {
         return box2dWorldCreator;
     }
 

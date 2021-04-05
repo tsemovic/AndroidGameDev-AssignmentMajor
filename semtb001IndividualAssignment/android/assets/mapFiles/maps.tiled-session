@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "level1.tmx",
     "expandedProjectPaths": [
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap"
     ],
@@ -150,8 +150,8 @@
             "scale": 0.75,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 5079.333333333333,
-                "y": 607.3333333333333
+                "x": 4679.333333333333,
+                "y": 606
             }
         },
         "level2.tmx": {
@@ -183,6 +183,7 @@
     "map.tileWidth": 64,
     "map.width": 250,
     "openFiles": [
+        "level1.tmx"
     ],
     "project": "maps.tiled-project",
     "recentFiles": [

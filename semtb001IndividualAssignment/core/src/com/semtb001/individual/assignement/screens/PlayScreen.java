@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.individual.assignement.scenes.GameOver;
 import com.semtb001.individual.assignement.scenes.Hud;
+import com.semtb001.individual.assignement.scenes.LevelBrief;
 import com.semtb001.individual.assignement.scenes.Paused;
 import com.semtb001.individual.assignement.sprites.FlyingEnemy;
 import com.semtb001.individual.assignement.sprites.Jewel;
@@ -61,6 +62,7 @@ public class PlayScreen implements Screen {
     private Paused paused;
     private Hud hud;
     private GameOver gameOver;
+    private LevelBrief levelBrief;
 
     private Player player;
     private Queue<GroundEnemy> groundEnemies;
@@ -70,6 +72,8 @@ public class PlayScreen implements Screen {
     private Music music;
 
     public String currentLevel;
+
+    private boolean levelBriefActive;
 
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment, String currentLevel) {
         game = semtb001IndividualAssignment;
@@ -109,6 +113,8 @@ public class PlayScreen implements Screen {
         hud = new Hud(game.batch, this);
         gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
+        levelBrief = new LevelBrief(game.batch, this);
+        levelBriefActive = true;
 
         inputMultiplexer.addProcessor(hud.stage);
         inputMultiplexer.addProcessor(gameOver.stage);
@@ -120,6 +126,7 @@ public class PlayScreen implements Screen {
         isGameOverCreated = false;
 
         gameCamera.position.x = player.box2dBody.getPosition().x + 9;
+        gameCamera.position.y = 23;
 
     }
 
@@ -156,6 +163,12 @@ public class PlayScreen implements Screen {
         }
 
         renderWorld(delta);
+
+        if(!levelBrief.timeToPlay){
+            game.batch.setProjectionMatrix(levelBrief.stage.getCamera().combined);
+            levelBrief.stage.draw();
+            levelBrief.update(delta);
+        }
     }
 
     private void renderWorld(float delta) {
@@ -216,7 +229,7 @@ public class PlayScreen implements Screen {
     }
 
     private void updateWorld(float t, float deltaTime) {
-        if (!isPaused) {
+        if (!isPaused && levelBrief.timeToPlay) {
             world.step(deltaTime, 6, 2);
             inputHandler(deltaTime);
             player.update(deltaTime);
@@ -238,12 +251,11 @@ public class PlayScreen implements Screen {
             enemy.stopSound();
         }
 
-        music.pause();
+        music.stop();
     }
 
     private void moveGameCamera() {
         if (!isPaused && !player.playerIsDead) {
-            gameCamera.position.y = 23;
             if (player.box2dBody.getPosition().x <= worldEndPosition) {
                 //gameCamera.position.x = player.box2dBody.getPosition().x + 8;
                 //gameCamera.position.x = (float) (gameCamera.position.x + (player.box2dBody.getLinearVelocity().x * 0.01));
@@ -369,6 +381,13 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
+        map.dispose();
+        world.dispose();
+        renderer.dispose();
+        hud.dispose();
+        gameOver.dispose();
+        paused.dispose();
+        box2dRenderer.dispose();
 
     }
 

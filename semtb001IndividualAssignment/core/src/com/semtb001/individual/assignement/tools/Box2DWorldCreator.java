@@ -34,8 +34,6 @@ public class Box2DWorldCreator {
     private Queue<Vector2> flyingEnemyPositions;
     private List<Jewel> jewels;
 
-
-
     public Box2DWorldCreator(PlayScreen playScreen) {
         world = playScreen.getWorld();
         map = playScreen.getMap();
@@ -93,7 +91,6 @@ public class Box2DWorldCreator {
         for (MapObject object : map.getLayers().get("groundEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             groundEnemyPositions.offer(new Vector2(rect.x, rect.y));
-            System.out.println("ZZZ");
         }
 
         //get flying enemies

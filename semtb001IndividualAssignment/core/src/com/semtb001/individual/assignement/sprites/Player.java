@@ -156,6 +156,8 @@ public class Player extends Sprite {
         tempFrames.clear();
 
         box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
+        currentFrame = (TextureRegion) running.getKeyFrame(0, false);
+
     }
 
     public void definePlayer() {
@@ -168,7 +170,7 @@ public class Player extends Sprite {
         fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(10, 16);
+        bodyDef.position.set(10, 19);
 
         box2dBody = world.createBody(bodyDef);
 

@@ -129,6 +129,6 @@ public class FlyingEnemy extends Sprite{
     }
 
     public void stopSound() {
-        enemySound.pause();
+        enemySound.stop();
     }
 }

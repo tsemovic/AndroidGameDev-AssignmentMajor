@@ -140,8 +140,13 @@ public class GameOver implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (subHeaderTextActive) {
+                    playScreen.dispose();
+                    dispose();
+
+                    //((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
-                    System.out.println(getNextLevel());
+
+
                 }
                 subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
@@ -171,6 +176,8 @@ public class GameOver implements Disposable {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (exitTextActive) {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
+                    dispose();
+                    playScreen.dispose();
                 }
                 exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }
@@ -186,12 +193,18 @@ public class GameOver implements Disposable {
     }
 
     public String getNextLevel() {
+
         String level = null;
 
-        if (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
-            level = "LEVEL: " + (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) + 1);
-        } else {
+        if(playScreen.getPlayer().playerIsDead) {
             level = playScreen.currentLevel;
+        }else{
+
+            if (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
+                level = "LEVEL: " + (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) + 1);
+            } else {
+                level = playScreen.currentLevel;
+            }
         }
         return level;
     }

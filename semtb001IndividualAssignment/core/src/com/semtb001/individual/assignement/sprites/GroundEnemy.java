@@ -104,7 +104,7 @@ public class GroundEnemy extends Sprite{
                 enemySound.play();
                 enemySound.setVolume(0.1f);
             }else{
-                enemySound.pause();
+                enemySound.setVolume(0.0f);
             }
         }else{
             if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 2) {
@@ -114,7 +114,9 @@ public class GroundEnemy extends Sprite{
                 enemySound.play();
                 enemySound.setVolume(0.2f);
             }else if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 30) {
-                enemySound.stop();
+                enemySound.setVolume(0.0f);
+            }else{
+                enemySound.setVolume(0.0f);
             }
         }
 
@@ -126,6 +128,6 @@ public class GroundEnemy extends Sprite{
     }
 
     public void stopSound() {
-        enemySound.pause();
+        enemySound.stop();
     }
 }

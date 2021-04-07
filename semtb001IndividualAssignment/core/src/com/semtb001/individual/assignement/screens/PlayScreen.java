@@ -474,22 +474,40 @@ public class PlayScreen implements Screen {
 
     // Method to draw the player
     public void drawPlayer() {
+
+        // If the player is running and was previously sliding
         if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END)) {
+
+            // Draw the current player animtaion frame
             game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
+
+            // If the player is sliding
         } else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
+
+            // Draw the current player animtaion frame (lower than normal as the player is laying down)
             game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
+
+            // If the player is starting to jump
         } else if (player.getState() == Player.State.JUMP_START) {
+
+            // Draw the current player animtaion frame
             game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 3), 8, 8);
+
+            // If the player is ending the jump
         } else if (player.getState() == Player.State.JUMP_END) {
+
+            // Draw the current player animtaion frame
             game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 2), 8, 8);
+
+        // Else, Draw the current player animation frame in the regular position
         } else {
             game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 2.6), 8, 8);
         }
     }
 
+    // Method to update the HUD coin counter (increase by 1)
     public void updateCollectedCoins() {
         hud.update();
-
     }
 
     @Override

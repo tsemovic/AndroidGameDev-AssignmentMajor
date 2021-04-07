@@ -215,8 +215,6 @@ public class PlayScreen implements Screen {
 
         //draw pause/game over display
         if (isPaused) {
-            stopSounds();
-            stopMusic();
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
         } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {

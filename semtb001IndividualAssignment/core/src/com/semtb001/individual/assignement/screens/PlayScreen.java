@@ -33,101 +33,114 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class PlayScreen implements Screen {
-    private static final float dt = (float) 0.01; // this is your fixed frame rate, in this case ~60fps
-    private float t = (float) 0.0; // total elapsed time
-    double accumulator = 0.0; // elapsed time since last call to updateWorld
 
+    // Game, camera, and current level objects
     private Semtb001IndividualAssignment game;
     private OrthographicCamera gameCamera;
-    private Viewport gameViewPort;
-    private InputMultiplexer inputMultiplexer;
+    public String currentLevel;
 
+    // world map objects
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-
     private World world;
+    private float worldEndPosition;
+
+    // Box2D objects
     private Box2DDebugRenderer box2dRenderer;
     private Box2DWorldCreator box2dWorldCreator;
 
-    private float timeCount;
-    private float worldEndPosition;
+    // world step time calculation variables
+    private static final float dt = (float) 0.01;
+    private float time = (float) 0.0;
+    double accumulator = 0.0;
 
+    // Texture objects
     public TextureAtlas textureAtlas;
     public SpriteBatch batch;
+
+    // variables for game pause and game over
     public boolean isPaused;
     public boolean isGameOverCreated;
 
-
+    // Screen overlay objects
     private Paused paused;
     private Hud hud;
     private GameOver gameOver;
     private LevelBrief levelBrief;
 
+    // Player, Enemy and Coin objects
     private Player player;
     private Queue<GroundEnemy> groundEnemies;
     private Queue<FlyingEnemy> flyingEnemies;
-    private Queue<Coin> jewels;
+    private Queue<Coin> coins;
 
+    // Music object for game music loop
     private Music music;
 
-    public String currentLevel;
+    // Input Multiplexer object (multitouch functionality)
+    private InputMultiplexer inputMultiplexer;
 
+    // Boolean to determine if the level brief is displayed
     private boolean levelBriefActive;
 
-
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment, String currentLevel) {
+
+        // Instantiate game and level objects
         game = semtb001IndividualAssignment;
-        gameCamera = new OrthographicCamera();
         batch = semtb001IndividualAssignment.batch;
         this.currentLevel = currentLevel;
+        isGameOverCreated = false;
 
+        // Setup game camera
+        gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
-        gameViewPort = new FitViewport((Gdx.graphics.getWidth() / Semtb001IndividualAssignment.WORLD_WIDTH) / Semtb001IndividualAssignment.PPM, (Gdx.graphics.getHeight() / Semtb001IndividualAssignment.WORLD_HEIGHT) / Semtb001IndividualAssignment.PPM, gameCamera);
 
-        inputMultiplexer = new InputMultiplexer();
+        // Load map level, render the map, and create the game world
         mapLoader = new TmxMapLoader();
-
-        //load map level
         map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
-
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001IndividualAssignment.MPP);
-
         world = new World(new Vector2(0, -100), true);
 
+        // Setup the Box2D world creator (creates Box2D bodies and adds them to the world)
         box2dRenderer = new Box2DDebugRenderer();
         box2dWorldCreator = new Box2DWorldCreator(this);
+
+        // Setup the world contact listener
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
+        // Setup the texture atlas for loading in the player and enemy textures
         textureAtlas = new TextureAtlas("texturepack/playerAndEnemy.pack");
 
+        // Instantiate Player, Enemies and Coins
         player = new Player(world, this);
-        //player.box2dBody.applyLinearImpulse(new Vector2(15f, 0), player.box2dBody.getWorldCenter(), true);
-
         groundEnemies = new LinkedList<GroundEnemy>();
         flyingEnemies = new LinkedList<FlyingEnemy>();
-        jewels = new LinkedList<Coin>();
+        coins = new LinkedList<Coin>();
 
+        // Setup the game camera position
+        gameCamera.position.x = player.box2dBody.getPosition().x + 9;
+        gameCamera.position.y = 23;
 
-        world.setContactListener(new WorldContactListener(box2dWorldCreator));
-
+        // Setup the screen overlay objects
         hud = new Hud(game.batch, this);
         gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
         levelBrief = new LevelBrief(game.batch, this);
+
+        // Initially, set the level brief to active so that the level brief is displayed at start up
         levelBriefActive = true;
 
+        // Input multiplexer setup (allows multitouch between the game, hud, paused, and game over screens)
+        inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(hud.stage);
         inputMultiplexer.addProcessor(gameOver.stage);
         inputMultiplexer.addProcessor(paused.stage);
 
+        // Setup game music loop
         music = Semtb001IndividualAssignment.assetManager.manager.get(Assets.music);
         music.setLooping(true);
         music.play();
-        isGameOverCreated = false;
-
-        gameCamera.position.x = player.box2dBody.getPosition().x + 9;
-        gameCamera.position.y = 23;
 
     }
 
@@ -136,16 +149,18 @@ public class PlayScreen implements Screen {
 
     }
 
+    // Method for handling input for the game
     public void inputHandler(float delta) {
 
-        //if the screen is touched (excluding the pause button)
+        // If the screen is touched when the game is not paused and the game is not over (excluding the pause button)
         if (Gdx.input.isTouched() && !hud.pausedPressed && !isPaused && !isGameOverCreated) {
-            //if the top half of the screen is touched: player jump
+
+            // If the top half of the screen is touched: player jump
             if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
                 player.jump();
-
-                //if the bottom half of the screen is touched: player slide
             } else {
+
+                // If the bottom half of the screen is touched: player slide
                 player.slide();
             }
         }
@@ -154,57 +169,70 @@ public class PlayScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        //https://www.reddit.com/r/libgdx/comments/5ib2q3/trying_to_get_my_head_around_fixed_timestep_in/
+        /* This code adjusts the time that the world is updated so that the world time step appears
+           consistant regardless of how fast the device is that the application is running on. This
+           means that the game will not speed up and become unplayable if it's run on a fast device.
+
+           The below code has come from 'https://gafferongames.com/post/fix_your_timestep/' and has
+           been modified to fit this project
+        */
         accumulator += delta;
 
         while (accumulator >= dt) {
-            updateWorld(t, dt);
+
+            // Update game
+            updateWorld(time, dt);
             accumulator -= dt;
-            t += dt;
+            time += dt;
         }
 
+        // Render game
         renderWorld(delta);
 
-        if(!levelBrief.timeToPlay){
+        // Display the level brief until the timer runs out and it's 'time to play' the game
+        if (!levelBrief.timeToPlay) {
             game.batch.setProjectionMatrix(levelBrief.stage.getCamera().combined);
             levelBrief.stage.draw();
             levelBrief.update(delta);
         }
     }
 
+
+    // Method to render the world
     private void renderWorld(float delta) {
-        //clear the screen
+
+        // Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //render the world and object fixtures
+        // Render the world and object fixtures
         gameCamera.update();
         renderer.setView(gameCamera);
         renderer.render();
 
-        //this is the render for debugging
+        // Debugging renderer (draws outline around Box2D objects)
         box2dRenderer.render(world, gameCamera.combined);
 
         game.batch.setProjectionMatrix(gameCamera.combined);
 
-        //set input processor
+        // Set the input processor
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        //begin the sprite batch for drawing everything
+        // Begin the sprite batch for drawing the Player, Enemies, and Coins
         game.batch.begin();
 
-        //draw player, jewels and enemies
+        // Draw Player, Enemies, and Coins
         drawPlayer();
         drawEnemies(delta);
         drawCoins(delta);
 
-        //end the sprite batch for drawing everything
+        // End the sprite batch for drawing the Player, Enemies, and Coins
         game.batch.end();
 
-        //draw the heads up display
+        // Draw the heads up display
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
-        //draw transparent background when the game is paused or game over
+        // Draw transparent background when the game is paused or when the game is over
         game.batch.begin();
         if (isPaused) {
             paused.getBackgroundSprite().draw(game.batch);
@@ -213,7 +241,7 @@ public class PlayScreen implements Screen {
         }
         game.batch.end();
 
-        //draw pause/game over display
+        // Draw the game paused and game over screen overlay
         if (isPaused) {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
@@ -238,7 +266,7 @@ public class PlayScreen implements Screen {
             movePlayer();
             checkIfDead(deltaTime);
             handleEnemies(deltaTime);
-            if(!music.isPlaying()) {
+            if (!music.isPlaying()) {
                 music.play();
             }
         } else {
@@ -256,11 +284,11 @@ public class PlayScreen implements Screen {
         }
     }
 
-    public void stopMusic(){
+    public void stopMusic() {
         music.stop();
     }
 
-    public void pauseMusic(){
+    public void pauseMusic() {
         music.pause();
     }
 
@@ -290,7 +318,6 @@ public class PlayScreen implements Screen {
         if (player.box2dBody.getPosition().x <= gameCamera.position.x - 15 && !player.playerIsDead) {
             gameOver = new GameOver(game.batch, game, this);
             inputMultiplexer.addProcessor(gameOver.stage);
-            timeCount = 0;
             player.playerIsDead = true;
         }
     }

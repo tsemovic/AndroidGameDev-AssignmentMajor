@@ -247,6 +247,7 @@ public class PlayScreen implements Screen {
             paused.stage.draw();
         } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
 
+            // If the game over screen has not yet been created, create it
             if (!isGameOverCreated) {
                 gameOver = new GameOver(game.batch, game, this);
                 inputMultiplexer.addProcessor(gameOver.stage);
@@ -257,126 +258,221 @@ public class PlayScreen implements Screen {
         }
     }
 
+    // Method to update the world
     private void updateWorld(float t, float deltaTime) {
+
+        // The world is only updated when the game is not paused and the level brief screen isn't displayed
         if (!isPaused && levelBrief.timeToPlay) {
+
+            // Step the world
             world.step(deltaTime, 6, 2);
+
+            // Handle application input
             inputHandler(deltaTime);
+
+            // Update player (sound, and animation frame depending on state)
             player.update(deltaTime);
-            moveGameCamera();
+
+            // Move player (constant running velocity)
             movePlayer();
-            checkIfDead(deltaTime);
-            handleEnemies(deltaTime);
+
+            // Move the game camera
+            moveGameCamera();
+
+            // Check if the player is dead (off the left side of the screen)
+            checkIfDead();
+
+            // Handle enemies (movement, sound, and animation frame depending on state)
+            handleEnemies();
+
+            // If the music is not playing, play music
             if (!music.isPlaying()) {
                 music.play();
             }
+
         } else {
+
+            // If the game is paused or the level brief is displayed: pause all game sounds
             stopSounds();
             pauseMusic();
         }
     }
 
+    // Method to stop enemy sounds from playing
     public void stopSounds() {
+
+        // Stop flying enemy (bee) sounds
         for (FlyingEnemy enemy : flyingEnemies) {
             enemy.stopSound();
         }
+
+        // Stop grounded enemy (slime) sounds
         for (GroundEnemy enemy : groundEnemies) {
             enemy.stopSound();
         }
     }
 
+    // Method to stop game loop music (used when the track needs to be restarted eg. new game)
     public void stopMusic() {
         music.stop();
     }
 
+    // Method to pause game loop music (used when the track needs to be resumed where it was stopped)
     public void pauseMusic() {
         music.pause();
     }
 
+    // Method to move the game camera so that it follows the player
     private void moveGameCamera() {
-        if (!isPaused && !player.playerIsDead) {
-            if (player.box2dBody.getPosition().x <= worldEndPosition) {
-                //gameCamera.position.x = player.box2dBody.getPosition().x + 8;
-                //gameCamera.position.x = (float) (gameCamera.position.x + (player.box2dBody.getLinearVelocity().x * 0.01));
-                gameCamera.position.x += 0.15003;
 
+        // If the game is not paused and the player is not dead
+        if (!isPaused && !player.playerIsDead) {
+
+            // If the player hasn't reached the end of the world: move the camera. If the player has
+            // reached the end of the world, the camera will not move (player runs off the screen)
+            if (player.box2dBody.getPosition().x <= worldEndPosition) {
+
+                // Increase the camera x position by the players maximum linear velocity (15f)
+                gameCamera.position.x += 0.15003;
             }
         }
     }
 
+    // Method to move the player along the map
     private void movePlayer() {
+
+        // If the game is not paused
         if (!isPaused) {
+
+            // If the player is not dead and the x axis velocity is less than 15f, move the player
             if (player.box2dBody.getLinearVelocity().x <= 15f && player.playerIsDead == false) {
+
+                // Apply a linear impulse to the player on the x axis
                 player.box2dBody.applyLinearImpulse(new Vector2(0.5f, 0), player.box2dBody.getWorldCenter(), true);
             }
         } else {
+
+            // If the game is paused, stop the player from moving (set x and y velocity to 0)
             player.box2dBody.setLinearVelocity(new Vector2(0, 0));
         }
     }
 
-    //check if the player is dead (edge of the screen)
-    private void checkIfDead(float delta) {
+    // Check if the player is dead (has gone off the left edge of the screen)
+    private void checkIfDead() {
+
+        // If the player's x position is 15 less than the camera's x position
         if (player.box2dBody.getPosition().x <= gameCamera.position.x - 15 && !player.playerIsDead) {
+
+            // Create a new game over screen and add it to the input multiplexer processors
             gameOver = new GameOver(game.batch, game, this);
             inputMultiplexer.addProcessor(gameOver.stage);
+
+            // Set the player to 'dead'
             player.playerIsDead = true;
         }
     }
 
-    public void handleEnemies(float delta) {
+    // Method to handle enemy spawns (grounded and flying)
+    public void handleEnemies() {
 
-        //handle grounded enemies
+        // If there are grounded enemies that need to be spawned in the map
         if (box2dWorldCreator.getGroundEnemyPositions().size() > 0) {
+
+            // If the player is coming up to where a grounded enemy spawns
             if (getPlayerPos().x + 100 > box2dWorldCreator.getGroundEnemyPositions().element().x / 64) {
+
+                // Create the enemy
                 GroundEnemy newGroundEnemy = new GroundEnemy(world, this, box2dWorldCreator.getGroundEnemyPositions().element());
                 groundEnemies.offer(newGroundEnemy);
+
+                // Remove the enemy from the 'enemies to be created' list
                 box2dWorldCreator.getGroundEnemyPositions().remove();
             }
         }
+
+        // If there are any ground enemies that are spawned into the map
         if (groundEnemies.size() > 0) {
+
+            // If the player has passed the grounded enemy and it's off the screen
             if (groundEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 20) {
+
+                // Destroy the enemy
                 world.destroyBody(groundEnemies.element().box2dBody);
                 groundEnemies.remove();
             }
         }
 
-        //handle flying enemies
+        // If there are flying enemies that need to be spawned in the map
         if (box2dWorldCreator.getFlyingEnemyPositions().size() > 0) {
+
+            // If the player is coming up to where a flying enemy spawns
             if (getPlayerPos().x + 100 > box2dWorldCreator.getFlyingEnemyPositions().element().x / 32) {
+
+                // Create the enemy
                 FlyingEnemy newFlyingEnemy = new FlyingEnemy(world, this, box2dWorldCreator.getFlyingEnemyPositions().element());
                 flyingEnemies.offer(newFlyingEnemy);
+
+                // Remove the enemy from the 'enemies to be created' list
                 box2dWorldCreator.getFlyingEnemyPositions().remove();
             }
         }
+
+        // If there are any flying enemies that are spawned into the map
         if (flyingEnemies.size() > 0) {
+
+            // If the player has passed the flying enemy and it's off the screen
             if (flyingEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 20) {
+
+                // Destroy the enemy
                 world.destroyBody(flyingEnemies.element().box2dBody);
                 flyingEnemies.remove();
             }
         }
     }
 
+    // Method to draw enemy sprites
     public void drawEnemies(float delta) {
-        //draw ground enemy animation frames
+
+        // Get all ground enemies that are spawned into the map
         for (GroundEnemy enemy : groundEnemies) {
+
+            // Update the enemy (updates current animation frame, sound, and movement)
             enemy.update(delta);
+
+            // Draw the current enemy animation frame
             game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
         }
 
+        // Get all flying enemies that are spawned into the map
         for (FlyingEnemy enemy : flyingEnemies) {
+
+            // Update the enemy (updates current animation frame, sound, and movement)
             enemy.update(delta);
+
+            // Draw the current enemy animation frame
             game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 2, 2);
         }
     }
 
+    // Method to draw coins in the map
     public void drawCoins(float delta) {
-        for (Coin jewel : box2dWorldCreator.getJewels()) {
-            jewel.update(delta);
-            if (!jewel.collected) {
-                game.batch.draw(jewel.currentFrame, jewel.box2dBody.getPosition().x - 0.75f, (float) (jewel.box2dBody.getPosition().y - 0.75f), 1.5f, 1.5f);
+
+        // Get all coins that are in the map
+        for (Coin coin : box2dWorldCreator.getJewels()) {
+
+            // Update the coin (updates current animation frame)
+            coin.update(delta);
+
+            // If the coin is not yet collected
+            if (!coin.collected) {
+
+                // Draw the current coin animation frame
+                game.batch.draw(coin.currentFrame, coin.box2dBody.getPosition().x - 0.75f, (float) (coin.box2dBody.getPosition().y - 0.75f), 1.5f, 1.5f);
             }
         }
     }
 
+    // Method to draw the player
     public void drawPlayer() {
         if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END)) {
             game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);

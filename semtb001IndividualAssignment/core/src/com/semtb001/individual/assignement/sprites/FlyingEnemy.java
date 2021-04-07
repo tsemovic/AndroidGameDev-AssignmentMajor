@@ -66,7 +66,6 @@ public class FlyingEnemy extends Sprite{
 
     public void defineEnemy(){
         BodyDef bodyDef = new BodyDef();
-        Rectangle rect = new Rectangle();
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
 
@@ -76,6 +75,8 @@ public class FlyingEnemy extends Sprite{
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(pos.x / 32, pos.y / 32);
 
+        fixtureDef.isSensor = true;
+
         box2dBody = world.createBody(bodyDef);
 
         shape.setAsBox(1, 1);
@@ -83,7 +84,6 @@ public class FlyingEnemy extends Sprite{
         fixtureDef.shape = shape;
 
         box2dBody.createFixture(fixtureDef).setUserData(this);
-
     }
 
     public void update(float delta){
@@ -108,7 +108,7 @@ public class FlyingEnemy extends Sprite{
                 enemySound.play();
                 enemySound.setVolume(0.1f);
             }else{
-                enemySound.pause();
+                enemySound.setVolume(0.0f);
             }
         }else{
             if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 2) {
@@ -117,8 +117,9 @@ public class FlyingEnemy extends Sprite{
             }else if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 10) {
                 enemySound.play();
                 enemySound.setVolume(0.2f);
-            }else if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 30) {
-                enemySound.stop();
+            }else{
+                enemySound.setVolume(0.0f);
+
             }
         }
     }

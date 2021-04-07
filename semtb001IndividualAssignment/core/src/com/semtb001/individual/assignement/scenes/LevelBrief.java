@@ -29,8 +29,9 @@ public class LevelBrief implements Disposable {
         this.playScreen = playScreen;
         viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
-        countdown = 5;
+        countdown = 3;
         timeToPlay = false;
+
         //table setup
         Table hudTable = new Table();
         hudTable.center();

@@ -141,6 +141,8 @@ public class GameOver implements Disposable {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (subHeaderTextActive) {
                     playScreen.dispose();
+                    playScreen.stopSounds();
+                    playScreen.stopMusic();
                     dispose();
 
                     //((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
@@ -175,9 +177,14 @@ public class GameOver implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (exitTextActive) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
-                    dispose();
+                    //dispose();
                     playScreen.dispose();
+                    playScreen.stopSounds();
+                    playScreen.stopMusic();
+
+
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
+
                 }
                 exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
             }

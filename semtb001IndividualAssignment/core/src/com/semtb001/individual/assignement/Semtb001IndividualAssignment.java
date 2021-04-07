@@ -85,10 +85,10 @@ public class Semtb001IndividualAssignment extends Game {
 		scoresPref = Gdx.app.getPreferences("scores");
 		levelsPref = Gdx.app.getPreferences("levels");
 
-//		levelsPref.clear();
-//		levelsPref.flush();
-//		scoresPref.clear();
-//		scoresPref.flush();
+		levelsPref.clear();
+		levelsPref.flush();
+		scoresPref.clear();
+		scoresPref.flush();
 
 
 		levelsPref.putBoolean("LEVEL: 1", true);

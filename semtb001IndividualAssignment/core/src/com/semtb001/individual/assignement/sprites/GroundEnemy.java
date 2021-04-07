@@ -61,15 +61,16 @@ public class GroundEnemy extends Sprite{
 
     public void defineEnemy(){
         BodyDef bodyDef = new BodyDef();
-        Rectangle rect = new Rectangle();
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
+
+        fixtureDef.filter.categoryBits = Player.ENEMY;
+        fixtureDef.filter.maskBits =  Player.WORLD | Player.DEFAULT;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(pos.x / 32, pos.y / 32);
 
-        fixtureDef.filter.categoryBits = Player.ENEMY;
-        fixtureDef.filter.maskBits = Player.PLAYER | Player.WORLD | Player.DEFAULT;
+        //fixtureDef.isSensor = true;
 
         box2dBody = world.createBody(bodyDef);
 
@@ -79,6 +80,12 @@ public class GroundEnemy extends Sprite{
 
         box2dBody.createFixture(fixtureDef).setUserData(this);
 
+        fixtureDef.filter.categoryBits = Player.ENEMY;
+        fixtureDef.filter.maskBits =  Player.PLAYER | Player.WORLD | Player.DEFAULT;
+        fixtureDef.isSensor = true;
+        fixtureDef.shape = shape;
+
+        box2dBody.createFixture(fixtureDef).setUserData(this);
 
     }
 

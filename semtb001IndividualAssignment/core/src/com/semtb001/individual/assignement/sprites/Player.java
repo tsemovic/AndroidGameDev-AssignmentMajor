@@ -38,14 +38,12 @@ public class Player extends Sprite {
     public static final short ENEMY = 8;
     public static final short JEWEL = 4;
 
-
     public enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
 
     private State currentState;
     public State previousState;
 
     public boolean playerIsDead;
-    public float deadTimer;
 
     public boolean gameOver;
 
@@ -86,7 +84,6 @@ public class Player extends Sprite {
         slideStartTimer = 0;
         slideEndTimer = 0;
 
-        deadTimer = 0;
         gameOver = false;
 
         currentState = State.RUN;
@@ -186,10 +183,7 @@ public class Player extends Sprite {
         currentFrame = getFramesFromAnimation(delta);
 
         if (playerIsDead) {
-            deadTimer += delta;
-            if (deadTimer > 2) {
-                gameOver = true;
-            }
+            gameOver = true;
             currentState = State.FAIL;
         }
     }
@@ -384,6 +378,10 @@ public class Player extends Sprite {
         }
     }
 
+    public void setPlayerIsDead(boolean value){
+        playerIsDead = value;
+    }
+
     public State getState() {
         return currentState;
     }
@@ -398,10 +396,6 @@ public class Player extends Sprite {
 
     public boolean getGameOver() {
         return gameOver;
-    }
-
-    public boolean getPlayerIsDead() {
-        return playerIsDead;
     }
 
     public TiledMapTileLayer.Cell getCellPlayerIsOn(String layerName) {

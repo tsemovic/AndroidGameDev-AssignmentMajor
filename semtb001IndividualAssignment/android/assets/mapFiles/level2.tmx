@@ -4,43 +4,25 @@
  <tileset firstgid="99" source="background_tilesheet.tsx"/>
  <layer id="9" name="backgroundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt2+fXyHUYx/Gf3PdtlIhQElIZmSWKBpLVQkZ20tDQQpqioVLKSHvYUVb2JiM0KIn2Lg0i2hp6ndNfoEd9j+vB69n1Puf6Bz5982dZP26gPzdyEzdzC7dyGwO4nYEM4g7upG/00Uf/v+/HM4GJPMckJvM8LzCFqUxjOjN4kZnMij766JPoN/E2m9nCO7zLe7zPB3zIR3zMJ3zKZ3weffTRJ9Hnz8myHHLJowAFKURhDuQginAwRSnGIRTPiT766FPo63AidanHSZxMfRpwCqdyGqfTkEY05ozoo48+if5iLuFSLqMXl3MFV3IVvbmaa7iW67iePtFHH30S/cOM4hEe5TEe5wme5Cme5hmeZTRjGMu46KOPPol+Fat5mTWsZR2v8Cqv8Trr2cAbvMlG3oo++uiT6H/kJ37mF37lN35nD3/wJ3/xN3vJcrMsHwfkRh999Cn0R7s9hmOpRGWqUJXjqEZ1alCTWtTmeE7IjT766FPo29KO9nTgAjrSic50oSvd6M6F9OAiekYfffRJ9HdxN4O5h3u5jyHczwMM5UEeYhjDGcHIhPsS2b9S/T/66Peln80c5jKP+SxgIYtYzBKWsozlvMQKVkYfffRJ9F/wJV+xla/5hm/5jm1s53t2sJMf2MXu6KOPPom+RF6WHUpJSlGawzicMhxBWY6kHOWpwFFUzIs++uhT6JtwJk1pRnNa0JKzOJtzOJfzaEVr2nB+9NFHn0Sfyn42+uijj/159NFHH/vz6KPfn/tU9rPRRx/9f+//Aei+Fkc=
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
   </data>
  </layer>
  <layer id="8" name="objectTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt07ENACAMA8HMRcMA7L8PTVaIEsGd5N7NRwAAAAAAAAAAE60c0K+qx5MD+lX1qHNes7sPAAAAAAAAAADABy6RNQLq
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
   </data>
  </layer>
  <layer id="1" name="groundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt0zsKg1AURVEF4wBi7bTiRB1gmhQSXqEhXPWwFuz2fYrTdQAAQJp1/E/Addk55LNzyGfnkM/OIZ+dt72+gjuzc8hn53A/fXGPTWfePX/69T3Lzqr/KLUaips2nXl3qyNnPXdW/UfpCtm5lJ+dS/nZuZSfnUv52bmUn51L+dm5VN8bcWWXcw==
+   eJzt01EJwDAUwMAHK/MvZgJnoh9tuINIyAwAAFDzvXsCzuVz6PM59Pkc+nwOfT6HPp9Dn8/hPo+kfEuSJEmSJEmSJEmSJM0PU22Kzw==
   </data>
  </layer>
- <objectgroup id="2" name="groundObject">
-  <object id="2" x="-88" y="716" width="1876" height="620"/>
-  <object id="3" x="1986" y="718" width="1789" height="620"/>
-  <object id="8" x="3968" y="710" width="128" height="32"/>
-  <object id="9" x="4288" y="715" width="11872" height="563"/>
-  <object id="11" x="5247" y="513" width="258" height="39"/>
- </objectgroup>
- <objectgroup id="10" name="jewelObject">
-  <object id="12" x="4552" y="671" width="31" height="17"/>
-  <object id="13" x="4647" y="672" width="22" height="15"/>
-  <object id="14" x="4750" y="678" width="20" height="11"/>
-  <object id="15" x="4831" y="669" width="27" height="21"/>
-  <object id="16" x="550" y="646" width="31" height="30"/>
- </objectgroup>
+ <objectgroup id="2" name="groundObject"/>
+ <objectgroup id="10" name="jewelObject"/>
  <objectgroup id="4" name="flyingEnemyPositions"/>
- <objectgroup id="5" name="groundEnemyPositions">
-  <object id="5" x="3746.36" y="637.03" width="38" height="36"/>
-  <object id="10" x="5607" y="651" width="26" height="28"/>
- </objectgroup>
+ <objectgroup id="5" name="groundEnemyPositions"/>
  <objectgroup id="6" name="worldEndPosition">
   <object id="1" x="13960" y="576" width="96" height="76"/>
  </objectgroup>
- <objectgroup id="7" name="objectObject">
-  <object id="6" x="2369.33" y="513.333" width="124" height="208"/>
-  <object id="7" x="961.333" y="574.667" width="124" height="160"/>
- </objectgroup>
+ <objectgroup id="7" name="objectObject"/>
 </map>

@@ -26,24 +26,21 @@ public class WorldContactListener implements ContactListener {
 
         if(fixA.getUserData() instanceof Player){
             if(fixB.getUserData() instanceof GroundEnemy){
-                ((Player) fixA.getUserData()).playerIsDead = true;
+                ((Player) fixA.getUserData()).setPlayerIsDead(true);
             }else if(fixB.getUserData() instanceof FlyingEnemy){
-                ((Player) fixA.getUserData()).playerIsDead = true;
+                ((Player) fixA.getUserData()).setPlayerIsDead(true);
             }else if(fixB.getUserData() instanceof Jewel){
-                Jewel hitJewel = (Jewel) fixB.getUserData();
-                hitJewel.hit();
-
+                ((Jewel) fixB.getUserData()).hit();
             }
         }
 
         if(fixB.getUserData() instanceof Player){
             if(fixA.getUserData() instanceof GroundEnemy){
-                ((Player) fixB.getUserData()).playerIsDead = true;
+                ((Player) fixB.getUserData()).setPlayerIsDead(true);
             }else if(fixA.getUserData() instanceof FlyingEnemy){
-                ((Player) fixB.getUserData()).playerIsDead = true;
+                ((Player) fixB.getUserData()).setPlayerIsDead(true);
             }else if(fixA.getUserData() instanceof Jewel){
-                Jewel hitJewel = (Jewel) fixB.getUserData();
-                hitJewel.hit();
+                ((Jewel) fixB.getUserData()).hit();
             }
         }
 

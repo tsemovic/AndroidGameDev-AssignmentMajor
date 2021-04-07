@@ -75,6 +75,7 @@ public class PlayScreen implements Screen {
 
     private boolean levelBriefActive;
 
+
     public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment, String currentLevel) {
         game = semtb001IndividualAssignment;
         gameCamera = new OrthographicCamera();
@@ -214,15 +215,17 @@ public class PlayScreen implements Screen {
 
         //draw pause/game over display
         if (isPaused) {
+            stopSounds();
+            stopMusic();
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
         } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
+
             if (!isGameOverCreated) {
                 gameOver = new GameOver(game.batch, game, this);
                 inputMultiplexer.addProcessor(gameOver.stage);
                 isGameOverCreated = true;
             }
-            stopSounds();
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
         }
@@ -237,9 +240,12 @@ public class PlayScreen implements Screen {
             movePlayer();
             checkIfDead(deltaTime);
             handleEnemies(deltaTime);
-            music.play();
+            if(!music.isPlaying()) {
+                music.play();
+            }
         } else {
             stopSounds();
+            pauseMusic();
         }
     }
 
@@ -250,8 +256,14 @@ public class PlayScreen implements Screen {
         for (GroundEnemy enemy : groundEnemies) {
             enemy.stopSound();
         }
+    }
 
+    public void stopMusic(){
         music.stop();
+    }
+
+    public void pauseMusic(){
+        music.pause();
     }
 
     private void moveGameCamera() {
@@ -296,7 +308,7 @@ public class PlayScreen implements Screen {
             }
         }
         if (groundEnemies.size() > 0) {
-            if (groundEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 10) {
+            if (groundEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 20) {
                 world.destroyBody(groundEnemies.element().box2dBody);
                 groundEnemies.remove();
             }
@@ -311,7 +323,7 @@ public class PlayScreen implements Screen {
             }
         }
         if (flyingEnemies.size() > 0) {
-            if (flyingEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 10) {
+            if (flyingEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 20) {
                 world.destroyBody(flyingEnemies.element().box2dBody);
                 flyingEnemies.remove();
             }
@@ -386,9 +398,9 @@ public class PlayScreen implements Screen {
         renderer.dispose();
         hud.dispose();
         gameOver.dispose();
+        levelBrief.dispose();
         paused.dispose();
         box2dRenderer.dispose();
-
     }
 
     public TiledMap getMap() {

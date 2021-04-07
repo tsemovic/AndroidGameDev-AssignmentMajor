@@ -345,7 +345,7 @@ public class PlayScreen implements Screen {
         for (Coin jewel : box2dWorldCreator.getJewels()) {
             jewel.update(delta);
             if (!jewel.collected) {
-                game.batch.draw(jewel.currentFrame, jewel.box2dBody.getPosition().x - 1, (float) (jewel.box2dBody.getPosition().y - 1), 2, 2);
+                game.batch.draw(jewel.currentFrame, jewel.box2dBody.getPosition().x - 0.75f, (float) (jewel.box2dBody.getPosition().y - 0.75f), 1.5f, 1.5f);
             }
         }
     }

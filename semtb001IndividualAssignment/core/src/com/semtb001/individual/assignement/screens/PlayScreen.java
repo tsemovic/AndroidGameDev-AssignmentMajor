@@ -21,7 +21,7 @@ import com.semtb001.individual.assignement.scenes.Hud;
 import com.semtb001.individual.assignement.scenes.LevelBrief;
 import com.semtb001.individual.assignement.scenes.Paused;
 import com.semtb001.individual.assignement.sprites.FlyingEnemy;
-import com.semtb001.individual.assignement.sprites.Jewel;
+import com.semtb001.individual.assignement.sprites.Coin;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.sprites.GroundEnemy;
@@ -67,7 +67,7 @@ public class PlayScreen implements Screen {
     private Player player;
     private Queue<GroundEnemy> groundEnemies;
     private Queue<FlyingEnemy> flyingEnemies;
-    private Queue<Jewel> jewels;
+    private Queue<Coin> jewels;
 
     private Music music;
 
@@ -106,7 +106,7 @@ public class PlayScreen implements Screen {
 
         groundEnemies = new LinkedList<GroundEnemy>();
         flyingEnemies = new LinkedList<FlyingEnemy>();
-        jewels = new LinkedList<Jewel>();
+        jewels = new LinkedList<Coin>();
 
 
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
@@ -195,7 +195,7 @@ public class PlayScreen implements Screen {
         //draw player, jewels and enemies
         drawPlayer();
         drawEnemies(delta);
-        drawJewels(delta);
+        drawCoins(delta);
 
         //end the sprite batch for drawing everything
         game.batch.end();
@@ -341,8 +341,8 @@ public class PlayScreen implements Screen {
         }
     }
 
-    public void drawJewels(float delta) {
-        for (Jewel jewel : box2dWorldCreator.getJewels()) {
+    public void drawCoins(float delta) {
+        for (Coin jewel : box2dWorldCreator.getJewels()) {
             jewel.update(delta);
             if (!jewel.collected) {
                 game.batch.draw(jewel.currentFrame, jewel.box2dBody.getPosition().x - 1, (float) (jewel.box2dBody.getPosition().y - 1), 2, 2);
@@ -364,7 +364,7 @@ public class PlayScreen implements Screen {
         }
     }
 
-    public void updateCollectedJewels() {
+    public void updateCollectedCoins() {
         hud.update();
 
     }

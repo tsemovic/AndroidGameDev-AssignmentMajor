@@ -12,8 +12,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
-import com.semtb001.individual.assignement.sprites.Jewel;
-import com.semtb001.individual.assignement.sprites.Player;
+import com.semtb001.individual.assignement.sprites.Coin;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,7 +31,7 @@ public class Box2DWorldCreator {
 
     private Queue<Vector2> groundEnemyPositions;
     private Queue<Vector2> flyingEnemyPositions;
-    private List<Jewel> jewels;
+    private List<Coin> jewels;
 
     public Box2DWorldCreator(PlayScreen playScreen) {
         world = playScreen.getWorld();
@@ -45,7 +44,7 @@ public class Box2DWorldCreator {
 
         groundEnemyPositions = new LinkedList<Vector2>();
         flyingEnemyPositions = new LinkedList<Vector2>();
-        jewels = new ArrayList<Jewel>();
+        jewels = new ArrayList<Coin>();
 
         //create map ground
         for (MapObject object : map.getLayers().get("groundObject").getObjects().getByType(RectangleMapObject.class)) {
@@ -77,7 +76,7 @@ public class Box2DWorldCreator {
             bodyDef.type = BodyDef.BodyType.StaticBody;
             bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
 
-            Jewel newJewel = new Jewel(rect, playScreen);
+            Coin newJewel = new Coin(rect, playScreen);
             jewels.add(newJewel);
         }
 
@@ -108,7 +107,7 @@ public class Box2DWorldCreator {
         return flyingEnemyPositions;
     }
 
-    public List<Jewel> getJewels() {
+    public List<Coin> getJewels() {
         return jewels;
     }
 

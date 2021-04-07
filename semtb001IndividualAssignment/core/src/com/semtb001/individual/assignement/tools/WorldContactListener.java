@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.semtb001.individual.assignement.sprites.FlyingEnemy;
-import com.semtb001.individual.assignement.sprites.Jewel;
+import com.semtb001.individual.assignement.sprites.Coin;
 import com.semtb001.individual.assignement.sprites.Player;
 import com.semtb001.individual.assignement.sprites.GroundEnemy;
 
@@ -29,8 +29,8 @@ public class WorldContactListener implements ContactListener {
                 ((Player) fixA.getUserData()).setPlayerIsDead(true);
             }else if(fixB.getUserData() instanceof FlyingEnemy){
                 ((Player) fixA.getUserData()).setPlayerIsDead(true);
-            }else if(fixB.getUserData() instanceof Jewel){
-                ((Jewel) fixB.getUserData()).hit();
+            }else if(fixB.getUserData() instanceof Coin){
+                ((Coin) fixB.getUserData()).hit();
             }
         }
 
@@ -39,8 +39,8 @@ public class WorldContactListener implements ContactListener {
                 ((Player) fixB.getUserData()).setPlayerIsDead(true);
             }else if(fixA.getUserData() instanceof FlyingEnemy){
                 ((Player) fixB.getUserData()).setPlayerIsDead(true);
-            }else if(fixA.getUserData() instanceof Jewel){
-                ((Jewel) fixB.getUserData()).hit();
+            }else if(fixA.getUserData() instanceof Coin){
+                ((Coin) fixB.getUserData()).hit();
             }
         }
 

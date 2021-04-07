@@ -30,9 +30,9 @@ public class Hud implements Disposable {
     private PlayScreen playScreen;
 
     private Label pause;
-    private Label jewels;
-    private Label jewelCountLabel;
-    private Integer jewelCount;
+    private Label coins;
+    private Label coinCountLabel;
+    private Integer coinCoint;
 
     public boolean pausedPressed;
 
@@ -40,7 +40,7 @@ public class Hud implements Disposable {
         this.playScreen = playScreen;
         viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
-        jewelCount = 0;
+        coinCoint = 0;
 
         //table setup
         Table hudTable = new Table();
@@ -48,16 +48,16 @@ public class Hud implements Disposable {
         hudTable.setFillParent(true);
 
         pause = new Label("ii", Semtb001IndividualAssignment.smallFontFontWhite);
-        jewels = new Label("JEWELS: ", Semtb001IndividualAssignment.tinyFontFontWhite);
-        jewelCountLabel = new Label(Integer.toString(jewelCount), Semtb001IndividualAssignment.tinyFontFontWhite);
+        coins = new Label("COINS: ", Semtb001IndividualAssignment.tinyFontFontWhite);
+        coinCountLabel = new Label(Integer.toString(coinCoint), Semtb001IndividualAssignment.tinyFontFontWhite);
 
         float hudTextAlpha = 0.75f;
         pause.setColor(1, 1, 1, hudTextAlpha);
-        jewels.setColor(1, 1, 1, hudTextAlpha);
-        jewelCountLabel.setColor(1, 1, 1, hudTextAlpha);
+        coins.setColor(1, 1, 1, hudTextAlpha);
+        coinCountLabel.setColor(1, 1, 1, hudTextAlpha);
 
-        hudTable.add(jewels).padLeft(Semtb001IndividualAssignment.PPM * 2);
-        hudTable.add(jewelCountLabel);
+        hudTable.add(coins).padLeft(Semtb001IndividualAssignment.PPM * 2);
+        hudTable.add(coinCountLabel);
         hudTable.add(pause).right().expandX().padRight(Semtb001IndividualAssignment.PPM * 2);
 
         stage.addActor(hudTable);
@@ -96,8 +96,8 @@ public class Hud implements Disposable {
     }
 
     public void update(){
-        jewelCount++;
-        jewelCountLabel.setText(jewelCount);
+        coinCoint++;
+        coinCountLabel.setText(coinCoint);
     }
 
     @Override
@@ -106,6 +106,6 @@ public class Hud implements Disposable {
     }
 
     public Integer getJewelCount(){
-        return jewelCount;
+        return coinCoint;
     }
 }

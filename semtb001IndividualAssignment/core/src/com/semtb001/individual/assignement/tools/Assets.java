@@ -39,8 +39,8 @@ public class Assets {
     public static final AssetDescriptor<Music> bee =
             new AssetDescriptor<Music>("audio/sounds/bee.ogg", Music.class);
 
-    public static final AssetDescriptor<Sound> jewel =
-            new AssetDescriptor<Sound>("audio/sounds/jewel.ogg", Sound.class);
+    public static final AssetDescriptor<Sound> coin =
+            new AssetDescriptor<Sound>("audio/sounds/coin.ogg", Sound.class);
 
     public static final AssetDescriptor<Sound> menuClick =
             new AssetDescriptor<Sound>("audio/sounds/menuClick.ogg", Sound.class);
@@ -69,7 +69,7 @@ public class Assets {
         manager.load(slime);
         manager.load(bee);
 
-        manager.load(jewel);
+        manager.load(coin);
         manager.load(menuClick);
 
         //load texture images

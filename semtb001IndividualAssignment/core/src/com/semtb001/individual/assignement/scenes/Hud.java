@@ -60,13 +60,13 @@ public class Hud implements Disposable {
         hudTable.add(coinCountLabel);
         hudTable.add(pause).right().expandX().padRight(Semtb001IndividualAssignment.PPM * 2);
 
-        // Add the table to the satage
+        // Add the table to the stage
         stage.addActor(hudTable);
 
         // Pause label click listener
         pause.addListener(new InputListener() {
 
-            // If the paused button is 'touched down' change the font colour to grey
+            // If the paused label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 pause.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
@@ -74,18 +74,18 @@ public class Hud implements Disposable {
                 return true;
             }
 
-            //If the user touches down on the pause button and drags
+            //If the user touches down on the pause label and drags
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
 
-                /* If the user touch is dragged and still on the pause button
+                /* If the user touch is dragged and still on the pause label
                 (change to grey font colour and active pausedPressed) */
                 if (x > 0 && x < pause.getWidth() && y > 0 && y < pause.getHeight()) {
                     pause.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     pausedPressed = true;
                 } else {
 
-                    /* If the user touch is dragged and not over the pause button
+                    /* If the user touch is dragged and not over the pause label
                     (de-activate pausedPressed and set the font colour to white) */
                     pause.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     pausedPressed = false;

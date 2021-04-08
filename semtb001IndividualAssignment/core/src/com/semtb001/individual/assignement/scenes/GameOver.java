@@ -29,7 +29,7 @@ public class GameOver implements Disposable {
     private Viewport viewport;
     private PlayScreen playScreen;
 
-    // Obects that will be displayed in the GameOver overlay
+    // Objects that will be displayed in the GameOver overlay
     private Label headerText;
     private Label subHeaderText;
     private Label exitText;

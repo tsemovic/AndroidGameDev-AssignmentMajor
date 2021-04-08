@@ -475,7 +475,10 @@ public class PlayScreen implements Screen {
     // Method to draw the player
     public void drawPlayer() {
 
-        // If the player is running and was previously sliding
+        /* This code draws the player in different positions due to the Box2D body shape changing
+        size depending on the state of the player
+
+        */// If the player is running and was previously sliding
         if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END)) {
 
             // Draw the current player animtaion frame
@@ -542,6 +545,7 @@ public class PlayScreen implements Screen {
         box2dRenderer.dispose();
     }
 
+    // Getters and Setters
     public TiledMap getMap() {
         return map;
     }
@@ -556,22 +560,6 @@ public class PlayScreen implements Screen {
         return pos;
     }
 
-    public TextureAtlas getTextureAtlas() {
-        return textureAtlas;
-    }
-
-    public float getWorldEndPosition() {
-        return worldEndPosition;
-    }
-
-    public void setWorldEndPosition(float x) {
-        worldEndPosition = x / Semtb001IndividualAssignment.PPM;
-    }
-
-    public void setPaused(boolean value) {
-        isPaused = value;
-    }
-
     public Player getPlayer() {
         return player;
     }
@@ -584,5 +572,12 @@ public class PlayScreen implements Screen {
         return box2dWorldCreator;
     }
 
+    public void setWorldEndPosition(float x) {
+        worldEndPosition = x / Semtb001IndividualAssignment.PPM;
+    }
 
+    public void setPaused(boolean value) {
+        isPaused = value;
+    }
+    
 }

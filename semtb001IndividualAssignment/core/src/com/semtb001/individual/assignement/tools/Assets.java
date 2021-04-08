@@ -6,9 +6,11 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 
+// Class used to load in assets
 public class Assets {
     public AssetManager manager = new AssetManager();
 
+    // Provide audio assets and thier path
     public static final AssetDescriptor<Music> music =
             new AssetDescriptor<Music>("audio/music/music.ogg", Music.class);
 
@@ -45,6 +47,7 @@ public class Assets {
     public static final AssetDescriptor<Sound> menuClick =
             new AssetDescriptor<Sound>("audio/sounds/menuClick.ogg", Sound.class);
 
+    // Provide image assets and their path
     public static final AssetDescriptor<Texture> backgroundTint =
             new AssetDescriptor<Texture>("gui/backgroundTint.png", Texture.class);
 
@@ -53,26 +56,29 @@ public class Assets {
 
     public void load() {
 
-        //load player sounds
-        manager.load(music);
+        // Load player sounds
         manager.load(jump1);
         manager.load(jump2);
         manager.load(jump3);
-
         manager.load(slide1);
         manager.load(slide2);
         manager.load(slide3);
-
         manager.load(fail);
 
-        //load enemy sounds
+        // Load looping game music
+        manager.load(music);
+
+        // Load enemy sounds
         manager.load(slime);
         manager.load(bee);
 
+        // Load coin sound
         manager.load(coin);
+
+        // Load menu click sound
         manager.load(menuClick);
 
-        //load texture images
+        // Load texture images
         manager.load(backgroundTint);
         manager.load(menuBackground);
     }

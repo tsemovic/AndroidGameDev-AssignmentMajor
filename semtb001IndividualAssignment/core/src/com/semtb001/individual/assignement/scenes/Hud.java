@@ -63,7 +63,7 @@ public class Hud implements Disposable {
         // Add the table to the stage
         stage.addActor(hudTable);
 
-        // Pause label click listener
+        // Pause label input listener
         pause.addListener(new InputListener() {
 
             // If the paused label is 'touched down' change the font colour to grey

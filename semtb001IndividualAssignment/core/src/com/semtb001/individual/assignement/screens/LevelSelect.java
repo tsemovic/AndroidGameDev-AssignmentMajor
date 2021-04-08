@@ -66,7 +66,7 @@ public class LevelSelect implements Screen {
         // Add the stage to the input processor
         Gdx.input.setInputProcessor(stage);
 
-        // Setup the background image
+        // Setup the background image sprite
         backgroundSprite = new Sprite(Semtb001IndividualAssignment.assetManager.manager.get(Assets.menuBackground));
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
         backgroundSprite.setAlpha(400);

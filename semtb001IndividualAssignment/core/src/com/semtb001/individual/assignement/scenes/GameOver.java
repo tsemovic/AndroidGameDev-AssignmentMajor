@@ -136,7 +136,7 @@ public class GameOver implements Disposable {
         //Listener for the subHeader text label
         subHeaderText.addListener(new InputListener() {
 
-            // If the subHeader label is 'touched down' change the font colour to grey
+            // If the label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
@@ -145,18 +145,18 @@ public class GameOver implements Disposable {
                 return true;
             }
 
-            //If the user touches down on the subHeader label and drags
+            //If the user touches down on the label and drags
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
 
-                /* If the user touch is dragged and still on the subHeader label
+                /* If the user touch is dragged and still on the label
                 (change to grey font colour and active subHeaderTextActive) */
                 if (x > 0 && x < subHeaderText.getWidth() && y > 0 && y < subHeaderText.getHeight()) {
                     subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
                     subHeaderTextActive = true;
                 } else {
 
-                    /* If the user touch is dragged and not over the subHeader label
+                    /* If the user touch is dragged and not over the label
                     (de-activate subHeaderTextActive and set the font colour to white) */
                     subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
                     subHeaderTextActive = false;

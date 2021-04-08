@@ -18,25 +18,33 @@ import com.semtb001.individual.assignement.screens.PlayScreen;
 import com.semtb001.individual.assignement.tools.Assets;
 
 public class Semtb001IndividualAssignment extends Game {
+
+	// Game sprite batch object
 	public SpriteBatch batch;
 
+	// Variables for the world dimensions
 	public static final float PPM = 32; // PPM = Pixel per Meter
 	public static final float MPP = 1 / PPM; // MPP = Meter per Pixel
-
 	public static final int WORLD_PIXEL_WIDTH = 1920/2;
 	public static final int WORLD_PIXEL_HEIGHT = 1080/2;
 	public static final float WORLD_WIDTH = WORLD_PIXEL_WIDTH / PPM; //in meter
 	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
 	public static final int NUMBER_OF_LEVELS = 2;
+
+	// Saved data objects
 	public static Preferences scoresPref;
 	public static Preferences levelsPref;
+
+	// Asset manager object
 	public static Assets assetManager;
 
+	// Font objects
 	public static BitmapFont largeFont;
 	public static BitmapFont mediumFont;
 	public static BitmapFont smallFont;
 	public static BitmapFont tinyFont;
 
+	// Label styles objects (used for all labels in the application)
 	public static Label.LabelStyle largeFontWhite;
 	public static Label.LabelStyle largeFontGrey;
 	public static Label.LabelStyle mediumFontFontWhite;
@@ -46,57 +54,77 @@ public class Semtb001IndividualAssignment extends Game {
 	public static Label.LabelStyle tinyFontFontWhite;
 	public static Label.LabelStyle tinyFontFontGrey;
 
-
-
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		assetManager = new Assets();
-		assetManager.load(); //starts loading assets
-		assetManager.manager.finishLoading(); //Continues when done loading.
 
-		//https://github.com/libgdx/libgdx/wiki/Gdx-freetype
+		// Game batch setup
+		batch = new SpriteBatch();
+
+		// Load game assets
+		assetManager = new Assets();
+		assetManager.load();
+		assetManager.manager.finishLoading();
+
+		/* This code is from the Gdx-freetype repository in the libgdx github wiki
+		(https://github.com/libgdx/libgdx/wiki/Gdx-freetype). It is used to load in
+		 true type format fonts so they can be used in labels, buttons etc.*/
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/poxel.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
+		// Setup large font style
 		parameter.size = (int) (Semtb001IndividualAssignment.PPM * 4);
 		largeFont = generator.generateFont(parameter);
 
+		// Setup medium font style
 		parameter.size = (int) (Semtb001IndividualAssignment.PPM * 3);
 		mediumFont = generator.generateFont(parameter);
 
+		// Setup small font style
 		parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
 		smallFont = generator.generateFont(parameter);
 
+		// Setup tiny font style
 		parameter.size = (int) (Semtb001IndividualAssignment.PPM * 1.5);
 		tinyFont = generator.generateFont(parameter);
 
+		// Dispose the .ttf font generator as all fonts have now been created
 		generator.dispose();
 
+		// Setup large font style in white and grey
 		largeFontWhite = new Label.LabelStyle(Semtb001IndividualAssignment.largeFont, Color.WHITE);
 		largeFontGrey = new Label.LabelStyle(Semtb001IndividualAssignment.largeFont, Color.GRAY);
+
+		// Setup medium font style in white and grey
 		mediumFontFontWhite = new Label.LabelStyle(Semtb001IndividualAssignment.mediumFont, Color.WHITE);
 		mediumFontFontGrey = new Label.LabelStyle(Semtb001IndividualAssignment.mediumFont, Color.GRAY);
+
+		// Setup small font style in white and grey
 		smallFontFontWhite = new Label.LabelStyle(Semtb001IndividualAssignment.smallFont, Color.WHITE);
 		smallFontFontGrey = new Label.LabelStyle(Semtb001IndividualAssignment.smallFont, Color.GRAY);
+
+		// Setup tiny font style in white and grey
 		tinyFontFontWhite = new Label.LabelStyle(Semtb001IndividualAssignment.tinyFont, Color.WHITE);
 		tinyFontFontGrey = new Label.LabelStyle(Semtb001IndividualAssignment.tinyFont, Color.GRAY);
 
+		// Setup the saved data for the scores and levels
 		scoresPref = Gdx.app.getPreferences("scores");
 		levelsPref = Gdx.app.getPreferences("levels");
 
+		// Only used when resetting the saved data
 		levelsPref.clear();
 		levelsPref.flush();
 		scoresPref.clear();
 		scoresPref.flush();
 
-
+		// Adding 'LEVEL: 1' to the levels data so that level 1 can be played from the beginning
 		levelsPref.putBoolean("LEVEL: 1", true);
 		levelsPref.flush();
 
+		// Set the screen to the main menu on startup
 		setScreen(new MainMenu(this));
 	}
 
+	// Method to play the 'menu click' sound (used when buttons are pressed in any of the menu's)
 	public static void playMenuClick(){
 		Sound menuClick = assetManager.manager.get(Assets.menuClick);
 		menuClick.play();

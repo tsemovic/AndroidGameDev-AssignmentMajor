@@ -478,7 +478,7 @@ public class PlayScreen implements Screen {
         /* This code draws the player in different positions due to the Box2D body shape changing
         size depending on the state of the player
 
-        */// If the player is running and was previously sliding
+         If the player is running and was previously sliding */
         if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END)) {
 
             // Draw the current player animtaion frame
@@ -579,5 +579,5 @@ public class PlayScreen implements Screen {
     public void setPaused(boolean value) {
         isPaused = value;
     }
-    
+
 }

@@ -131,6 +131,11 @@ public class LevelSelect implements Screen {
         // Add the 'main' table to the 'levels' table (table within a table)
         levelLabelTable.add(mainTable);
 
+
+        // Add the 'level' and 'back' tables to the stage
+        stage.addActor(levelLabelTable);
+        stage.addActor(backTable);
+
         // Loops through each level
         for (final Label currentLevel : levels) {
 
@@ -150,18 +155,16 @@ public class LevelSelect implements Screen {
             }
         }
 
-        // Add an event listener on the back button to return to the main menu
+        // Add input listener to the 'back' label
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Semtb001IndividualAssignment.playMenuClick();
+
+                // If the 'back' label is touched, return to the main menu
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
             }
         });
-
-        // Add the 'level' and 'back' tables to the stage
-        stage.addActor(levelLabelTable);
-        stage.addActor(backTable);
 
     }
 

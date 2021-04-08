@@ -71,7 +71,7 @@ public class MainMenu implements Screen {
         mainTable.setFillParent(true);
         mainTable.center();
 
-        // Create label to be displayed in the table
+        // Create labels to be displayed in the table
         title = new Label("GAME TITLE", Semtb001IndividualAssignment.largeFontWhite);
         play = new Label("PLAY", Semtb001IndividualAssignment.smallFontFontWhite);
         highscores = new Label("STATISTICS", Semtb001IndividualAssignment.smallFontFontWhite);

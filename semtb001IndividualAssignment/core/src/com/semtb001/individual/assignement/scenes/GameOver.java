@@ -69,7 +69,7 @@ public class GameOver implements Disposable {
             headerText = new Label("LEVEL PASSED", lvlCompleteStyle);
             subHeaderText = new Label("TRY AGAIN", buttonTextStyle);
 
-            if (playScreen.getHud().getJewelCount() == playScreen.getBox2dWorldCreator().getJewels().size()) {
+            if (playScreen.getHud().getCoinCount() == playScreen.getBox2dWorldCreator().getJewels().size()) {
                 if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
                     String newLevel = "LEVEL: " + Integer.toString(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) + 1);
                     Semtb001IndividualAssignment.levelsPref.putBoolean(newLevel, true);
@@ -82,7 +82,7 @@ public class GameOver implements Disposable {
                 }
             }
 
-            float jewelCount = playScreen.getHud().getJewelCount();
+            float jewelCount = playScreen.getHud().getCoinCount();
             float jewelTotal = playScreen.getBox2dWorldCreator().getJewels().size();
             Label levelCompletion = new Label("LEVEL COMPLETION: " + (int) ((jewelCount / jewelTotal) * 100) + "%", buttonTextStyle);
 

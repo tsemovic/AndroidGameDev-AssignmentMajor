@@ -49,7 +49,7 @@ public class Coin {
         CircleShape shape = new CircleShape();
         fixtureDef = new FixtureDef();
 
-        // Coin is a sensor (doesn't collide with anything)
+        // Coin is a sensor
         fixtureDef.isSensor = true;
 
         // Set the body to static
@@ -65,7 +65,7 @@ public class Coin {
         shape.setRadius(0.75f);
         fixtureDef.shape = shape;
 
-        // Create the fixture
+        // Add the fixture to the body
         box2dBody.createFixture(fixtureDef).setUserData(this);
 
         // Hold a temporary list of Textures for the coin

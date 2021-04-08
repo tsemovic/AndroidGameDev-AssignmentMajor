@@ -1,8 +1,6 @@
 package com.semtb001.individual.assignement.scenes;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,50 +10,71 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.screens.PlayScreen;
 
+/* Class to present a overlay on the game screen showing the level brief (a count down until
+the game starts */
 public class LevelBrief implements Disposable {
 
+    // LevelBrief stage and viewport objects
     public Stage stage;
     private Viewport viewport;
-    private PlayScreen playScreen;
 
+    // Obects that will be displayed in the LevelBrief
     private Label startLabel;
     private Label countdownLabel;
-    private Integer countdown;
 
-    public boolean timeToPlay;
+    // Variables for the countdown time
+    private Integer countdown;
     private float timeCount;
 
-    public LevelBrief(SpriteBatch spriteBatch, final PlayScreen playScreen) {
-        this.playScreen = playScreen;
+    // Variable for when the countdown has stopped and it's time to play the game
+    public boolean timeToPlay;
+
+    public LevelBrief(SpriteBatch spriteBatch) {
+
+        // Instantiate the viewport and stage
         viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
+
+        // Set the countdown timer to 3 seconds and set timeToPlay to false
         countdown = 3;
         timeToPlay = false;
 
-        //table setup
+        // Setup table that is displayed in the LevelBrief
         Table hudTable = new Table();
         hudTable.center();
         hudTable.setFillParent(true);
 
+
+        // Setup the labels that will go inside of the table
         startLabel = new Label("STARTING IN:", Semtb001IndividualAssignment.smallFontFontWhite);
         countdownLabel = new Label(Integer.toString(countdown), Semtb001IndividualAssignment.tinyFontFontWhite);
 
+        // Add the labels to the table
         hudTable.add(startLabel).padLeft(Semtb001IndividualAssignment.PPM * 2);
         hudTable.row();
         hudTable.add(countdownLabel);
 
+        // Add the table to the stage
         stage.addActor(hudTable);
-
     }
 
+    // Method to update the countdown time
     public void update(float dt){
+
+        // This code executes every 1 second
         timeCount += dt;
         if(timeCount >= 1){
+
+            // If the countdown timer is not yet 0, subtract 1
             if (countdown > 1) {
                 countdown--;
             } else {
+
+                // If the countdown time is 0, it's time to play the game
                 timeToPlay = true;
             }
+
+            // Update the countDownLabel text to the countDown timer
             countdownLabel.setText(countdown);
             timeCount = 0;
         }

@@ -126,7 +126,7 @@ public class PlayScreen implements Screen {
         hud = new Hud(game.batch, this);
         gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
-        levelBrief = new LevelBrief(game.batch, this);
+        levelBrief = new LevelBrief(game.batch);
 
         // Initially, set the level brief to active so that the level brief is displayed at start up
         levelBriefActive = true;

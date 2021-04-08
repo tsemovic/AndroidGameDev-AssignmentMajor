@@ -107,7 +107,7 @@ public class Coin {
             // Call the updateCollectedCoins method to update the coin counter in the hud
             playScreen.updateCollectedCoins();
 
-            // Play the collected coin sound ('ding')
+            // Play the collected coin sound
             Sound coin = Semtb001IndividualAssignment.assetManager.manager.get(Assets.coin);
             coin.play();
         }

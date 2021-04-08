@@ -20,7 +20,7 @@ public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
 
-    // Obects that will be displayed in the HUD
+    // Objects that will be displayed in the HUD
     private Label pause;
     private Label coins;
     private Label coinCountLabel;

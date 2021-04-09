@@ -222,11 +222,15 @@ public class Player extends Sprite {
             int result = r.nextInt(4-1) + 1;
 
             // Play the appropriate jump sound depending on the random number generated
-            switch (result){
-                case 1: jumpSound1.play();
-                case 2: jumpSound2.play();
-                case 3: jumpSound3.play();
+            if(result == 1){
+                jumpSound1.play();
+            }else if(result == 2){
+                jumpSound2.play();
+            }else{
+                jumpSound3.play();
             }
+
+            System.out.println(result);
         }
 
         // If the player is starting to slide
@@ -237,10 +241,12 @@ public class Player extends Sprite {
             int result = r.nextInt(4-1) + 1;
 
             // Play the appropriate jump sound depending on the random number generated
-            switch (result){
-                case 1: slideSound1.play();
-                case 2: slideSound2.play();
-                case 3: slideSound3.play();
+            if(result == 1){
+                slideSound1.play();
+            }else if(result == 2){
+                slideSound2.play();
+            }else{
+                slideSound3.play();
             }
         }
 
@@ -373,100 +379,87 @@ public class Player extends Sprite {
         if ((currentState == State.SLIDE_START || currentState == State.SLIDE_END) &&
                 (previousState != State.SLIDE_START && previousState != State.SLIDE_END)) {
 
-            Vector2 currentPosition = box2dBody.getPosition();
-            world.destroyBody(box2dBody);
+            // Destroy the current body's fixture
+            box2dBody.destroyFixture(box2dBody.getFixtureList().get(0));
 
-
-            BodyDef bodyDef = new BodyDef();
-            bodyDef.position.set(currentPosition);
-
-            bodyDef.type = BodyDef.BodyType.DynamicBody;
-            box2dBody = world.createBody(bodyDef);
-
-            fixtureDef = new FixtureDef();
-            shape = new PolygonShape();
+            // Update the size of the fixture shape
             shape.setAsBox(1, (float) 0.8);
-            fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.PLAYER;
-            fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD | Semtb001IndividualAssignment.ENEMY | Semtb001IndividualAssignment.COIN;
             fixtureDef.shape = shape;
 
+            // Add the fixture to the body
             box2dBody.createFixture(fixtureDef).setUserData(this);
-            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
+
+            // Set the player's linear velocity to 15f
+            box2dBody.setLinearVelocity(15f, 0f);
 
             //if currently running and was previously sliding or jumping (return to normal box height)
         } else if ((currentState == State.RUN) &&
                 (previousState == State.SLIDE_START || previousState == State.SLIDE_END)) {
 
-            Vector2 currentPosition = box2dBody.getPosition();
-            currentPosition.y = currentPosition.y + 2;
+            // Destroy the current body's fixture
+            box2dBody.destroyFixture(box2dBody.getFixtureList().get(0));
 
-            world.destroyBody(box2dBody);
-
-            BodyDef bodyDef = new BodyDef();
-            bodyDef.position.set(currentPosition);
-
-            bodyDef.type = BodyDef.BodyType.DynamicBody;
-            box2dBody = world.createBody(bodyDef);
-
-            fixtureDef = new FixtureDef();
-            shape = new PolygonShape();
+            // Update the size of the fixture shape
             shape.setAsBox(1, (float) 2.1);
-            fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.PLAYER;
-            fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD | Semtb001IndividualAssignment.ENEMY | Semtb001IndividualAssignment.COIN;
             fixtureDef.shape = shape;
 
+            // Add the fixture to the body
             box2dBody.createFixture(fixtureDef).setUserData(this);
-            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
+
+            // Set the player's linear velocity to 15f
+            box2dBody.setLinearVelocity(15f, 0f);
 
         } else if ((currentState == State.RUN) &&
                 (previousState == State.JUMP_START || previousState == State.JUMP_END)) {
 
-//            Vector2 currentPosition = box2dBody.getPosition();
-//
-//            world.destroyBody(box2dBody);
-//
-//            BodyDef bodyDef = new BodyDef();
-//            bodyDef.position.set(currentPosition);
-//
-//            bodyDef.type = BodyDef.BodyType.DynamicBody;
-//            box2dBody = world.createBody(bodyDef);
-//
-//            fixtureDef = new FixtureDef();
-//            shape = new PolygonShape();
-//            shape.setAsBox(1, (float) 2.1);
-//            fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.PLAYER;
-//            fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD | Semtb001IndividualAssignment.ENEMY | Semtb001IndividualAssignment.COIN;
-//            fixtureDef.shape = shape;
-//
-//            box2dBody.createFixture(fixtureDef).setUserData(this);
-//            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
+            // Destroy the current body's fixture
+            box2dBody.destroyFixture(box2dBody.getFixtureList().get(0));
 
-            box2dBody.getFixtureList().clear();
-            shape = new PolygonShape();
+            // Update the size of the fixture shape
             shape.setAsBox(1, (float) 2.1);
             fixtureDef.shape = shape;
+
+            // Add the fixture to the body
             box2dBody.createFixture(fixtureDef).setUserData(this);
-            box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
+
+            // Set the player's linear velocity to 15f
+            box2dBody.setLinearVelocity(15f, 0f);
         }
 
     }
 
+    /* Method to make the player jump (called from the input handler when the user touches the
+    top half of the screen*/
     public void jump() {
+
+        // If the player is running (prevents double jumps)
         if (currentState == State.RUN) {
+
+            // Apply a linear velocity on the y axis
             box2dBody.applyLinearImpulse(new Vector2(0, 39f), box2dBody.getWorldCenter(), true);
+
+            // Update the player state to "JUMP_START"
             currentState = State.JUMP_START;
         }
     }
 
+    /* Method to make the player slide (called from the input handler when the user touches the
+    bottom half of the screen*/
     public void slide() {
+
+        // If the player is running (prevents continuous sliding)
         if (currentState == State.RUN) {
+
+            // Update the player state to "SLIDE_START"
             currentState = State.SLIDE_START;
+
+            // Update slide timers (how long the player slides for)
             slideStartTimer = 1.3;
             slideEndTimer = 0.1;
-
         }
     }
 
+    // Getters and Setters
     public void setPlayerIsDead(boolean value){
         playerIsDead = value;
     }
@@ -475,21 +468,8 @@ public class Player extends Sprite {
         return currentState;
     }
 
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
-    }
-
-    public void setCurrentState(State state) {
-        currentState = state;
-    }
-
     public boolean getGameOver() {
         return gameOver;
-    }
-
-    public TiledMapTileLayer.Cell getCellPlayerIsOn(String layerName) {
-        TiledMapTileLayer layer = (TiledMapTileLayer) playScreen.getMap().getLayers().get(layerName);
-        return layer.getCell((int) 10, (int) 15);
     }
 
 }

@@ -207,8 +207,8 @@ public class PlayScreen implements Screen {
         renderer.setView(gameCamera);
         renderer.render();
 
-        // Debugging renderer (draws outline around Box2D objects)
-        box2dRenderer.render(world, gameCamera.combined);
+        // Debugging renderer (draws outline around Box2D objects used for debugging)
+        //box2dRenderer.render(world, gameCamera.combined);
 
         game.batch.setProjectionMatrix(gameCamera.combined);
 

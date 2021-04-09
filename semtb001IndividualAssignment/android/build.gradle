@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion "30.0.3"
-    compileSdkVersion 30
+    buildToolsVersion "29.0.3"
+    compileSdkVersion 29
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -17,9 +17,9 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "com.semtb001.individual.assignement"
+        applicationId "com.mygdx.game"
         minSdkVersion 14
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -86,7 +86,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.semtb001.individual.assignement/com.semtb001.individual.assignement.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.game/com.mygdx.game.AndroidLauncher'
 }
 
 eclipse.project.name = appName + "-android"

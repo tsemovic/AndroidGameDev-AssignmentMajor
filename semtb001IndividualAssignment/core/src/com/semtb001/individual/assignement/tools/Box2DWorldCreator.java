@@ -19,88 +19,105 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+// Class for creating Box2D map objects
 public class Box2DWorldCreator {
 
+    // Game world and map objects
     private World world;
     private TiledMap map;
+
+    // Box2D objects
     private BodyDef bodyDef;
     private PolygonShape shape;
     private FixtureDef fixtureDef;
     private Body body;
-    private PlayScreen screen;
 
+    // List's of ground enemies, flying enemies and coins
     private Queue<Vector2> groundEnemyPositions;
     private Queue<Vector2> flyingEnemyPositions;
     private List<Coin> coins;
 
     public Box2DWorldCreator(PlayScreen playScreen) {
+
+        // Instantiate gmae world and map objects
         world = playScreen.getWorld();
         map = playScreen.getMap();
-        screen = playScreen;
 
+        // Instantiate Box2D objects
         bodyDef = new BodyDef();
         shape = new PolygonShape();
         fixtureDef = new FixtureDef();
 
+        // Instantiate List's of ground enemies, flying enemies and coins
         groundEnemyPositions = new LinkedList<Vector2>();
         flyingEnemyPositions = new LinkedList<Vector2>();
         coins = new ArrayList<Coin>();
 
-        //create map ground
+        // Create world ground and objects (floor of map and boxes/platforms)
         for (MapObject object : map.getLayers().get("groundObject").getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            // Make the objects static (doesn't move)
             bodyDef.type = BodyDef.BodyType.StaticBody;
+
+            // Set the position of the world ground and object fixtures in the map file
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
             bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
 
+            // Create the body in the world
             body = world.createBody(bodyDef);
+
+            // Setup the shape of the object
             shape.setAsBox((rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
             fixtureDef.shape = shape;
+
+            // Set the categoryBits of the object to "WORLD" (so player can collide with them)
             fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.WORLD;
 
-            body.createFixture(fixtureDef).setUserData("WORLD");
+            // Add the fixture to the body object
+            body.createFixture(fixtureDef);
         }
 
-        //create map objects
-        for (MapObject object : map.getLayers().get("objectObject").getObjects().getByType(RectangleMapObject.class)) {
+        // Create map coins
+        for (MapObject object : map.getLayers().get("coinObject").getObjects().getByType(RectangleMapObject.class)) {
+
+            // Get the size and position of the coin object in the map file
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
 
-            body = world.createBody(bodyDef);
-            shape.setAsBox((rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef).setUserData("OBJECT");
+            // Create a new coin in that position
+            Coin newCoin = new Coin(rect, playScreen);
+
+            // Add the coin to the coins list
+            coins.add(newCoin);
         }
 
-        //create map coins
-        for (MapObject object : map.getLayers().get("jewelObject").getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
-
-            Coin newJewel = new Coin(rect, playScreen);
-            coins.add(newJewel);
-        }
-
-        //set world end position
+        // Create world end position
         for (MapObject object : map.getLayers().get("worldEndPosition").getObjects().getByType(RectangleMapObject.class)) {
+
+            // Get the size and position of the 'worldEnd' object in the map file
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            // Set the world end position
             playScreen.setWorldEndPosition(rect.x);
         }
 
-        //get grounded enemies
+        // Create grounded enemies
         for (MapObject object : map.getLayers().get("groundEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
+
+            // Add the grounded enemy position to the groundedEnemyPositions list
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             groundEnemyPositions.offer(new Vector2(rect.x, rect.y));
         }
 
-        //get flying enemies
+        // Create flying enemies
         for (MapObject object : map.getLayers().get("flyingEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
+
+            // Add the flying enemy position to the flyingEnemyPositions list
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             flyingEnemyPositions.offer(new Vector2(rect.x, rect.y));
         }
     }
 
+    //Getters for the list's of enemys and coins
     public Queue<Vector2> getGroundEnemyPositions() {
         return groundEnemyPositions;
     }
@@ -112,6 +129,5 @@ public class Box2DWorldCreator {
     public List<Coin> getCoins() {
         return coins;
     }
-
-
+    
 }

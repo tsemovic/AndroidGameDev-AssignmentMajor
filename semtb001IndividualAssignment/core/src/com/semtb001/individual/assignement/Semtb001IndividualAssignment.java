@@ -31,6 +31,12 @@ public class Semtb001IndividualAssignment extends Game {
 	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
 	public static final int NUMBER_OF_LEVELS = 2;
 
+	// Object types (used for Box2D collisions)
+	public static final short PLAYER = 1;
+	public static final short WORLD = 2;
+	public static final short ENEMY = 4;
+	public static final short COIN = 8;
+
 	// Saved data objects
 	public static Preferences scoresPref;
 	public static Preferences levelsPref;

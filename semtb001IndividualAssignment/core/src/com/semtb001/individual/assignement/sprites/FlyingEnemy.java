@@ -74,8 +74,8 @@ public class FlyingEnemy extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
 
         // Setup body as an enemy that can collide with the player and the world
-        fixtureDef.filter.categoryBits = Player.ENEMY;
-        fixtureDef.filter.maskBits = Player.PLAYER | Player.WORLD | Player.DEFAULT;
+        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.ENEMY;
+        fixtureDef.filter.maskBits = Semtb001IndividualAssignment.PLAYER | Semtb001IndividualAssignment.WORLD;
 
         // Setup the body as a dynamic body (ability to move)
         bodyDef.type = BodyDef.BodyType.DynamicBody;

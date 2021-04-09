@@ -458,7 +458,7 @@ public class PlayScreen implements Screen {
     public void drawCoins(float delta) {
 
         // Get all coins that are in the map
-        for (Coin coin : box2dWorldCreator.getJewels()) {
+        for (Coin coin : box2dWorldCreator.getCoins()) {
 
             // Update the coin (updates current animation frame)
             coin.update(delta);

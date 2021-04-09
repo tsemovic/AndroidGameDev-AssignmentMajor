@@ -31,7 +31,7 @@ public class Box2DWorldCreator {
 
     private Queue<Vector2> groundEnemyPositions;
     private Queue<Vector2> flyingEnemyPositions;
-    private List<Coin> jewels;
+    private List<Coin> coins;
 
     public Box2DWorldCreator(PlayScreen playScreen) {
         world = playScreen.getWorld();
@@ -44,7 +44,7 @@ public class Box2DWorldCreator {
 
         groundEnemyPositions = new LinkedList<Vector2>();
         flyingEnemyPositions = new LinkedList<Vector2>();
-        jewels = new ArrayList<Coin>();
+        coins = new ArrayList<Coin>();
 
         //create map ground
         for (MapObject object : map.getLayers().get("groundObject").getObjects().getByType(RectangleMapObject.class)) {
@@ -55,6 +55,8 @@ public class Box2DWorldCreator {
             body = world.createBody(bodyDef);
             shape.setAsBox((rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
             fixtureDef.shape = shape;
+            fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.WORLD;
+
             body.createFixture(fixtureDef).setUserData("WORLD");
         }
 
@@ -70,14 +72,14 @@ public class Box2DWorldCreator {
             body.createFixture(fixtureDef).setUserData("OBJECT");
         }
 
-        //create map jewels
+        //create map coins
         for (MapObject object : map.getLayers().get("jewelObject").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             bodyDef.type = BodyDef.BodyType.StaticBody;
             bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
 
             Coin newJewel = new Coin(rect, playScreen);
-            jewels.add(newJewel);
+            coins.add(newJewel);
         }
 
         //set world end position
@@ -107,8 +109,8 @@ public class Box2DWorldCreator {
         return flyingEnemyPositions;
     }
 
-    public List<Coin> getJewels() {
-        return jewels;
+    public List<Coin> getCoins() {
+        return coins;
     }
 
 

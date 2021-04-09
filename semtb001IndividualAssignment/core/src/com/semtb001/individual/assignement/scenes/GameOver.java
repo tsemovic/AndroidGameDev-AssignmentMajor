@@ -84,7 +84,7 @@ public class GameOver implements Disposable {
             /* If the player has collected all of the coins in the map: unlock the next level
             (and save to the saved data) and set the subHeader text to "NEXT LEVEL" if there is
             a another level to play*/
-            if (playScreen.getHud().getCoinCount() == playScreen.getBox2dWorldCreator().getJewels().size()) {
+            if (playScreen.getHud().getCoinCount() == playScreen.getBox2dWorldCreator().getCoins().size()) {
                 if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
                     String newLevel = "LEVEL: " + Integer.toString(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) + 1);
                     Semtb001IndividualAssignment.levelsPref.putBoolean(newLevel, true);
@@ -103,7 +103,7 @@ public class GameOver implements Disposable {
 
             // Create the Level Completion Percentage label (percentage of coins collected)
             float jewelCount = playScreen.getHud().getCoinCount();
-            float jewelTotal = playScreen.getBox2dWorldCreator().getJewels().size();
+            float jewelTotal = playScreen.getBox2dWorldCreator().getCoins().size();
             Label levelCompletion = new Label("LEVEL COMPLETION: " +
                     (int) ((jewelCount / jewelTotal) * 100) + "%",
                     Semtb001IndividualAssignment.smallFontFontWhite);

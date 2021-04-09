@@ -1,19 +1,15 @@
 package com.semtb001.individual.assignement.sprites;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -26,17 +22,13 @@ import java.util.Random;
 
 import javax.swing.event.CellEditorListener;
 
+// Class for the player
 public class Player extends Sprite {
 
     private World world;
     private PlayScreen playScreen;
 
-    public static final short DESTROYED = 0;
-    public static final short DEFAULT = 1;
-    public static final short PLAYER = 2;
-    public static final short WORLD = 4;
-    public static final short ENEMY = 8;
-    public static final short JEWEL = 4;
+
 
     public enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
 
@@ -163,8 +155,8 @@ public class Player extends Sprite {
         shape = new PolygonShape();
         fixtureDef = new FixtureDef();
 
-        fixtureDef.filter.categoryBits = Player.PLAYER;
-        fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
+        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.PLAYER;
+        fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD | Semtb001IndividualAssignment.ENEMY | Semtb001IndividualAssignment.COIN;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(10, 19);
@@ -304,8 +296,8 @@ public class Player extends Sprite {
             fixtureDef = new FixtureDef();
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 0.8);
-            fixtureDef.filter.categoryBits = Player.PLAYER;
-            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
+            fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.PLAYER;
+            fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD | Semtb001IndividualAssignment.ENEMY | Semtb001IndividualAssignment.COIN;
             fixtureDef.shape = shape;
 
             box2dBody.createFixture(fixtureDef).setUserData(this);
@@ -329,8 +321,8 @@ public class Player extends Sprite {
             fixtureDef = new FixtureDef();
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 2.1);
-            fixtureDef.filter.categoryBits = Player.PLAYER;
-            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
+            fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.PLAYER;
+            fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD | Semtb001IndividualAssignment.ENEMY | Semtb001IndividualAssignment.COIN;
             fixtureDef.shape = shape;
 
             box2dBody.createFixture(fixtureDef).setUserData(this);
@@ -352,8 +344,8 @@ public class Player extends Sprite {
             fixtureDef = new FixtureDef();
             shape = new PolygonShape();
             shape.setAsBox(1, (float) 2.1);
-            fixtureDef.filter.categoryBits = Player.PLAYER;
-            fixtureDef.filter.maskBits = Player.DEFAULT | Player.WORLD | Player.ENEMY | Player.JEWEL;
+            fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.PLAYER;
+            fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD | Semtb001IndividualAssignment.ENEMY | Semtb001IndividualAssignment.COIN;
             fixtureDef.shape = shape;
 
             box2dBody.createFixture(fixtureDef).setUserData(this);

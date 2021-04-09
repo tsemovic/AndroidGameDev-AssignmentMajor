@@ -55,6 +55,9 @@ public class Coin {
         // Set the body to static
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
+        // Set the fixture category to COIN
+        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.COIN;
+
         // Set the position to the x and y coordinates of the object in the map file
         bodyDef.position.set(position.x / 32, position.y / 32);
 

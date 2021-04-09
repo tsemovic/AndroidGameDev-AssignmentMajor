@@ -71,8 +71,8 @@ public class GroundEnemy extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
 
         // Setup body as an enemy that can collide with the the world (exclude the player)
-        fixtureDef.filter.categoryBits = Player.ENEMY;
-        fixtureDef.filter.maskBits = Player.WORLD | Player.DEFAULT;
+        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.ENEMY;
+        fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD;
 
         // Setup the body as a dynamic body (ability to move)
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -91,10 +91,10 @@ public class GroundEnemy extends Sprite {
         box2dBody.createFixture(fixtureDef).setUserData(this);
 
         // Create a 'new' fixture (sensor) on the body that can detect player collisions
-        fixtureDef.filter.categoryBits = Player.ENEMY;
+        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.ENEMY;
 
         // Allow the fixture to detect collisions from the player and the world
-        fixtureDef.filter.maskBits = Player.PLAYER | Player.WORLD | Player.DEFAULT;
+        fixtureDef.filter.maskBits = Semtb001IndividualAssignment.PLAYER | Semtb001IndividualAssignment.WORLD;
 
         // Setup the fixture as a sensor
         fixtureDef.isSensor = true;

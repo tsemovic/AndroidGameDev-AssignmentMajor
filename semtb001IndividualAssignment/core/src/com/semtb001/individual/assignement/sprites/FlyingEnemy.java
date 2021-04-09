@@ -17,9 +17,9 @@ import com.semtb001.individual.assignement.screens.PlayScreen;
 import com.semtb001.individual.assignement.tools.Assets;
 
 // Class for the Flying enemy (bee)
-public class FlyingEnemy extends Sprite{
+public class FlyingEnemy extends Sprite {
 
-    // Enemy world and playscren objects
+    // Enemy world and playscreen objects
     private World world;
     private PlayScreen playScreen;
 
@@ -27,10 +27,8 @@ public class FlyingEnemy extends Sprite{
     public Body box2dBody;
     private float stateTimer;
 
-    // Enemy sprite
-
     // Enemy animation
-    private Animation flyingAnimation;
+    private Animation beeAnimation;
     public TextureRegion currentFrame;
 
     // Enemy position
@@ -50,30 +48,27 @@ public class FlyingEnemy extends Sprite{
         // Define the enemy (Box2D)
         defineEnemy();
 
+        // Temporary array for storing animation frames
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
-        //get run animation frames and add them to marioRun Animation
-        for(int i = 0; i < 2; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("bee"),  0, 0, 56, 48));
-        }
-        //get run animation frames and add them to marioRun Animation
-        for(int i = 0; i < 2; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("bee_fly"),  0, 0, 56, 48));
-        }
-        flyingAnimation = new Animation(0.1f, tempFrames);
 
-        tempFrames.clear();
+        // Get the bee animation frames and add them to bee Animation
+        tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("bee"), 0, 0, 56, 48));
+        tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("bee_fly"), 0, 0, 56, 48));
 
+        beeAnimation = new Animation(0.1f, tempFrames);
+
+        // Set the gravity to 0 for the flying enemy (so it doesn't fall out of the sky)
         box2dBody.setGravityScale(0f);
-        box2dBody.setLinearVelocity(new Vector2(-.01f, 0));
 
+        // Initialise the enemy sound
         enemySound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.bee);
         enemySound.play();
         enemySound.setLooping(true);
     }
 
-    public void defineEnemy(){
+    public void defineEnemy() {
 
-        // Box2D objects setup
+        // Initialise Box2D objects
         BodyDef bodyDef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
@@ -82,10 +77,10 @@ public class FlyingEnemy extends Sprite{
         fixtureDef.filter.categoryBits = Player.ENEMY;
         fixtureDef.filter.maskBits = Player.PLAYER | Player.WORLD | Player.DEFAULT;
 
-        // Setup the body as a dynamic body (can move)
+        // Setup the body as a dynamic body (ability to move)
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        // Set the position of the body to the x and y coordinates of the enemy obejct in the map file
+        // Set the position of the body to the x and y coordinates of the enemy object in the map file
         bodyDef.position.set(pos.x / 32, pos.y / 32);
 
         // Setup the body as a sensor
@@ -103,11 +98,11 @@ public class FlyingEnemy extends Sprite{
     }
 
     // Method to update the enemy
-    public void update(float delta){
+    public void update(float delta) {
 
         // Update the state timer and set the current animation frame to the animation key frame
         stateTimer += delta;
-        currentFrame = (TextureRegion)flyingAnimation.getKeyFrame(stateTimer, true);
+        currentFrame = (TextureRegion) beeAnimation.getKeyFrame(stateTimer, true);
 
         // If the enemy is moving slower than -5f (velocity of 5 going left)
         if (box2dBody.getLinearVelocity().x >= -5f) {
@@ -116,9 +111,11 @@ public class FlyingEnemy extends Sprite{
             box2dBody.applyLinearImpulse(new Vector2(-0.5f, 0), box2dBody.getWorldCenter(), true);
         }
 
-        // This code makes the enemy sound gradually louder as they approach and gradually quieter as they pass
-        // If the enemy is ahead of the player
-        if(playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x) {
+        /* This code makes the enemy sound gradually louder as they approach and gradually quieter
+        as they pass
+
+        If the enemy is ahead of the player */
+        if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x) {
 
             // If the player x position plus 10 is greater than the enemy position: play enemy sound at max volume
             if (playScreen.getPlayer().box2dBody.getPosition().x + 10 > box2dBody.getPosition().x) {
@@ -141,10 +138,12 @@ public class FlyingEnemy extends Sprite{
                 enemySound.setVolume(0.1f);
 
                 // Else, set enemy sound to 0% volume
-            }else{
+            } else {
                 enemySound.setVolume(0.0f);
             }
-        }else{
+
+            // If the enemy is behind the player
+        } else {
 
             // If the player x position is less than the enemy position plus 2: play enemy sound at 50% volume
             if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 2) {
@@ -152,12 +151,12 @@ public class FlyingEnemy extends Sprite{
                 enemySound.setVolume(0.5f);
 
                 // If the player x position is less than the enemy position plus 10: play enemy sound at 50% volume
-            }else if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 10) {
+            } else if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 10) {
                 enemySound.play();
                 enemySound.setVolume(0.2f);
 
                 // Else, set enemy sound to 0% volume
-            }else{
+            } else {
                 enemySound.setVolume(0.0f);
             }
         }

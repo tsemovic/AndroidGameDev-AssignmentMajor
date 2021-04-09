@@ -129,5 +129,5 @@ public class Box2DWorldCreator {
     public List<Coin> getCoins() {
         return coins;
     }
-    
+
 }

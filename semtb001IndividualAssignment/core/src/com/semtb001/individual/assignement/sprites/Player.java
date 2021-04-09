@@ -226,7 +226,6 @@ public class Player extends Sprite {
                 jumpSound3.play();
             }
 
-            System.out.println(result);
         }
 
         // If the player is starting to slide

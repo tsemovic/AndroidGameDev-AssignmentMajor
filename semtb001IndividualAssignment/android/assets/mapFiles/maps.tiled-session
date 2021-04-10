@@ -147,19 +147,19 @@
             "scaleInEditor": 4
         },
         "level1.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 6,
+            "scale": 0.5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1703.0303030303028,
-                "y": 380.30303030303025
+                "x": 12986,
+                "y": 709
             }
         },
         "level2.tmx": {
             "scale": 0.5,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 402,
-                "y": 1009
+                "x": 1170,
+                "y": 583
             }
         },
         "platformPack_tilesheet.tsx": {

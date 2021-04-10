@@ -25,6 +25,7 @@ import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
 import com.semtb001.individual.assignement.sprites.GroundEnemy;
 import com.semtb001.individual.assignement.tools.Assets;
 import com.semtb001.individual.assignement.tools.Box2DWorldCreator;
+import com.semtb001.individual.assignement.tools.ScreenShaker;
 import com.semtb001.individual.assignement.tools.WorldContactListener;
 
 import java.util.LinkedList;
@@ -268,6 +269,8 @@ public class PlayScreen implements Screen {
             // Move player (constant running velocity)
             movePlayer();
 
+            shakeCamera(deltaTime);
+
             // Move the game camera
             moveGameCamera();
 
@@ -500,6 +503,40 @@ public class PlayScreen implements Screen {
         }
     }
 
+    // Method to shake the game camera (to simulate an earthquake)
+    private void shakeCamera(float deltaTime) {
+
+        // If there are any screenShaker's in the map
+        if (box2dWorldCreator.getScreenShakerPositions().size() > 0) {
+
+            // set 'shaker' to the head of the queue (closest to player)
+            ScreenShaker shaker = box2dWorldCreator.getScreenShakerPositions().element();
+
+            // if the shaker's x position is greater than the player's x position
+            if (player.box2dBody.getPosition().x >= shaker.getPosition().x / 32) {
+
+                // If the shaker is not shaking and hasn't been shaked before
+                if(!shaker.isShaking() && !shaker.isShakeFinished()){
+
+                    // Set the shaker to 'shaking' for 2 seconds with a magnitude of 0.2f
+                    shaker.setShaking(true);
+                    shaker.shake(2f, 0.2f);
+
+                    // If the shaker is shaking
+                }else{
+
+                    // Update the shaker (translate the gameCamera randomly)
+                    shaker.update(deltaTime);
+                }
+
+                if(shaker.isShakeFinished()){
+                    box2dWorldCreator.getScreenShakerPositions().poll();
+                }
+
+            }
+        }
+    }
+
     // Method to update the HUD coin counter (increase by 1)
     public void updateCollectedCoins() {
         hud.update();
@@ -549,6 +586,10 @@ public class PlayScreen implements Screen {
         Vector2 pos = new Vector2((int) (player.box2dBody.getPosition().x * Semtb001IndividualAssignment.PPM / 32),
                 (int) (player.box2dBody.getPosition().y * Semtb001IndividualAssignment.PPM / 32));
         return pos;
+    }
+
+    public OrthographicCamera getGameCamera() {
+        return gameCamera;
     }
 
     public Player getPlayer() {

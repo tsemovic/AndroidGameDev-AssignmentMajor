@@ -35,6 +35,7 @@ public class Box2DWorldCreator {
     // List's of ground enemies, flying enemies and coins
     private Queue<Vector2> groundEnemyPositions;
     private Queue<Vector2> flyingEnemyPositions;
+    private Queue<ScreenShaker> screenShakers;
     private List<Coin> coins;
 
     public Box2DWorldCreator(PlayScreen playScreen) {
@@ -51,6 +52,7 @@ public class Box2DWorldCreator {
         // Instantiate List's of ground enemies, flying enemies and coins
         groundEnemyPositions = new LinkedList<Vector2>();
         flyingEnemyPositions = new LinkedList<Vector2>();
+        screenShakers = new LinkedList<ScreenShaker>();
         coins = new ArrayList<Coin>();
 
         // Create world ground and objects (floor of map and boxes/platforms)
@@ -100,6 +102,13 @@ public class Box2DWorldCreator {
             playScreen.setWorldEndPosition(rect.x);
         }
 
+        // Create map shakers
+        for (MapObject object : map.getLayers().get("ScreenShakerPositions").getObjects().getByType(RectangleMapObject.class)) {
+
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            screenShakers.offer(new ScreenShaker(playScreen, rect));
+        }
+
         // Create grounded enemies
         for (MapObject object : map.getLayers().get("groundEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
 
@@ -124,6 +133,10 @@ public class Box2DWorldCreator {
 
     public Queue<Vector2> getFlyingEnemyPositions() {
         return flyingEnemyPositions;
+    }
+
+    public Queue<ScreenShaker> getScreenShakerPositions() {
+        return screenShakers;
     }
 
     public List<Coin> getCoins() {

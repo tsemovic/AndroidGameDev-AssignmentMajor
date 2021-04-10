@@ -449,7 +449,7 @@ public class Player extends Sprite {
             currentState = State.SLIDE_START;
 
             // Update slide timers (how long the player slides for)
-            slideStartTimer = 1.3;
+            slideStartTimer = 0.9;
             slideEndTimer = 0.1;
         }
     }

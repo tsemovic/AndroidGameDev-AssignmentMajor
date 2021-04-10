@@ -371,7 +371,7 @@ public class PlayScreen implements Screen {
         if (box2dWorldCreator.getGroundEnemyPositions().size() > 0) {
 
             // If the player is coming up to where a grounded enemy spawns
-            if (getPlayerPos().x + 100 > box2dWorldCreator.getGroundEnemyPositions().element().x / 64) {
+            if (getPlayerPos().x + 50 > box2dWorldCreator.getGroundEnemyPositions().element().x / 32) {
 
                 // Create the enemy
                 GroundEnemy newGroundEnemy = new GroundEnemy(world, this, box2dWorldCreator.getGroundEnemyPositions().element());
@@ -398,7 +398,7 @@ public class PlayScreen implements Screen {
         if (box2dWorldCreator.getFlyingEnemyPositions().size() > 0) {
 
             // If the player is coming up to where a flying enemy spawns
-            if (getPlayerPos().x + 100 > box2dWorldCreator.getFlyingEnemyPositions().element().x / 32) {
+            if (getPlayerPos().x + 50 > box2dWorldCreator.getFlyingEnemyPositions().element().x / 32) {
 
                 // Create the enemy
                 FlyingEnemy newFlyingEnemy = new FlyingEnemy(world, this, box2dWorldCreator.getFlyingEnemyPositions().element());

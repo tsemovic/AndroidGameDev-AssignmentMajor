@@ -138,6 +138,12 @@ public class Semtb001IndividualAssignment extends Game {
 	
 	@Override
 	public void dispose () {
+		super.dispose();
+		assetManager.dispose();
+		batch.dispose();
 
+		smallFont.dispose();
+		mediumFont.dispose();
+		largeFont.dispose();
 	}
 }

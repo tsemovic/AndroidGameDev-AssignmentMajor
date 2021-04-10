@@ -45,7 +45,6 @@ public class PlayScreen implements Screen {
     private float worldEndPosition;
 
     // Box2D objects
-    private Box2DDebugRenderer box2dRenderer;
     private Box2DWorldCreator box2dWorldCreator;
 
     // world step time calculation variables
@@ -101,7 +100,6 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -100), true);
 
         // Setup the Box2D world creator (creates Box2D bodies and adds them to the world)
-        box2dRenderer = new Box2DDebugRenderer();
         box2dWorldCreator = new Box2DWorldCreator(this);
 
         // Setup the world contact listener
@@ -206,10 +204,6 @@ public class PlayScreen implements Screen {
         gameCamera.update();
         renderer.setView(gameCamera);
         renderer.render();
-
-        // Debugging renderer (draws outline around Box2D objects used for debugging)
-        //box2dRenderer.render(world, gameCamera.combined);
-
         game.batch.setProjectionMatrix(gameCamera.combined);
 
         // Set the input processor
@@ -540,7 +534,6 @@ public class PlayScreen implements Screen {
         gameOver.dispose();
         levelBrief.dispose();
         paused.dispose();
-        box2dRenderer.dispose();
     }
 
     // Getters and Setters

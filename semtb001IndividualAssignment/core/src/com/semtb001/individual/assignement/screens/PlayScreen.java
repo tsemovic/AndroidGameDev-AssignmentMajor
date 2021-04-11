@@ -108,7 +108,7 @@ public class PlayScreen implements Screen {
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
         // Setup the texture atlas for loading in the player and enemy textures
-        textureAtlas = new TextureAtlas("texturepack/playerAndEnemy.pack");
+        textureAtlas = Semtb001IndividualAssignment.assetManager.manager.get(Assets.textureAtlas);
 
         // Instantiate Player, Enemies and Coins
         player = new Player(world, this);

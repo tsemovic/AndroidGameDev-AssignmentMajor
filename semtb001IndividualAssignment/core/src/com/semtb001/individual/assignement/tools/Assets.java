@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 // Class used to load in assets
 public class Assets {
@@ -54,6 +55,9 @@ public class Assets {
     public static final AssetDescriptor<Texture> menuBackground =
             new AssetDescriptor<Texture>("gui/mainMenuBackground.png", Texture.class);
 
+    public static final AssetDescriptor<TextureAtlas> textureAtlas =
+            new AssetDescriptor<TextureAtlas>("texturepack/playerAndEnemy.pack", TextureAtlas.class);
+
     public void load() {
 
         // Load player sounds
@@ -81,6 +85,9 @@ public class Assets {
         // Load texture images
         manager.load(backgroundTint);
         manager.load(menuBackground);
+
+        // Load texture atlas
+        manager.load(textureAtlas);
     }
 
     public void dispose() {

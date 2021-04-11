@@ -163,6 +163,7 @@ public class PlayScreen implements Screen {
             }
         }
 
+        // Inputs for keyboard use (up: jump, down: slide)
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             player.jump();
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {

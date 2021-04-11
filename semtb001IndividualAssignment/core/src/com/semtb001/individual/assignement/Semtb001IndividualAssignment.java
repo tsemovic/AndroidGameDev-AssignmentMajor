@@ -112,10 +112,10 @@ public class Semtb001IndividualAssignment extends Game {
 		levelsPref = Gdx.app.getPreferences("levels");
 
 		// Only used when resetting the saved data
-		//levelsPref.clear();
-		//levelsPref.flush();
-		//scoresPref.clear();
-		//scoresPref.flush();
+//		levelsPref.clear();
+//		levelsPref.flush();
+//		scoresPref.clear();
+//		scoresPref.flush();
 
 		// Adding 'LEVEL: 1' to the levels data so that level 1 can be played from the beginning
 		levelsPref.putBoolean("LEVEL: 1", true);

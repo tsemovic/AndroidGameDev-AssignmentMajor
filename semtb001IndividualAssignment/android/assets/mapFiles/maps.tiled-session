@@ -148,18 +148,18 @@
         },
         "level1.tmx": {
             "scale": 0.5,
-            "selectedLayer": 4,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 12986,
-                "y": 709
+                "x": 14088,
+                "y": 629
             }
         },
         "level2.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 3,
+            "scale": 0.75,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1170,
-                "y": 583
+                "x": 13966.666666666666,
+                "y": 447.3333333333333
             }
         },
         "platformPack_tilesheet.tsx": {

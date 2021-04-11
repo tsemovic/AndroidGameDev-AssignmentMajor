@@ -65,9 +65,7 @@
   <object id="152" x="4992" y="576" width="64" height="64"/>
   <object id="155" x="13888" y="576" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="11" name="ScreenShakerPositions">
-  <object id="164" x="4034" y="268" width="64" height="204"/>
- </objectgroup>
+ <objectgroup id="11" name="ScreenShakerPositions"/>
  <objectgroup id="4" name="flyingEnemyPositions">
   <object id="51" x="5504" y="512" width="64" height="64"/>
   <object id="52" x="5696" y="445.333" width="64" height="64"/>

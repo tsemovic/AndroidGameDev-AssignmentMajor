@@ -1,29 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="12" nextobjectid="19">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="13" nextobjectid="105">
  <tileset firstgid="1" source="platformPack_tilesheet.tsx"/>
  <tileset firstgid="99" source="background_tilesheet.tsx"/>
  <layer id="9" name="backgroundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
-  </data>
- </layer>
- <layer id="8" name="objectTiles" width="250" height="20">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
+   eJzt20OQXFEYhuGT9HTHtm3btm3bNju2k4lt27Zt27Yxb1clVbOeVCVzkm/xLO6peuv+9yzu7vd2GDMeEzARkzAZUzAV0zAdMzATszAbYzEO3urVq/f3/T7sxwEcxCEcxhEcxTEcxwmcxCmcxh7sVa9evRX9O7zHB3zEJ3zGF3zFN3zHDxgvYwIgIN7w/Fa9evVW9AloEiIREiMJkiIZkiMFUiIVUiMN0iIe4nupV6/ehr4CKqISKqMKqqIaqqMGaqIWaqMO6qIcyqtXr96Kvj8GYCAGYTCGYCiGYThGYCRGYTTGoC/6qVev3op+HdZjAzZiEzZjC7ZiG7ZjB3ZiF3ZjDdaqV6/eiv4e7uMBHuIRHuMJnuIZnuMFXuIVXuMO7qpXr96KPoLTmIiIhMiIgqiIhuiIgZiIhdiIg7gIh/BO9erV29AXQEEUQmEUQVEUQ3GUQEmUQmmUQVnkQ3716tVb0XdAR3RCZ3RBV3RDd/RAT7jRC73RB+3QXr169Vb08zAfC7AQi7AYS7AUy7AcK7ASq7AaczD3N3rPTC7z997/L/Wee/Tw3bt9nXu4f575x/n90v/6Prel8//p/hzO4wIu4hIu4wqu4hqu4wZu4hZu4wzOqlev3oreyU/RhUAIjCAIimAIjhAIiVAIjTAICwe8XOrVq7ehz4CMyITMyIKsyIbsyIGcyIXcyIO8SIf06tWrt6Jv4DCmIRqhMZqgKZqhOVqgJVqhNdqgLeqhvkO9evU29Lbsz6pXr1775+rVq9f+uXr1/3Nvy/6sevXq/d77AMVlYno=
   </data>
  </layer>
  <layer id="1" name="groundTiles" width="250" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt01EJwDAUwMAHK/MvZgJnoh9tuINIyAwAAFDzvXsCzuVz6PM59Pkc+nwOfT6HPp9Dn8/hPo+kfEuSJEmSJEmSJEmSJM0PU22Kzw==
+   eJzt0zEOwjAQRNFIoPQg+pyA23NAGgpkJSEF66xX70u/iNPYOzvTBAAAAKAar/k/AsiLngP10XOgPnoO1EfPgfroOVAfPQfqo+fAeFw6O3+5NN+97zKqc+Pz49b52r/bgLZvaPfHDm177exjx953GdW9GR71PqBH3nV2Nvy9o2ffbRT13A5lV0axM9RzZlBGsTPUc2ZQRrEz1HNmUEaxM9RzZlBGsTPUc2ZQRrEz1HOu+QYwVrLN
   </data>
  </layer>
- <objectgroup id="11" name="ScreenShakerPositions"/>
- <objectgroup id="2" name="groundObject"/>
- <objectgroup id="10" name="jewelObject"/>
- <objectgroup id="4" name="flyingEnemyPositions"/>
- <objectgroup id="5" name="groundEnemyPositions"/>
+ <layer id="8" name="objectTiles" width="250" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt1zEKgDAMBdCey8XRwfvfRwSn0sHFmLTvwZ/7KQmlrQEAAAAAAPCVowswn7MLMLY9qShyv6ve0coyz3Z0N2/hO5lnhrGss33/MSO7RZ9X2ex7vv9dAAAAAAAAAAAAFnABGL0Igg==
+  </data>
+ </layer>
+ <objectgroup id="2" name="groundObject">
+  <object id="27" x="0" y="709" width="1792" height="571"/>
+  <object id="28" x="1344" y="576" width="128" height="128"/>
+  <object id="30" x="1984" y="704" width="64" height="42"/>
+  <object id="31" x="2240" y="709" width="4732" height="571"/>
+  <object id="45" x="3776" y="670" width="66" height="34"/>
+  <object id="46" x="3840" y="576" width="128" height="128"/>
+  <object id="57" x="5568" y="667" width="65" height="37"/>
+  <object id="58" x="5632" y="512" width="128" height="192"/>
+  <object id="64" x="7232" y="704" width="129.333" height="42.6667"/>
+  <object id="66" x="7616" y="704" width="191" height="41.3333"/>
+  <object id="67" x="8064" y="710.667" width="2876.24" height="569.333"/>
+  <object id="78" x="10368" y="512" width="64" height="192"/>
+  <object id="79" x="10432" y="576" width="64" height="128"/>
+  <object id="84" x="11519.3" y="710.667" width="4480.91" height="569.333"/>
+  <object id="85" x="11200" y="704" width="65" height="44"/>
+  <object id="86" x="6976" y="1216" width="1088" height="64"/>
+  <object id="87" x="1792" y="1216" width="448" height="64"/>
+  <object id="88" x="10944" y="1216" width="576" height="64"/>
+ </objectgroup>
+ <objectgroup id="10" name="coinObject">
+  <object id="20" x="1408" y="448" width="64" height="64"/>
+  <object id="26" x="2013" y="575" width="64" height="64"/>
+  <object id="32" x="2560" y="576" width="64" height="64"/>
+  <object id="33" x="2688" y="576" width="64" height="64"/>
+  <object id="34" x="2816" y="576" width="64" height="64"/>
+  <object id="35" x="2944" y="576" width="64" height="64"/>
+  <object id="36" x="3072" y="576" width="64" height="64"/>
+  <object id="44" x="3904" y="448" width="64" height="64"/>
+  <object id="49" x="4096" y="576" width="64" height="64"/>
+  <object id="50" x="4224" y="576" width="64" height="64"/>
+  <object id="51" x="4352" y="576" width="64" height="64"/>
+  <object id="59" x="5696" y="384" width="64" height="64"/>
+  <object id="60" x="5888" y="512" width="64" height="64"/>
+  <object id="61" x="6080" y="576" width="64" height="64"/>
+  <object id="62" x="6272" y="576" width="64" height="64"/>
+  <object id="71" x="8640" y="576" width="64" height="64"/>
+  <object id="72" x="8768" y="576" width="64" height="64"/>
+  <object id="73" x="8896" y="576" width="64" height="64"/>
+  <object id="81" x="10432" y="384" width="64" height="64"/>
+  <object id="82" x="10560" y="512" width="64" height="64"/>
+  <object id="83" x="10752" y="576" width="64" height="64"/>
+  <object id="99" x="11584" y="576" width="64" height="64"/>
+  <object id="101" x="11712" y="576" width="64" height="64"/>
+  <object id="102" x="11234" y="574" width="64" height="64"/>
+  <object id="103" x="7296" y="576" width="64" height="64"/>
+  <object id="104" x="7720" y="574.667" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="12" name="ScreenShakerPositions">
+  <object id="63" x="1664" y="64" width="64" height="192"/>
+  <object id="69" x="6848" y="64" width="64" height="192"/>
+  <object id="70" x="7488" y="64" width="64" height="192"/>
+  <object id="89" x="10816" y="64" width="64" height="192"/>
+  <object id="90" x="11264" y="64" width="64" height="192"/>
+ </objectgroup>
+ <objectgroup id="4" name="flyingEnemyPositions">
+  <object id="38" x="3072" y="512" width="64" height="64"/>
+  <object id="39" x="3200" y="384" width="64" height="64"/>
+  <object id="53" x="4800" y="512" width="64" height="64"/>
+  <object id="55" x="4864" y="256" width="64" height="64"/>
+  <object id="56" x="4672" y="384" width="64" height="64"/>
+  <object id="76" x="9920" y="448" width="64" height="64"/>
+  <object id="77" x="9856" y="512" width="64" height="64"/>
+  <object id="93" x="13184" y="448" width="64" height="64"/>
+  <object id="94" x="13312" y="320" width="64" height="64"/>
+  <object id="95" x="13312" y="512" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="5" name="groundEnemyPositions">
+  <object id="40" x="3776" y="576" width="64" height="64"/>
+  <object id="54" x="5312" y="576" width="64" height="64"/>
+  <object id="74" x="9536" y="576" width="64" height="64"/>
+  <object id="91" x="12416" y="576" width="64" height="64"/>
+  <object id="92" x="12800" y="576" width="64" height="64"/>
+  <object id="97" x="13824" y="576" width="64" height="64"/>
+ </objectgroup>
  <objectgroup id="6" name="worldEndPosition">
   <object id="1" x="13960" y="576" width="96" height="76"/>
  </objectgroup>
- <objectgroup id="7" name="objectObject"/>
 </map>

@@ -1,6 +1,7 @@
 package com.semtb001.individual.assignement.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -160,6 +161,12 @@ public class PlayScreen implements Screen {
                 // If the bottom half of the screen is touched: player slide
                 player.slide();
             }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            player.jump();
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            player.slide();
         }
     }
 

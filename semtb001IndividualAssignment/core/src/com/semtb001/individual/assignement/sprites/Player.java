@@ -151,7 +151,7 @@ public class Player extends Sprite {
         tempFrames.clear();
 
         // Set the starting animation frame to 'run'
-        currentFrame = (TextureRegion) running.getKeyFrame(0, false);
+        currentFrame = (TextureRegion) running.getKeyFrame(3, false);
 
         // Initially add a linear impulse to the player to start moving straight away
         box2dBody.applyLinearImpulse(new Vector2(15f, 0), box2dBody.getWorldCenter(), true);
@@ -175,7 +175,7 @@ public class Player extends Sprite {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         // Set the player starting position
-        bodyDef.position.set(10, 19);
+        bodyDef.position.set(10, 20);
 
         // Create the body in the world
         box2dBody = world.createBody(bodyDef);
@@ -428,7 +428,7 @@ public class Player extends Sprite {
     public void jump() {
 
         // If the player is running (prevents double jumps)
-        if (currentState == State.RUN) {
+        if (box2dBody.getLinearVelocity().y == 0 && currentState == State.RUN) {
 
             // Apply a linear velocity on the y axis
             box2dBody.applyLinearImpulse(new Vector2(0, 39f), box2dBody.getWorldCenter(), true);
@@ -443,7 +443,7 @@ public class Player extends Sprite {
     public void slide() {
 
         // If the player is running (prevents continuous sliding)
-        if (currentState == State.RUN) {
+        if (box2dBody.getLinearVelocity().y == 0 && currentState == State.RUN) {
 
             // Update the player state to "SLIDE_START"
             currentState = State.SLIDE_START;

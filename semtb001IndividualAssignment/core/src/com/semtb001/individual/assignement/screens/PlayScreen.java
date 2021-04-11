@@ -101,14 +101,14 @@ public class PlayScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001IndividualAssignment.MPP);
         world = new World(new Vector2(0, -100), true);
 
+        // Setup the texture atlas for loading in the player and enemy textures
+        textureAtlas = Semtb001IndividualAssignment.assetManager.manager.get(Assets.textureAtlas);
+
         // Setup the Box2D world creator (creates Box2D bodies and adds them to the world)
         box2dWorldCreator = new Box2DWorldCreator(this);
 
         // Setup the world contact listener
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
-
-        // Setup the texture atlas for loading in the player and enemy textures
-        textureAtlas = Semtb001IndividualAssignment.assetManager.manager.get(Assets.textureAtlas);
 
         // Instantiate Player, Enemies and Coins
         player = new Player(world, this);

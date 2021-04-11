@@ -56,7 +56,7 @@ public class Assets {
             new AssetDescriptor<Texture>("gui/mainMenuBackground.png", Texture.class);
 
     public static final AssetDescriptor<TextureAtlas> textureAtlas =
-            new AssetDescriptor<TextureAtlas>("texturepack/playerAndEnemy.pack", TextureAtlas.class);
+            new AssetDescriptor<TextureAtlas>("texturepack/texturepack.pack", TextureAtlas.class);
 
     public void load() {
 

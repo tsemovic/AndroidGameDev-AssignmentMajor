@@ -82,7 +82,9 @@ public class LevelSelect implements Screen {
         // Setup back table to be displayed in the main table
         Table backTable = new Table();
         backTable.setFillParent(true);
-        backTable.top().left().pad(20);
+        backTable.top().left();
+        backTable.padTop(20);
+        backTable.padLeft(50);
 
         // Create labels for the 'levels' table
         levelsLabel = new Label("LEVELS", Semtb001IndividualAssignment.mediumFontFontWhite);

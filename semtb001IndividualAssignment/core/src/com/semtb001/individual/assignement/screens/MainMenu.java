@@ -72,7 +72,7 @@ public class MainMenu implements Screen {
         mainTable.center();
 
         // Create labels to be displayed in the table
-        title = new Label("GAME TITLE", Semtb001IndividualAssignment.largeFontWhite);
+        title = new Label("BLOCK RUNNER", Semtb001IndividualAssignment.mediumFontFontWhite);
         play = new Label("PLAY", Semtb001IndividualAssignment.smallFontFontWhite);
         highscores = new Label("STATISTICS", Semtb001IndividualAssignment.smallFontFontWhite);
         exit = new Label("EXIT", Semtb001IndividualAssignment.smallFontFontWhite);

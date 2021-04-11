@@ -1,5 +1,5 @@
 
-playerAndEnemy.png
+texturepack.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
@@ -52,14 +52,14 @@ slime
   orig: 320, 80
   offset: 0, 0
   index: -1
-bee
+coin
   rotate: false
-  xy: 1797, 849
-  size: 56, 48
-  orig: 56, 48
+  xy: 1797, 881
+  size: 127, 16
+  orig: 127, 16
   offset: 0, 0
   index: -1
-bee_dead
+bee
   rotate: false
   xy: 1285, 333
   size: 56, 48

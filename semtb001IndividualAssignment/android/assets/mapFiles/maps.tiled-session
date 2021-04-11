@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level1.tmx",
+    "activeFile": "level2.tmx",
     "expandedProjectPaths": [
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap"
     ],
@@ -130,7 +130,7 @@
             "scaleInEditor": 5.5
         },
         "background_tilesheet.tsx": {
-            "scaleInDock": 0.0625,
+            "scaleInDock": 0.125,
             "scaleInEditor": 1
         },
         "buildings_spritesheet.tsx": {
@@ -155,11 +155,11 @@
             }
         },
         "level2.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 4,
+            "scale": 0.25,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 13966.666666666666,
-                "y": 447.3333333333333
+                "x": 11296,
+                "y": 162
             }
         },
         "platformPack_tilesheet.tsx": {
@@ -183,7 +183,8 @@
     "map.tileWidth": 64,
     "map.width": 250,
     "openFiles": [
-        "level1.tmx"
+        "level1.tmx",
+        "level2.tmx"
     ],
     "project": "maps.tiled-project",
     "recentFiles": [

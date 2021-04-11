@@ -78,7 +78,9 @@ public class Coin {
         for (int i = 1; i <= 7; i++) {
 
             // Add the frame to the tempFrames list
-            tempFrames.add(new TextureRegion(new Texture("coin.png"), i * 16, 0, 16, 16));
+            //tempFrames.add(new TextureRegion(new Texture("coin.png"), i * 16, 0, 16, 16));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("coin"), i * 16, 0, 16, 16));
+
         }
 
         // Create the coin animation from the list of texture regions

@@ -80,7 +80,9 @@ public class Statistics implements Screen {
         // Create 'back' table to be displayed in the stage
         Table backTable = new Table();
         backTable.setFillParent(true);
-        backTable.top().left().pad(20);
+        backTable.top().left();
+        backTable.padTop(20);
+        backTable.padLeft(50);
 
         // Create 'main' table to be displayed in the 'level' table
         Table mainTable = new Table();

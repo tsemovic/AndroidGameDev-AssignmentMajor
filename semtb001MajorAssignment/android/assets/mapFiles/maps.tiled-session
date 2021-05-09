@@ -150,16 +150,16 @@
             "scale": 0.5,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 14088,
-                "y": 629
+                "x": 8000,
+                "y": 638
             }
         },
         "level2.tmx": {
             "scale": 0.25,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 11296,
-                "y": 162
+                "x": 8000,
+                "y": 640
             }
         },
         "platformPack_tilesheet.tsx": {

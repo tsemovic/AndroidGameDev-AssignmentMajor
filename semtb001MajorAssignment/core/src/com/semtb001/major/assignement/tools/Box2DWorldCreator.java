@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.tools;
+package com.semtb001.major.assignement.tools;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -10,9 +10,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.screens.PlayScreen;
-import com.semtb001.individual.assignement.sprites.Coin;
+import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.sprites.Coin;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -63,17 +63,17 @@ public class Box2DWorldCreator {
 
             // Set the position of the world ground and object fixtures in the map file
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
+            bodyDef.position.set((rect.getX() + rect.getWidth() / 2) / Semtb001MajorAssignment.PPM, (rect.getY() + rect.getHeight() / 2) / Semtb001MajorAssignment.PPM);
 
             // Create the body in the world
             body = world.createBody(bodyDef);
 
             // Setup the shape of the object
-            shape.setAsBox((rect.getWidth() / 2) / Semtb001IndividualAssignment.PPM, (rect.getHeight() / 2) / Semtb001IndividualAssignment.PPM);
+            shape.setAsBox((rect.getWidth() / 2) / Semtb001MajorAssignment.PPM, (rect.getHeight() / 2) / Semtb001MajorAssignment.PPM);
             fixtureDef.shape = shape;
 
             // Set the categoryBits of the object to "WORLD" (so player can collide with them)
-            fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.WORLD;
+            fixtureDef.filter.categoryBits = Semtb001MajorAssignment.WORLD;
 
             // Add the fixture to the body object
             body.createFixture(fixtureDef);

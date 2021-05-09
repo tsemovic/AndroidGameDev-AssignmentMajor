@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.screens;
+package com.semtb001.major.assignement.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class Statistics implements Screen {
 
     // Statistics Menu game, spritebatch, stage, viewport, and camera objects
-    public Semtb001IndividualAssignment game;
+    public Semtb001MajorAssignment game;
     private SpriteBatch batch;
     protected Stage stage;
     private Viewport viewport;
@@ -42,18 +42,18 @@ public class Statistics implements Screen {
     // Statistics Menu Background sprite object
     private Sprite backgroundSprite;
 
-    public Statistics(Semtb001IndividualAssignment semtb001IndividualAssignment){
+    public Statistics(Semtb001MajorAssignment semtb001MajorAssignment){
 
         // Instantiate game and spritebatch
-        game = semtb001IndividualAssignment;
+        game = semtb001MajorAssignment;
         batch = new SpriteBatch();
 
         // Setup camera
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
+        camera.setToOrtho(false, Semtb001MajorAssignment.WORLD_WIDTH, Semtb001MajorAssignment.WORLD_HEIGHT);
 
         // Setup viewport
-        viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM, Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
+        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
         camera.update();
 
         // Setup stage
@@ -88,17 +88,17 @@ public class Statistics implements Screen {
         Table mainTable = new Table();
 
         // Create label to be displayed in the 'level' table
-        levelsLabel = new Label("STATISTICS" ,Semtb001IndividualAssignment.largeFontWhite);
+        levelsLabel = new Label("STATISTICS" , Semtb001MajorAssignment.largeFontWhite);
         levelsLabel.setColor(Color.WHITE);
-        descriptionLabel = new Label("LEVEL COMPLETION PERCENTAGE", Semtb001IndividualAssignment.tinyFontFontWhite);
+        descriptionLabel = new Label("LEVEL COMPLETION PERCENTAGE", Semtb001MajorAssignment.tinyFontFontWhite);
         descriptionLabel.setColor(Color.WHITE);
 
         // Create 'back' label to be displayed in the 'back' table
-        back = new Label("<BACK", Semtb001IndividualAssignment.smallFontFontWhite);
+        back = new Label("<BACK", Semtb001MajorAssignment.smallFontFontWhite);
         back.setColor(Color.WHITE);
 
         // Add labels to the 'level' table
-        levelLabelTable.add(levelsLabel).padBottom(Semtb001IndividualAssignment.PPM);
+        levelLabelTable.add(levelsLabel).padBottom(Semtb001MajorAssignment.PPM);
         levelLabelTable.row();
         levelLabelTable.add(descriptionLabel);
         levelLabelTable.row();
@@ -117,11 +117,11 @@ public class Statistics implements Screen {
         levels = new ArrayList<Label>();
 
         // Executes code for the number of levels in the game
-        for(int i = 1; i <= Semtb001IndividualAssignment.NUMBER_OF_LEVELS; i++){
+        for(int i = 1; i <= Semtb001MajorAssignment.NUMBER_OF_LEVELS; i++){
 
             // Create a new label for the current level in the loop (level completion percentage)
             Label currentLevel = new Label("LEVEL: " + Integer.toString(i) + " = " +
-                    game.scoresPref.getInteger("LEVEL: " + Integer.toString(i)) + "%", Semtb001IndividualAssignment.tinyFontFontWhite);
+                    game.scoresPref.getInteger("LEVEL: " + Integer.toString(i)) + "%", Semtb001MajorAssignment.tinyFontFontWhite);
             currentLevel.setColor(Color.WHITE);
 
             // Add the current level label to the main table
@@ -134,7 +134,7 @@ public class Statistics implements Screen {
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Semtb001IndividualAssignment.playMenuClick();
+                Semtb001MajorAssignment.playMenuClick();
 
                 // If the 'back' label is touched, return to the main menu
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));

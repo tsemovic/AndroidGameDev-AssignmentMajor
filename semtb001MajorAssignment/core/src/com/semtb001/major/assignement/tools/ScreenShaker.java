@@ -1,7 +1,7 @@
-package com.semtb001.individual.assignement.tools;
+package com.semtb001.major.assignement.tools;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.semtb001.individual.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.screens.PlayScreen;
 import java.util.Random;
 
 // Class for screen shaker (simulates earthquake)

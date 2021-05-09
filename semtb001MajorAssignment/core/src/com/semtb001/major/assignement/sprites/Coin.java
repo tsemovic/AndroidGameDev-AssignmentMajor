@@ -1,7 +1,6 @@
-package com.semtb001.individual.assignement.sprites;
+package com.semtb001.major.assignement.sprites;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -11,16 +10,16 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.screens.PlayScreen;
-import com.semtb001.individual.assignement.tools.Assets;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.tools.Assets;
 
 // Class for the coins in the map
 public class Coin {
 
     // Coin world and playscreen objects
     private World world;
-    private PlayScreen playScreen;
+    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
 
     // Coin texture objects
     private Animation texture;
@@ -56,7 +55,7 @@ public class Coin {
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
         // Set the fixture category to COIN
-        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.COIN;
+        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.COIN;
 
         // Set the position to the x and y coordinates of the object in the map file
         bodyDef.position.set(position.x / 32, position.y / 32);
@@ -113,7 +112,7 @@ public class Coin {
             playScreen.updateCollectedCoins();
 
             // Play the collected coin sound
-            Sound coin = Semtb001IndividualAssignment.assetManager.manager.get(Assets.coin);
+            Sound coin = Semtb001MajorAssignment.assetManager.manager.get(Assets.coin);
             coin.play();
         }
     }

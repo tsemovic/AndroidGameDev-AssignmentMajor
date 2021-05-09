@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.screens;
+package com.semtb001.major.assignement.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -14,14 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.tools.Assets;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.tools.Assets;
 
 // Class for the main menu (shown at startup)
 public class MainMenu implements Screen {
 
     // Main Menu game, spritebatch, stage, viewport, and camera objects
-    public Semtb001IndividualAssignment game;
+    public Semtb001MajorAssignment game;
     private SpriteBatch batch;
     protected Stage stage;
     private Viewport viewport;
@@ -41,7 +41,7 @@ public class MainMenu implements Screen {
     // Main Menu Background sprite object
     private Sprite backgroundSprite;
 
-    public MainMenu(Semtb001IndividualAssignment game) {
+    public MainMenu(Semtb001MajorAssignment game) {
 
         // Instantiate game and spritebatch
         this.game = game;
@@ -49,10 +49,10 @@ public class MainMenu implements Screen {
 
         // Setup camera
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
+        camera.setToOrtho(false, Semtb001MajorAssignment.WORLD_WIDTH, Semtb001MajorAssignment.WORLD_HEIGHT);
 
         // Setup viewport
-        viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM, Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
+        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
         camera.update();
 
         // Setup stage
@@ -72,25 +72,25 @@ public class MainMenu implements Screen {
         mainTable.center();
 
         // Create labels to be displayed in the table
-        title = new Label("BLOCK RUNNER", Semtb001IndividualAssignment.mediumFontFontWhite);
-        play = new Label("PLAY", Semtb001IndividualAssignment.smallFontFontWhite);
-        highscores = new Label("STATISTICS", Semtb001IndividualAssignment.smallFontFontWhite);
-        exit = new Label("EXIT", Semtb001IndividualAssignment.smallFontFontWhite);
+        title = new Label("BLOCK RUNNER", Semtb001MajorAssignment.mediumFontFontWhite);
+        play = new Label("PLAY", Semtb001MajorAssignment.smallFontFontWhite);
+        highscores = new Label("STATISTICS", Semtb001MajorAssignment.smallFontFontWhite);
+        exit = new Label("EXIT", Semtb001MajorAssignment.smallFontFontWhite);
 
         // Add the labels to the table
-        mainTable.add(title).pad(Semtb001IndividualAssignment.PPM / 2);
+        mainTable.add(title).pad(Semtb001MajorAssignment.PPM / 2);
         mainTable.row();
-        mainTable.add(play).pad(Semtb001IndividualAssignment.PPM / 4);
+        mainTable.add(play).pad(Semtb001MajorAssignment.PPM / 4);
         mainTable.row();
-        mainTable.add(highscores).pad(Semtb001IndividualAssignment.PPM / 4);
+        mainTable.add(highscores).pad(Semtb001MajorAssignment.PPM / 4);
         mainTable.row();
-        mainTable.add(exit).pad(Semtb001IndividualAssignment.PPM / 4);
+        mainTable.add(exit).pad(Semtb001MajorAssignment.PPM / 4);
 
         // Add the table to the stage
         stage.addActor(mainTable);
 
         // Setup the background image sprite
-        backgroundSprite = new Sprite(Semtb001IndividualAssignment.assetManager.manager.get(Assets.menuBackground));
+        backgroundSprite = new Sprite(Semtb001MajorAssignment.assetManager.manager.get(Assets.menuBackground));
         backgroundSprite.setSize(camera.viewportWidth, camera.viewportHeight);
         backgroundSprite.setAlpha(400);
 
@@ -100,7 +100,7 @@ public class MainMenu implements Screen {
             // If the label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                play.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                play.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                 playActive = true;
                 return true;
             }
@@ -112,13 +112,13 @@ public class MainMenu implements Screen {
                 /* If the user touch is dragged and still on the label
                 (change to grey font colour and active playActive) */
                 if (x > 0 && x < play.getWidth() && y > 0 && y < play.getHeight()) {
-                    play.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                    play.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     playActive = true;
                 } else {
 
                     /* If the user touch is dragged and not over the label
                     (de-activate playActive and set the font colour to white) */
-                    play.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                    play.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     playActive = false;
                 }
             }
@@ -128,10 +128,10 @@ public class MainMenu implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (playActive) {
-                    Semtb001IndividualAssignment.playMenuClick();
+                    Semtb001MajorAssignment.playMenuClick();
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new LevelSelect(game));
                 }
-                play.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                play.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
 
@@ -141,7 +141,7 @@ public class MainMenu implements Screen {
             // If the label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                highscores.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                highscores.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                 highscoresActive = true;
                 return true;
             }
@@ -153,13 +153,13 @@ public class MainMenu implements Screen {
                 /* If the user touch is dragged and still on the label
                 (change to grey font colour and active highscoresActive) */
                 if (x > 0 && x < highscores.getWidth() && y > 0 && y < highscores.getHeight()) {
-                    highscores.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                    highscores.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     highscoresActive = true;
                 } else {
 
                     /* If the user touch is dragged and not over the label
                     (de-activate highscoresActive and set the font colour to white) */
-                    highscores.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                    highscores.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     highscoresActive = false;
                 }
             }
@@ -169,10 +169,10 @@ public class MainMenu implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (highscoresActive) {
-                    Semtb001IndividualAssignment.playMenuClick();
+                    Semtb001MajorAssignment.playMenuClick();
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new Statistics(game));
                 }
-                highscores.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                highscores.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
 
@@ -182,7 +182,7 @@ public class MainMenu implements Screen {
             // If the label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                exit.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                exit.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                 exitActive = true;
                 return true;
             }
@@ -194,13 +194,13 @@ public class MainMenu implements Screen {
                 /* If the user touch is dragged and still on the label
                 (change to grey font colour and active exitActive) */
                 if (x > 0 && x < exit.getWidth() && y > 0 && y < exit.getHeight()) {
-                    exit.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                    exit.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     exitActive = true;
                 } else {
 
                     /* If the user touch is dragged and not over the label
                     (de-activate exitActive and set the font colour to white) */
-                    exit.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                    exit.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     exitActive = false;
                 }
             }
@@ -210,14 +210,14 @@ public class MainMenu implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (exitActive) {
-                    Semtb001IndividualAssignment.playMenuClick();
+                    Semtb001MajorAssignment.playMenuClick();
                     dispose();
                     game.dispose();
 
                     Gdx.app.exit();
                     System.exit(0);
                 }
-                exit.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                exit.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
             }
         });
 

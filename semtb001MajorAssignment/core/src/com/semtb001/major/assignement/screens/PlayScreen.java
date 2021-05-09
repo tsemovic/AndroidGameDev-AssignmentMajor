@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.screens;
+package com.semtb001.major.assignement.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,21 +13,20 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.semtb001.individual.assignement.scenes.GameOver;
-import com.semtb001.individual.assignement.scenes.Hud;
-import com.semtb001.individual.assignement.scenes.LevelBrief;
-import com.semtb001.individual.assignement.scenes.Paused;
-import com.semtb001.individual.assignement.sprites.FlyingEnemy;
-import com.semtb001.individual.assignement.sprites.Coin;
-import com.semtb001.individual.assignement.sprites.Player;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.sprites.GroundEnemy;
-import com.semtb001.individual.assignement.tools.Assets;
-import com.semtb001.individual.assignement.tools.Box2DWorldCreator;
-import com.semtb001.individual.assignement.tools.ScreenShaker;
-import com.semtb001.individual.assignement.tools.WorldContactListener;
+import com.semtb001.major.assignement.scenes.GameOver;
+import com.semtb001.major.assignement.scenes.Hud;
+import com.semtb001.major.assignement.sprites.FlyingEnemy;
+import com.semtb001.major.assignement.sprites.Coin;
+import com.semtb001.major.assignement.sprites.Player;
+import com.semtb001.major.assignement.sprites.GroundEnemy;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.scenes.LevelBrief;
+import com.semtb001.major.assignement.scenes.Paused;
+import com.semtb001.major.assignement.tools.Assets;
+import com.semtb001.major.assignement.tools.Box2DWorldCreator;
+import com.semtb001.major.assignement.tools.ScreenShaker;
+import com.semtb001.major.assignement.tools.WorldContactListener;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -35,7 +34,7 @@ import java.util.Queue;
 public class PlayScreen implements Screen {
 
     // Game, camera, and current level objects
-    private Semtb001IndividualAssignment game;
+    private Semtb001MajorAssignment game;
     private OrthographicCamera gameCamera;
     public String currentLevel;
 
@@ -47,7 +46,7 @@ public class PlayScreen implements Screen {
     private float worldEndPosition;
 
     // Box2D objects
-    private Box2DWorldCreator box2dWorldCreator;
+    private com.semtb001.major.assignement.tools.Box2DWorldCreator box2dWorldCreator;
 
     // world step time calculation variables
     private static final float dt = (float) 0.01;
@@ -63,10 +62,10 @@ public class PlayScreen implements Screen {
     public boolean isGameOverCreated;
 
     // Screen overlay objects
-    private Paused paused;
+    private com.semtb001.major.assignement.scenes.Paused paused;
     private Hud hud;
     private GameOver gameOver;
-    private LevelBrief levelBrief;
+    private com.semtb001.major.assignement.scenes.LevelBrief levelBrief;
 
     // Player, Enemy and Coin objects
     private Player player;
@@ -83,29 +82,29 @@ public class PlayScreen implements Screen {
     // Boolean to determine if the level brief is displayed
     private boolean levelBriefActive;
 
-    public PlayScreen(Semtb001IndividualAssignment semtb001IndividualAssignment, String currentLevel) {
+    public PlayScreen(Semtb001MajorAssignment semtb001MajorAssignment, String currentLevel) {
 
         // Instantiate game and level objects
-        game = semtb001IndividualAssignment;
-        batch = semtb001IndividualAssignment.batch;
+        game = semtb001MajorAssignment;
+        batch = semtb001MajorAssignment.batch;
         this.currentLevel = currentLevel;
         isGameOverCreated = false;
 
         // Setup game camera
         gameCamera = new OrthographicCamera();
-        gameCamera.setToOrtho(false, Semtb001IndividualAssignment.WORLD_WIDTH, Semtb001IndividualAssignment.WORLD_HEIGHT);
+        gameCamera.setToOrtho(false, Semtb001MajorAssignment.WORLD_WIDTH, Semtb001MajorAssignment.WORLD_HEIGHT);
 
         // Load map level, render the map, and create the game world
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, Semtb001IndividualAssignment.MPP);
+        renderer = new OrthogonalTiledMapRenderer(map, Semtb001MajorAssignment.MPP);
         world = new World(new Vector2(0, -100), true);
 
         // Setup the texture atlas for loading in the player and enemy textures
-        textureAtlas = Semtb001IndividualAssignment.assetManager.manager.get(Assets.textureAtlas);
+        textureAtlas = Semtb001MajorAssignment.assetManager.manager.get(com.semtb001.major.assignement.tools.Assets.textureAtlas);
 
         // Setup the Box2D world creator (creates Box2D bodies and adds them to the world)
-        box2dWorldCreator = new Box2DWorldCreator(this);
+        box2dWorldCreator = new com.semtb001.major.assignement.tools.Box2DWorldCreator(this);
 
         // Setup the world contact listener
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
@@ -136,7 +135,7 @@ public class PlayScreen implements Screen {
         inputMultiplexer.addProcessor(paused.stage);
 
         // Setup game music loop
-        music = Semtb001IndividualAssignment.assetManager.manager.get(Assets.music);
+        music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
         music.setLooping(true);
         music.play();
 
@@ -591,8 +590,8 @@ public class PlayScreen implements Screen {
     }
 
     public Vector2 getPlayerPos() {
-        Vector2 pos = new Vector2((int) (player.box2dBody.getPosition().x * Semtb001IndividualAssignment.PPM / 32),
-                (int) (player.box2dBody.getPosition().y * Semtb001IndividualAssignment.PPM / 32));
+        Vector2 pos = new Vector2((int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32),
+                (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32));
         return pos;
     }
 
@@ -613,7 +612,7 @@ public class PlayScreen implements Screen {
     }
 
     public void setWorldEndPosition(float x) {
-        worldEndPosition = x / Semtb001IndividualAssignment.PPM;
+        worldEndPosition = x / Semtb001MajorAssignment.PPM;
     }
 
     public void setPaused(boolean value) {

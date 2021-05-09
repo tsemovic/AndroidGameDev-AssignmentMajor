@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.scenes;
+package com.semtb001.major.assignement.scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,12 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.screens.MainMenu;
-import com.semtb001.individual.assignement.screens.PlayScreen;
-import com.semtb001.individual.assignement.tools.Assets;
-
-import java.text.DecimalFormat;
+import com.semtb001.major.assignement.screens.MainMenu;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.tools.Assets;
 
 /* Class to present a overlay on the game screen showing that the game is over
 (this is shown when the player dies and also when the player completes the level */
@@ -26,7 +24,7 @@ public class GameOver implements Disposable {
     // GameOver stage viewport, and PlayScreen objects
     public Stage stage;
     private Viewport viewport;
-    private PlayScreen playScreen;
+    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
 
     // Objects that will be displayed in the GameOver overlay
     private Label headerText;
@@ -41,14 +39,14 @@ public class GameOver implements Disposable {
     public Sprite backgroundSprite;
     public SpriteBatch batch;
 
-    public GameOver(SpriteBatch spriteBatch, final Semtb001IndividualAssignment game,
-                    final PlayScreen playScreen) {
+    public GameOver(SpriteBatch spriteBatch, final Semtb001MajorAssignment game,
+                    final com.semtb001.major.assignement.screens.PlayScreen playScreen) {
 
         // Instantiate the GameOver spritebatch, viewport, stage, and PlayScreen
         this.playScreen = playScreen;
         batch = spriteBatch;
-        viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM,
-                Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
+        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM,
+                Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
 
         // Setup the table that is displayed in the GameOver overlay
@@ -57,17 +55,17 @@ public class GameOver implements Disposable {
         pausedTable.setFillParent(true);
 
         // Set the exitText label to 'EXIT' (does not change if the player dies or completes the level)
-        exitText = new Label("EXIT", Semtb001IndividualAssignment.smallFontFontWhite);
+        exitText = new Label("EXIT", Semtb001MajorAssignment.smallFontFontWhite);
 
         // If the player is dead
         if (playScreen.getPlayer().playerIsDead) {
 
             // Set the header text to 'GAME OVER' and the subHeader text to 'TRY AGAIN'
-            headerText = new Label("GAME OVER", Semtb001IndividualAssignment.largeFontWhite);
-            subHeaderText = new Label("TRY AGAIN", Semtb001IndividualAssignment.smallFontFontWhite);
+            headerText = new Label("GAME OVER", Semtb001MajorAssignment.largeFontWhite);
+            subHeaderText = new Label("TRY AGAIN", Semtb001MajorAssignment.smallFontFontWhite);
 
             // Add the labels to the table
-            pausedTable.add(headerText).pad(Semtb001IndividualAssignment.PPM * 2);
+            pausedTable.add(headerText).pad(Semtb001MajorAssignment.PPM * 2);
             pausedTable.row();
             pausedTable.add(subHeaderText);
             pausedTable.row();
@@ -77,26 +75,26 @@ public class GameOver implements Disposable {
 
             // If the player is not dead (completes the level successfully)
             // Set the header text to "LEVEL PASSED" and the subHeader text to "TRY AGAIN"
-            headerText = new Label("LEVEL PASSED", Semtb001IndividualAssignment.mediumFontFontWhite);
-            subHeaderText = new Label("TRY AGAIN", Semtb001IndividualAssignment.smallFontFontWhite);
+            headerText = new Label("LEVEL PASSED", Semtb001MajorAssignment.mediumFontFontWhite);
+            subHeaderText = new Label("TRY AGAIN", Semtb001MajorAssignment.smallFontFontWhite);
 
             /* If the player has collected all of the coins in the map: unlock the next level
             (and save to the saved data) and set the subHeader text to "NEXT LEVEL" if there is
             a another level to play*/
             if (playScreen.getHud().getCoinCount() == playScreen.getBox2dWorldCreator().getCoins().size()) {
-                if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
+                if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001MajorAssignment.NUMBER_OF_LEVELS) {
                     String newLevel = "LEVEL: " + Integer.toString(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) + 1);
-                    Semtb001IndividualAssignment.levelsPref.putBoolean(newLevel, true);
-                    Semtb001IndividualAssignment.levelsPref.flush();
+                    Semtb001MajorAssignment.levelsPref.putBoolean(newLevel, true);
+                    Semtb001MajorAssignment.levelsPref.flush();
                     System.out.println(newLevel + " unlcoked");
                     subHeaderText = new Label("NEXT LEVEL",
-                            Semtb001IndividualAssignment.smallFontFontWhite);
+                            Semtb001MajorAssignment.smallFontFontWhite);
                 } else {
 
                     /* If there are no other levels to play (completed all levels), set the
                     subHeader text to "ALL LEVELS COMPLETE" */
                     subHeaderText = new Label("ALL LEVELS COMPLETE!",
-                            Semtb001IndividualAssignment.smallFontFontWhite);
+                            Semtb001MajorAssignment.smallFontFontWhite);
                 }
             }
 
@@ -105,17 +103,17 @@ public class GameOver implements Disposable {
             float jewelTotal = playScreen.getBox2dWorldCreator().getCoins().size();
             Label levelCompletion = new Label("LEVEL COMPLETION: " +
                     (int) ((jewelCount / jewelTotal) * 100) + "%",
-                    Semtb001IndividualAssignment.smallFontFontWhite);
+                    Semtb001MajorAssignment.smallFontFontWhite);
 
             /* If percentage completed is greater than values in the saved data: update saved data
             with new completion percentage */
-            if ((int) ((jewelCount / jewelTotal) * 100) > Semtb001IndividualAssignment.scoresPref.getInteger(playScreen.currentLevel)) {
-                Semtb001IndividualAssignment.scoresPref.putInteger(playScreen.currentLevel, (int) ((jewelCount / jewelTotal) * 100));
-                Semtb001IndividualAssignment.scoresPref.flush();
+            if ((int) ((jewelCount / jewelTotal) * 100) > Semtb001MajorAssignment.scoresPref.getInteger(playScreen.currentLevel)) {
+                Semtb001MajorAssignment.scoresPref.putInteger(playScreen.currentLevel, (int) ((jewelCount / jewelTotal) * 100));
+                Semtb001MajorAssignment.scoresPref.flush();
             }
 
             // Add the labels to the table
-            pausedTable.add(headerText).pad(Semtb001IndividualAssignment.PPM * 2);
+            pausedTable.add(headerText).pad(Semtb001MajorAssignment.PPM * 2);
             pausedTable.row();
             pausedTable.add(levelCompletion);
             pausedTable.row();
@@ -128,7 +126,7 @@ public class GameOver implements Disposable {
         stage.addActor(pausedTable);
 
         // Set the background sprite the 'backgroundTint' asset
-        backgroundSprite = new Sprite(Semtb001IndividualAssignment.assetManager.manager.get(Assets.backgroundTint));
+        backgroundSprite = new Sprite(Semtb001MajorAssignment.assetManager.manager.get(Assets.backgroundTint));
         backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
         backgroundSprite.setAlpha(400);
 
@@ -138,7 +136,7 @@ public class GameOver implements Disposable {
             // If the label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                 subHeaderTextActive = true;
 
                 return true;
@@ -151,13 +149,13 @@ public class GameOver implements Disposable {
                 /* If the user touch is dragged and still on the label
                 (change to grey font colour and active subHeaderTextActive) */
                 if (x > 0 && x < subHeaderText.getWidth() && y > 0 && y < subHeaderText.getHeight()) {
-                    subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                    subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     subHeaderTextActive = true;
                 } else {
 
                     /* If the user touch is dragged and not over the label
                     (de-activate subHeaderTextActive and set the font colour to white) */
-                    subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                    subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     subHeaderTextActive = false;
                 }
             }
@@ -175,7 +173,7 @@ public class GameOver implements Disposable {
 
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
                 }
-                subHeaderText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
 
@@ -185,7 +183,7 @@ public class GameOver implements Disposable {
             // If the exit label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                exitText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                 exitTextActive = true;
                 return true;
             }
@@ -197,13 +195,13 @@ public class GameOver implements Disposable {
                 /* If the user touch is dragged and still on the exit label
                 (change to grey font colour and active exitTextActive) */
                 if (x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()) {
-                    exitText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     exitTextActive = true;
                 } else {
 
                     /* If the user touch is dragged and not over the exit label
                     (de-activate exitTextActive and set the font colour to white) */
-                    exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     exitTextActive = false;
                 }
             }
@@ -221,7 +219,7 @@ public class GameOver implements Disposable {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
 
                 }
-                exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
     }
@@ -237,7 +235,7 @@ public class GameOver implements Disposable {
         } else {
 
             // If the player player completes the level, reutn the next level
-            if (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001IndividualAssignment.NUMBER_OF_LEVELS) {
+            if (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001MajorAssignment.NUMBER_OF_LEVELS) {
                 level = "LEVEL: " + (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) + 1);
             } else {
 

@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement;
+package com.semtb001.major.assignement;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.semtb001.individual.assignement.screens.MainMenu;
-import com.semtb001.individual.assignement.tools.Assets;
+import com.semtb001.major.assignement.screens.MainMenu;
+import com.semtb001.major.assignement.tools.Assets;
 
-public class Semtb001IndividualAssignment extends Game {
+public class Semtb001MajorAssignment extends Game {
 
 	// Game sprite batch object
 	public SpriteBatch batch;
@@ -37,7 +37,7 @@ public class Semtb001IndividualAssignment extends Game {
 	public static Preferences levelsPref;
 
 	// Asset manager object
-	public static Assets assetManager;
+	public static com.semtb001.major.assignement.tools.Assets assetManager;
 
 	// Font objects
 	public static BitmapFont largeFont;
@@ -62,7 +62,7 @@ public class Semtb001IndividualAssignment extends Game {
 		batch = new SpriteBatch();
 
 		// Load game assets
-		assetManager = new Assets();
+		assetManager = new com.semtb001.major.assignement.tools.Assets();
 		assetManager.load();
 		assetManager.manager.finishLoading();
 
@@ -73,39 +73,39 @@ public class Semtb001IndividualAssignment extends Game {
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
 		// Setup large font style
-		parameter.size = (int) (Semtb001IndividualAssignment.PPM * 4);
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 4);
 		largeFont = generator.generateFont(parameter);
 
 		// Setup medium font style
-		parameter.size = (int) (Semtb001IndividualAssignment.PPM * 3);
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 3);
 		mediumFont = generator.generateFont(parameter);
 
 		// Setup small font style
-		parameter.size = (int) (Semtb001IndividualAssignment.PPM * 2);
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 2);
 		smallFont = generator.generateFont(parameter);
 
 		// Setup tiny font style
-		parameter.size = (int) (Semtb001IndividualAssignment.PPM * 1.5);
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 1.5);
 		tinyFont = generator.generateFont(parameter);
 
 		// Dispose the .ttf font generator as all fonts have now been created
 		generator.dispose();
 
 		// Setup large font style in white and grey
-		largeFontWhite = new Label.LabelStyle(Semtb001IndividualAssignment.largeFont, Color.WHITE);
-		largeFontGrey = new Label.LabelStyle(Semtb001IndividualAssignment.largeFont, Color.GRAY);
+		largeFontWhite = new Label.LabelStyle(Semtb001MajorAssignment.largeFont, Color.WHITE);
+		largeFontGrey = new Label.LabelStyle(Semtb001MajorAssignment.largeFont, Color.GRAY);
 
 		// Setup medium font style in white and grey
-		mediumFontFontWhite = new Label.LabelStyle(Semtb001IndividualAssignment.mediumFont, Color.WHITE);
-		mediumFontFontGrey = new Label.LabelStyle(Semtb001IndividualAssignment.mediumFont, Color.GRAY);
+		mediumFontFontWhite = new Label.LabelStyle(Semtb001MajorAssignment.mediumFont, Color.WHITE);
+		mediumFontFontGrey = new Label.LabelStyle(Semtb001MajorAssignment.mediumFont, Color.GRAY);
 
 		// Setup small font style in white and grey
-		smallFontFontWhite = new Label.LabelStyle(Semtb001IndividualAssignment.smallFont, Color.WHITE);
-		smallFontFontGrey = new Label.LabelStyle(Semtb001IndividualAssignment.smallFont, Color.GRAY);
+		smallFontFontWhite = new Label.LabelStyle(Semtb001MajorAssignment.smallFont, Color.WHITE);
+		smallFontFontGrey = new Label.LabelStyle(Semtb001MajorAssignment.smallFont, Color.GRAY);
 
 		// Setup tiny font style in white and grey
-		tinyFontFontWhite = new Label.LabelStyle(Semtb001IndividualAssignment.tinyFont, Color.WHITE);
-		tinyFontFontGrey = new Label.LabelStyle(Semtb001IndividualAssignment.tinyFont, Color.GRAY);
+		tinyFontFontWhite = new Label.LabelStyle(Semtb001MajorAssignment.tinyFont, Color.WHITE);
+		tinyFontFontGrey = new Label.LabelStyle(Semtb001MajorAssignment.tinyFont, Color.GRAY);
 
 		// Setup the saved data for the scores and levels
 		scoresPref = Gdx.app.getPreferences("scores");

@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement;
+package com.semtb001.major.assignement;
 
 import android.os.Bundle;
 
@@ -10,6 +10,6 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new Semtb001IndividualAssignment(), config);
+		initialize(new Semtb001MajorAssignment(), config);
 	}
 }

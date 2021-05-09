@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.scenes;
+package com.semtb001.major.assignement.scenes;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
 
 /* Class to present a overlay on the game screen showing the level brief (a count down until
 the game starts */
@@ -31,7 +31,7 @@ public class LevelBrief implements Disposable {
     public LevelBrief(SpriteBatch spriteBatch) {
 
         // Instantiate the viewport and stage
-        viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
+        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM , Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
 
         // Set the countdown timer to 3 seconds and set timeToPlay to false
@@ -45,11 +45,11 @@ public class LevelBrief implements Disposable {
 
 
         // Setup the labels that will go inside of the table
-        startLabel = new Label("STARTING IN:", Semtb001IndividualAssignment.smallFontFontWhite);
-        countdownLabel = new Label(Integer.toString(countdown), Semtb001IndividualAssignment.tinyFontFontWhite);
+        startLabel = new Label("STARTING IN:", Semtb001MajorAssignment.smallFontFontWhite);
+        countdownLabel = new Label(Integer.toString(countdown), Semtb001MajorAssignment.tinyFontFontWhite);
 
         // Add the labels to the table
-        hudTable.add(startLabel).padLeft(Semtb001IndividualAssignment.PPM * 2);
+        hudTable.add(startLabel).padLeft(Semtb001MajorAssignment.PPM * 2);
         hudTable.row();
         hudTable.add(countdownLabel);
 

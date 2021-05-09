@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.sprites;
+package com.semtb001.major.assignement.sprites;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -11,16 +11,16 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.screens.PlayScreen;
-import com.semtb001.individual.assignement.tools.Assets;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.tools.Assets;
 
 // Class for the Flying enemy (bee)
 public class FlyingEnemy extends Sprite {
 
     // Enemy world and playscreen objects
     private World world;
-    private PlayScreen playScreen;
+    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
 
     // Enemy Box2D objects
     public Body box2dBody;
@@ -60,7 +60,7 @@ public class FlyingEnemy extends Sprite {
         box2dBody.setGravityScale(0f);
 
         // Initialise the enemy sound
-        enemySound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.bee);
+        enemySound = Semtb001MajorAssignment.assetManager.manager.get(Assets.bee);
         enemySound.play();
         enemySound.setLooping(true);
     }
@@ -73,8 +73,8 @@ public class FlyingEnemy extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
 
         // Setup body as an enemy that can collide with the player and the world
-        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.ENEMY;
-        fixtureDef.filter.maskBits = Semtb001IndividualAssignment.PLAYER | Semtb001IndividualAssignment.WORLD;
+        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.ENEMY;
+        fixtureDef.filter.maskBits = Semtb001MajorAssignment.PLAYER | Semtb001MajorAssignment.WORLD;
 
         // Setup the body as a dynamic body (ability to move)
         bodyDef.type = BodyDef.BodyType.DynamicBody;

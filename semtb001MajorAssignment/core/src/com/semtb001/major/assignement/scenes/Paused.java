@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.scenes;
+package com.semtb001.major.assignement.scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.screens.MainMenu;
-import com.semtb001.individual.assignement.screens.PlayScreen;
-import com.semtb001.individual.assignement.tools.Assets;
+import com.semtb001.major.assignement.screens.MainMenu;
+import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.tools.Assets;
 
 // Class to present a overlay on the game screen showing the pause screen
 public class Paused implements Disposable {
@@ -38,13 +38,13 @@ public class Paused implements Disposable {
     public Sprite backgroundSprite;
     public SpriteBatch batch;
 
-    public Paused(SpriteBatch spriteBatch, final Semtb001IndividualAssignment game,
+    public Paused(SpriteBatch spriteBatch, final Semtb001MajorAssignment game,
                   final PlayScreen playScreen) {
 
         // Instantiate the paused spritebatch, viewport, stage, and PlayScreen
         this.playScreen = playScreen;
         batch = spriteBatch;
-        viewport = new FillViewport(Semtb001IndividualAssignment.WORLD_WIDTH * Semtb001IndividualAssignment.PPM , Semtb001IndividualAssignment.WORLD_HEIGHT * Semtb001IndividualAssignment.PPM);
+        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM , Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
         stage = new Stage(viewport, spriteBatch);
 
         // Setup the table that is displayed in the paused overlay
@@ -53,12 +53,12 @@ public class Paused implements Disposable {
         pausedTable.setFillParent(true);
 
         // Setup the labels that will go inside of the table
-        pausedText = new Label("PAUSED", Semtb001IndividualAssignment.largeFontWhite);
-        continueText = new Label("CONTINUE", Semtb001IndividualAssignment.smallFontFontWhite);
-        exitText = new Label("EXIT", Semtb001IndividualAssignment.smallFontFontWhite);
+        pausedText = new Label("PAUSED", Semtb001MajorAssignment.largeFontWhite);
+        continueText = new Label("CONTINUE", Semtb001MajorAssignment.smallFontFontWhite);
+        exitText = new Label("EXIT", Semtb001MajorAssignment.smallFontFontWhite);
 
         // Add the labels to the table
-        pausedTable.add(pausedText).pad(Semtb001IndividualAssignment.PPM*2);
+        pausedTable.add(pausedText).pad(Semtb001MajorAssignment.PPM*2);
         pausedTable.row();
         pausedTable.add(continueText);
         pausedTable.row();
@@ -68,7 +68,7 @@ public class Paused implements Disposable {
         stage.addActor(pausedTable);
 
         // Set the background sprite the 'backgroundTint' asset
-        backgroundSprite = new Sprite(Semtb001IndividualAssignment.assetManager.manager.get(Assets.backgroundTint));
+        backgroundSprite = new Sprite(Semtb001MajorAssignment.assetManager.manager.get(Assets.backgroundTint));
         backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
         backgroundSprite.setAlpha(400);
 
@@ -78,7 +78,7 @@ public class Paused implements Disposable {
             // If the Continue label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                continueText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                continueText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                 continueTextActive = true;
 
                 return true;
@@ -91,13 +91,13 @@ public class Paused implements Disposable {
                 /* If the user touch is dragged and still on the Continue label
                 (change to grey font colour and active continueTextActive) */
                 if(x > 0 && x < continueText.getWidth() && y > 0 && y < continueText.getHeight()){
-                    continueText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                    continueText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     continueTextActive = true;
                 }else{
 
                     /* If the user touch is dragged and not over the Continue label
                     (de-activate continueTextActive and set the font colour to white) */
-                    continueText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                    continueText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     continueTextActive = false;
                 }
             }
@@ -109,7 +109,7 @@ public class Paused implements Disposable {
                 if(continueTextActive) {
                     playScreen.setPaused(false);
                 }
-                continueText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                continueText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
 
@@ -119,7 +119,7 @@ public class Paused implements Disposable {
             // If the exit label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                exitText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                 exitTextActive = true;
                 return true;
             }
@@ -131,13 +131,13 @@ public class Paused implements Disposable {
                 /* If the user touch is dragged and still on the exit label
                 (change to grey font colour and active exitTextActive) */
                 if(x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()){
-                    exitText.setStyle(Semtb001IndividualAssignment.smallFontFontGrey);
+                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     exitTextActive = true;
                 }else{
 
                     /* If the user touch is dragged and not over the exit label
                     (de-activate exitTextActive and set the font colour to white) */
-                    exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     exitTextActive = false;
                 }
             }
@@ -151,7 +151,7 @@ public class Paused implements Disposable {
                     playScreen.stopSounds();
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
                 }
-                exitText.setStyle(Semtb001IndividualAssignment.smallFontFontWhite);
+                exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
     }

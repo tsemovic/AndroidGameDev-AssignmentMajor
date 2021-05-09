@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.sprites;
+package com.semtb001.major.assignement.sprites;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -12,9 +12,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.screens.PlayScreen;
-import com.semtb001.individual.assignement.tools.Assets;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.tools.Assets;
+
 import java.util.Random;
 
 
@@ -23,7 +24,7 @@ public class Player extends Sprite {
 
     // Player world and playscreen objects
     private World world;
-    private PlayScreen playScreen;
+    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
 
     // Player states
     public enum State {RUN, JUMP_START, JUMP_END, SLIDE_START, SLIDE_END, FAIL}
@@ -86,17 +87,17 @@ public class Player extends Sprite {
         previousState = null;
 
         // Instantiate the player slide sounds
-        slideSound1 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide1);
-        slideSound2 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide2);
-        slideSound3 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slide3);
+        slideSound1 = Semtb001MajorAssignment.assetManager.manager.get(com.semtb001.major.assignement.tools.Assets.slide1);
+        slideSound2 = Semtb001MajorAssignment.assetManager.manager.get(com.semtb001.major.assignement.tools.Assets.slide2);
+        slideSound3 = Semtb001MajorAssignment.assetManager.manager.get(com.semtb001.major.assignement.tools.Assets.slide3);
 
         // Instantiate the player jump sounds
-        jumpSound1 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump1);
-        jumpSound2 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump2);
-        jumpSound3 = Semtb001IndividualAssignment.assetManager.manager.get(Assets.jump3);
+        jumpSound1 = Semtb001MajorAssignment.assetManager.manager.get(com.semtb001.major.assignement.tools.Assets.jump1);
+        jumpSound2 = Semtb001MajorAssignment.assetManager.manager.get(com.semtb001.major.assignement.tools.Assets.jump2);
+        jumpSound3 = Semtb001MajorAssignment.assetManager.manager.get(com.semtb001.major.assignement.tools.Assets.jump3);
 
         // Instantiate the player fail sound
-        failSound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.fail);
+        failSound = Semtb001MajorAssignment.assetManager.manager.get(Assets.fail);
 
         // Define the player (Box2d)
         definePlayer();
@@ -168,8 +169,8 @@ public class Player extends Sprite {
         fixtureDef = new FixtureDef();
 
         // Set the player category to 'PLAYER' and maskBits (can collide with) to "WORLD", "ENEMY", and "COIN"
-        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.PLAYER;
-        fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD | Semtb001IndividualAssignment.ENEMY | Semtb001IndividualAssignment.COIN;
+        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.PLAYER;
+        fixtureDef.filter.maskBits = Semtb001MajorAssignment.WORLD | Semtb001MajorAssignment.ENEMY | Semtb001MajorAssignment.COIN;
 
         // Setup the body as a dynamic body (ability to move)
         bodyDef.type = BodyDef.BodyType.DynamicBody;

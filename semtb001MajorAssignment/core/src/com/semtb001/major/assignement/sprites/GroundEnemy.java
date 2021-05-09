@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.sprites;
+package com.semtb001.major.assignement.sprites;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -11,16 +11,16 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.semtb001.individual.assignement.Semtb001IndividualAssignment;
-import com.semtb001.individual.assignement.screens.PlayScreen;
-import com.semtb001.individual.assignement.tools.Assets;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.tools.Assets;
 
 // Class for the Grounded enemy (slime)
 public class GroundEnemy extends Sprite {
 
     // Enemy world and playscreen objects
     private World world;
-    private PlayScreen playScreen;
+    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
 
     // Enemy Box2D objects
     public Body box2dBody;
@@ -57,7 +57,7 @@ public class GroundEnemy extends Sprite {
         slimeAnimation = new Animation(0.1f, tempFrames);
 
         // Initialise the enemy sound
-        enemySound = Semtb001IndividualAssignment.assetManager.manager.get(Assets.slime);
+        enemySound = Semtb001MajorAssignment.assetManager.manager.get(Assets.slime);
         enemySound.play();
         enemySound.setLooping(true);
     }
@@ -70,8 +70,8 @@ public class GroundEnemy extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
 
         // Setup body as an enemy that can collide with the the world (exclude the player)
-        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.ENEMY;
-        fixtureDef.filter.maskBits = Semtb001IndividualAssignment.WORLD;
+        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.ENEMY;
+        fixtureDef.filter.maskBits = Semtb001MajorAssignment.WORLD;
 
         // Setup the body as a dynamic body (ability to move)
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -90,10 +90,10 @@ public class GroundEnemy extends Sprite {
         box2dBody.createFixture(fixtureDef).setUserData(this);
 
         // Create a 'new' fixture (sensor) on the body that can detect player collisions
-        fixtureDef.filter.categoryBits = Semtb001IndividualAssignment.ENEMY;
+        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.ENEMY;
 
         // Allow the fixture to detect collisions from the player and the world
-        fixtureDef.filter.maskBits = Semtb001IndividualAssignment.PLAYER | Semtb001IndividualAssignment.WORLD;
+        fixtureDef.filter.maskBits = Semtb001MajorAssignment.PLAYER | Semtb001MajorAssignment.WORLD;
 
         // Setup the fixture as a sensor
         fixtureDef.isSensor = true;

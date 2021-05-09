@@ -1,19 +1,19 @@
-package com.semtb001.individual.assignement.tools;
+package com.semtb001.major.assignement.tools;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.semtb001.individual.assignement.sprites.FlyingEnemy;
-import com.semtb001.individual.assignement.sprites.Coin;
-import com.semtb001.individual.assignement.sprites.Player;
-import com.semtb001.individual.assignement.sprites.GroundEnemy;
+import com.semtb001.major.assignement.sprites.FlyingEnemy;
+import com.semtb001.major.assignement.sprites.Coin;
+import com.semtb001.major.assignement.sprites.Player;
+import com.semtb001.major.assignement.sprites.GroundEnemy;
 
 // Class for handling contact in the world (Box2d)
 public class WorldContactListener implements ContactListener {
 
-    private Box2DWorldCreator creator;
+    private com.semtb001.major.assignement.tools.Box2DWorldCreator creator;
 
     // World contact listener (listens for Box2D contact in the world)
     public WorldContactListener(Box2DWorldCreator creator) {

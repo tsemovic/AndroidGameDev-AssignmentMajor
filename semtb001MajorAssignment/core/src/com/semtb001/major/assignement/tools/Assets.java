@@ -1,4 +1,4 @@
-package com.semtb001.individual.assignement.tools;
+package com.semtb001.major.assignement.tools;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;

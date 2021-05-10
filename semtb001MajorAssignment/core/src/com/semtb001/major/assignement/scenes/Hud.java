@@ -25,6 +25,8 @@ public class Hud implements Disposable {
     private Label pause;
     private Label harvested;
     private Label harvestedCountLabel;
+    private Label time;
+    private Label timeCountLabel;
 
     // Variable for counting the coins that have been collected
     private Integer wheatCount;
@@ -44,9 +46,8 @@ public class Hud implements Disposable {
 
         // Set the number of coints collected to 0
         wheatCount = 0;
-
         timeCount = 0;
-        worldTimer = 100;
+        worldTimer = 90;
 
         // Setup the table that is displayed in the HUD
         Table hudTable = new Table();
@@ -54,20 +55,29 @@ public class Hud implements Disposable {
         hudTable.setFillParent(true);
 
         // Setup the labels that will go inside of the table
-        pause = new Label("ii", Semtb001MajorAssignment.smallFontFontWhite);
+        pause = new Label("II", Semtb001MajorAssignment.tinyFontFontWhite);
         harvested = new Label("HARVESTED: ", Semtb001MajorAssignment.tinyFontFontWhite);
         harvestedCountLabel = new Label(Integer.toString(wheatCount), Semtb001MajorAssignment.tinyFontFontWhite);
+
+        time = new Label("TIME: ", Semtb001MajorAssignment.tinyFontFontWhite);
+        timeCountLabel = new Label(String.format("%02d", worldTimer), Semtb001MajorAssignment.tinyFontFontWhite);
+
 
         // Set the HUD labels to have an opacity of 75% so that the game view isn't as obstructed
         float hudTextAlpha = 0.75f;
         pause.setColor(1, 1, 1, hudTextAlpha);
         harvested.setColor(1, 1, 1, hudTextAlpha);
         harvestedCountLabel.setColor(1, 1, 1, hudTextAlpha);
+        time.setColor(1, 1, 1, hudTextAlpha);
+        timeCountLabel.setColor(1, 1, 1, hudTextAlpha);
+
 
         // Add the labels to the table
         hudTable.add(harvested).padLeft(Semtb001MajorAssignment.PPM * 2);
         hudTable.add(harvestedCountLabel);
-        hudTable.add(pause).right().expandX().padRight(Semtb001MajorAssignment.PPM * 2);
+        hudTable.add(time).right().expandX();
+        hudTable.add(timeCountLabel).padRight(Semtb001MajorAssignment.PPM * 2);
+        hudTable.add(pause).right().padRight(Semtb001MajorAssignment.PPM * 2);
 
         // Add the table to the stage
         stage.addActor(hudTable);
@@ -123,7 +133,7 @@ public class Hud implements Disposable {
             } else {
                 timeUp = true;
             }
-            //countdownLabel.setText(String.format("%03d", worldTimer));
+            timeCountLabel.setText(String.format("%02d", worldTimer));
             timeCount = 0;
         }
         harvestedCountLabel.setText(Integer.toString(wheatCount));

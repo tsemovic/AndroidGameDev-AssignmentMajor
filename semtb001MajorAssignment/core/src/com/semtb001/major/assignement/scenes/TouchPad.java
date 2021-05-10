@@ -80,7 +80,7 @@ public class TouchPad {
         touchpadStyle.knob = touchInactiveKnob;
 
         //Create new TouchPad with the inactive style
-        touchPad = new Touchpad(0, touchpadStyle);
+        touchPad = new Touchpad(10, touchpadStyle);
 
         //setBounds(x,y,width,height)
         touchPad.setBounds(Semtb001MajorAssignment.PPM / 2, Semtb001MajorAssignment.PPM / 2, Semtb001MajorAssignment.viewport.getScreenWidth()/3.5f, Semtb001MajorAssignment.viewport.getScreenWidth()/3.5f);

@@ -85,54 +85,78 @@ public class Player extends Sprite {
         for (int i = 0; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("N"), i * 128, 0, 128, 128));
         }
-        N = new Animation(0.1f, tempFrames);
+        for (int i = 4; i >= 0; i--) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("N"), i * 128, 0, 128, 128));
+        }
+        N = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NE"), i * 128, 0, 128, 128));
         }
-        NE = new Animation(0.1f, tempFrames);
+        for (int i = 4; i >= 0; i--) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NE"), i * 128, 0, 128, 128));
+        }
+        NE = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("E"), i * 128, 0, 128, 128));
         }
-        E = new Animation(0.1f, tempFrames);
+        for (int i = 4; i >= 0; i--) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("E"), i * 128, 0, 128, 128));
+        }
+        E = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SE"), i * 128, 0, 128, 128));
         }
-        SE = new Animation(0.1f, tempFrames);
+        for (int i = 4; i >= 0; i--) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SE"), i * 128, 0, 128, 128));
+        }
+        SE = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("S"), i * 128, 0, 128, 128));
         }
-        S = new Animation(0.1f, tempFrames);
+        for (int i = 4; i >= 0; i--) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("S"), i * 128, 0, 128, 128));
+        }
+        S = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SW"), i * 128, 0, 128, 128));
         }
-        SW = new Animation(0.1f, tempFrames);
+        for (int i = 4; i >= 0; i--) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SW"), i * 128, 0, 128, 128));
+        }
+        SW = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("W"), i * 128, 0, 128, 128));
         }
-        W = new Animation(0.1f, tempFrames);
+        for (int i = 4; i >= 0; i--) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("W"), i * 128, 0, 128, 128));
+        }
+        W = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NW"), i * 128, 0, 128, 128));
         }
-        NW = new Animation(0.1f, tempFrames);
+        for (int i = 4; i >= 0; i--) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NW"), i * 128, 0, 128, 128));
+        }
+        NW = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
 
         // Set the starting animation frame to N
-        currentFrame = (TextureRegion) N.getKeyFrame(0, false);
+        currentFrame = (TextureRegion) N.getKeyFrame(0.2f, false);
 
 
     }
@@ -183,73 +207,59 @@ public class Player extends Sprite {
         // Store the current state as 'previous state'
         previousState = currentState;
 
-        // Update current player state
-        getState(delta);
-
         // Texture region that will be returned
         TextureRegion returnRegion = null;
 
         // If the player state is "FAIL" return the fail animation frame
         if (currentState == State.N) {
+            N.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) N.getKeyFrame(stateTimer, true);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) N.getKeyFrame(2, true);
+                returnRegion = (TextureRegion) N.getKeyFrame(0.2f, true);
             }
         }else if(currentState == State.NE){
-            returnRegion = (TextureRegion) NE.getKeyFrame(stateTimer, true);
+            NE.setFrameDuration(getDurationFromSpeed(currentSpeed));
+            returnRegion = (TextureRegion) NE.getKeyFrame(stateTimer, false);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) NE.getKeyFrame(2, true);
+                returnRegion = (TextureRegion) NE.getKeyFrame(0.2f, false);
             }
         }else if(currentState == State.E){
+            E.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) E.getKeyFrame(stateTimer, true);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) E.getKeyFrame(2, true);
+                returnRegion = (TextureRegion) E.getKeyFrame(0.2f, true);
             }
         }else if(currentState == State.SE){
+            SE.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) SE.getKeyFrame(stateTimer, true);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) SE.getKeyFrame(2, true);
+                returnRegion = (TextureRegion) SE.getKeyFrame(0.2f, true);
             }
         }else if(currentState == State.S){
+            S.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) S.getKeyFrame(stateTimer, true);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) S.getKeyFrame(2, true);
+                returnRegion = (TextureRegion) S.getKeyFrame(0.2f, true);
             }
         }else if(currentState == State.SW){
+            SW.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) SW.getKeyFrame(stateTimer, true);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) SW.getKeyFrame(2, true);
+                returnRegion = (TextureRegion) SW.getKeyFrame(0.2f, true);
             }
         }else if(currentState == State.W){
+            W.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) W.getKeyFrame(stateTimer, true);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) W.getKeyFrame(2, true);
+                returnRegion = (TextureRegion) W.getKeyFrame(0.2f, true);
             }
         }else if(currentState == State.NW){
+            NW.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) NW.getKeyFrame(stateTimer, true);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) NW.getKeyFrame(2, true);
+                returnRegion = (TextureRegion) NW.getKeyFrame(0.2f, true);
             }
         }
-//        else if (currentState == State.JUMP_START) {
-//            returnRegion = (TextureRegion) jumpStart.getKeyFrame(stateTimer, false);
-//
-//            // If the player state is "JUMP_END" return the JUMP_END animation frame
-//        } else if (currentState == State.JUMP_END) {
-//            returnRegion = (TextureRegion) jumpEnd.getKeyFrame(stateTimer, false);
-//
-//            // If the player state is "SLIDE_START" return the SLIDE_START animation frame
-//        } else if (currentState == State.SLIDE_START) {
-//            returnRegion = (TextureRegion) slideStart.getKeyFrame(stateTimer, false);
-//
-//            // If the player state is "SLIDE_END" return the SLIDE_END animation frame
-//        } else if (currentState == State.SLIDE_END) {
-//            returnRegion = (TextureRegion) slideEnd.getKeyFrame(stateTimer, false);
-//        } else {
-//
-//            // Else, return the running animation frame
-//            returnRegion = (TextureRegion) running.getKeyFrame(stateTimer, true);
-//        }
 
         // If the current state and previous state aren't the same: reset the state timer
         if (currentState != previousState) {
@@ -258,15 +268,27 @@ public class Player extends Sprite {
             // If the current state and previous state are the same: increase the state timer
         } else {
             stateTimer += delta;
+
         }
 
         // Return the frame
         return returnRegion;
     }
 
-    // Method to update the player state
-    public void getState(float delta) {
+    private float getDurationFromSpeed(double currentSpeed) {
 
+        float returnSpeed = 0;
+        if (currentSpeed > 0.9) {
+            returnSpeed = 0.06f;
+        } else if (currentSpeed > 0.06) {
+            returnSpeed = 0.1f;
+        } else if (currentSpeed > 0.3) {
+            returnSpeed = 0.125f;
+        } else {
+            returnSpeed = 0.15f;
+        }
+
+        return returnSpeed;
     }
 
     public void setAngle(double a) {

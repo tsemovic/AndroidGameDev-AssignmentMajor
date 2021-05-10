@@ -352,7 +352,6 @@ public class PlayScreen implements Screen {
             // Handle application input
             inputHandler(deltaTime);
 
-
             player.update(deltaTime);
             gui.update(deltaTime, player);
             hud.update(deltaTime);

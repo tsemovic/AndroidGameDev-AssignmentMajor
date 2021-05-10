@@ -172,7 +172,7 @@ public class Player extends Sprite {
 
         // Set the player category to 'PLAYER' and maskBits (can collide with) to "WORLD", "ENEMY", and "COIN"
         fixtureDef.filter.categoryBits = Semtb001MajorAssignment.PLAYER;
-        fixtureDef.filter.maskBits = Semtb001MajorAssignment.WORLD | Semtb001MajorAssignment.ENEMY | Semtb001MajorAssignment.COIN;
+        fixtureDef.filter.maskBits = Semtb001MajorAssignment.WORLD | Semtb001MajorAssignment.SHEEP;
 
         // Setup the body as a dynamic body (ability to move)
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -219,9 +219,9 @@ public class Player extends Sprite {
             }
         }else if(currentState == State.NE){
             NE.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) NE.getKeyFrame(stateTimer, false);
+            returnRegion = (TextureRegion) NE.getKeyFrame(stateTimer, true);
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) NE.getKeyFrame(0.2f, false);
+                returnRegion = (TextureRegion) NE.getKeyFrame(0.2f, true);
             }
         }else if(currentState == State.E){
             E.setFrameDuration(getDurationFromSpeed(currentSpeed));
@@ -264,11 +264,9 @@ public class Player extends Sprite {
         // If the current state and previous state aren't the same: reset the state timer
         if (currentState != previousState) {
             stateTimer = 0;
-
             // If the current state and previous state are the same: increase the state timer
         } else {
             stateTimer += delta;
-
         }
 
         // Return the frame
@@ -278,6 +276,7 @@ public class Player extends Sprite {
     private float getDurationFromSpeed(double currentSpeed) {
 
         float returnSpeed = 0;
+
         if (currentSpeed > 0.9) {
             returnSpeed = 0.06f;
         } else if (currentSpeed > 0.06) {

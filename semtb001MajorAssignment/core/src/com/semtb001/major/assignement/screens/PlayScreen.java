@@ -27,8 +27,7 @@ import com.semtb001.major.assignement.scenes.Hud;
 import com.semtb001.major.assignement.scenes.LevelBrief;
 import com.semtb001.major.assignement.scenes.Paused;
 import com.semtb001.major.assignement.scenes.TouchPad;
-import com.semtb001.major.assignement.sprites.FlyingEnemy;
-import com.semtb001.major.assignement.sprites.GroundEnemy;
+import com.semtb001.major.assignement.sprites.Sheep;
 import com.semtb001.major.assignement.sprites.Player;
 import com.semtb001.major.assignement.tools.Assets;
 import com.semtb001.major.assignement.tools.Box2DWorldCreator;
@@ -53,7 +52,6 @@ public class PlayScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private Box2DDebugRenderer box2DDebugRenderer;
     private World world;
-    private float worldEndPosition;
 
     // Box2D objects
     private Box2DWorldCreator box2dWorldCreator;
@@ -79,8 +77,7 @@ public class PlayScreen implements Screen {
 
     // Player, Enemy and Coin objects
     public Player player;
-    private Queue<GroundEnemy> groundEnemies;
-    private Queue<FlyingEnemy> flyingEnemies;
+    private Queue<Sheep> sheep;
 
     // Music object for game music loop
     private Music music;
@@ -126,8 +123,7 @@ public class PlayScreen implements Screen {
 
         // Instantiate Player, Enemies and Coins
         player = new Player(world, this);
-        groundEnemies = new LinkedList<GroundEnemy>();
-        flyingEnemies = new LinkedList<FlyingEnemy>();
+        sheep = new LinkedList<Sheep>();
 
         // Setup the game camera position
         gameCamera.position.x = player.box2dBody.getPosition().x + 9;
@@ -229,8 +225,10 @@ public class PlayScreen implements Screen {
                             //prevents picking up water and placing it instantly;
                             if (timeCount >= 1) {
                                 if (i.getHealth() == 100) {
-                                    getCell("grass").setTile(tileSet.getTile(137));
-                                    i.setHealth(0);
+                                    if (getCell("grass").getTile() == tileSet.getTile(42)) {
+                                        getCell("grass").setTile(tileSet.getTile(137));
+                                        i.setHealth(0);
+                                    }
 
                                 } else {
                                     for (TiledMapTileLayer.Cell cell : getSurroundingBucketCells("water", getPlayerPos())) {
@@ -312,7 +310,7 @@ public class PlayScreen implements Screen {
 
         // Draw Player and Enemies
         drawPlayer();
-//        drawEnemies(delta);
+        drawSheep(delta);
 
         // End the sprite batch for drawing the Player, Enemies, and Coins
         game.batch.end();
@@ -357,7 +355,7 @@ public class PlayScreen implements Screen {
             hud.update(deltaTime);
 
             // Handle enemies (movement, sound, and animation frame depending on state)
-            handleEnemies();
+            handleEnemies(deltaTime);
 
             for (Wheat wheat : box2dWorldCreator.wheat) {
                 wheat.update(deltaTime);
@@ -377,86 +375,47 @@ public class PlayScreen implements Screen {
     }
 
     // Method to handle enemy spawns (grounded and flying)
-    public void handleEnemies() {
+    public void handleEnemies(float deltaTime) {
 
         // If there are grounded enemies that need to be spawned in the map
-        if (box2dWorldCreator.getGroundEnemyPositions().size() > 0) {
+        if (box2dWorldCreator.getSheepPositions().size() > 0) {
 
             // If the player is coming up to where a grounded enemy spawns
-            if (getPlayerPos().x + 50 > box2dWorldCreator.getGroundEnemyPositions().element().x / 32) {
+            if (getPlayerPos().x + 50 > box2dWorldCreator.getSheepPositions().element().x / 32) {
 
                 // Create the enemy
-                GroundEnemy newGroundEnemy = new GroundEnemy(world, this, box2dWorldCreator.getGroundEnemyPositions().element());
-                groundEnemies.offer(newGroundEnemy);
+                Sheep newGroundEnemy = new Sheep(world, this, box2dWorldCreator.getSheepPositions().element());
+                sheep.offer(newGroundEnemy);
 
                 // Remove the enemy from the 'enemies to be created' list
-                box2dWorldCreator.getGroundEnemyPositions().remove();
+                box2dWorldCreator.getSheepPositions().remove();
             }
         }
 
         // If there are any ground enemies that are spawned into the map
-        if (groundEnemies.size() > 0) {
+        if (sheep.size() > 0) {
 
-            // If the player has passed the grounded enemy and it's off the screen
-            if (groundEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 20) {
-
-                // Destroy the enemy
-                world.destroyBody(groundEnemies.element().box2dBody);
-                groundEnemies.remove();
+            for(Sheep s : sheep){
+                s.update(deltaTime);
             }
         }
 
-        // If there are flying enemies that need to be spawned in the map
-        if (box2dWorldCreator.getFlyingEnemyPositions().size() > 0) {
+    }
 
-            // If the player is coming up to where a flying enemy spawns
-            if (getPlayerPos().x + 50 > box2dWorldCreator.getFlyingEnemyPositions().element().x / 32) {
+    // Method to sheep sprites
+    public void drawSheep(float delta) {
 
-                // Create the enemy
-                FlyingEnemy newFlyingEnemy = new FlyingEnemy(world, this, box2dWorldCreator.getFlyingEnemyPositions().element());
-                flyingEnemies.offer(newFlyingEnemy);
+        // Get all ground enemies that are spawned into the map
+        for (Sheep sheep : sheep) {
 
-                // Remove the enemy from the 'enemies to be created' list
-                box2dWorldCreator.getFlyingEnemyPositions().remove();
-            }
-        }
+            // Update the enemy (updates current animation frame, sound, and movement)
+            sheep.update(delta);
 
-        // If there are any flying enemies that are spawned into the map
-        if (flyingEnemies.size() > 0) {
-
-            // If the player has passed the flying enemy and it's off the screen
-            if (flyingEnemies.element().box2dBody.getPosition().x < getPlayerPos().x - 20) {
-
-                // Destroy the enemy
-                world.destroyBody(flyingEnemies.element().box2dBody);
-                flyingEnemies.remove();
-            }
+            // Draw the current enemy animation frame
+            game.batch.draw(sheep.currentFrame, sheep.box2dBody.getPosition().x - 1, (float) (sheep.box2dBody.getPosition().y - 1), 1.5f, 1.5f);
         }
     }
 
-    //    // Method to draw enemy sprites
-//    public void drawEnemies(float delta) {
-//
-//        // Get all ground enemies that are spawned into the map
-//        for (GroundEnemy enemy : groundEnemies) {
-//
-//            // Update the enemy (updates current animation frame, sound, and movement)
-//            enemy.update(delta);
-//
-//            // Draw the current enemy animation frame
-//            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
-//        }
-//
-//        // Get all flying enemies that are spawned into the map
-//        for (FlyingEnemy enemy : flyingEnemies) {
-//
-//            // Update the enemy (updates current animation frame, sound, and movement)
-//            enemy.update(delta);
-//
-//            // Draw the current enemy animation frame
-//            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 2, 2);
-//        }
-//    }
 //https://stackoverflow.com/questions/42057796/move-the-player-only-in-45-steps-with-touchpad-in-libgdx
     public void movePlayer(float dx, float dy) {
         int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 8) / (2 * Math.PI / 8));
@@ -651,10 +610,6 @@ public class PlayScreen implements Screen {
 
     public Box2DWorldCreator getBox2dWorldCreator() {
         return box2dWorldCreator;
-    }
-
-    public void setWorldEndPosition(float x) {
-        worldEndPosition = x / Semtb001MajorAssignment.PPM;
     }
 
     public void setPaused(boolean value) {

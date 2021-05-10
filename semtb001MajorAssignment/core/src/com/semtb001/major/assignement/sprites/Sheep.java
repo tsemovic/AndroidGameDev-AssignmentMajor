@@ -4,19 +4,23 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.items.Wheat;
 import com.semtb001.major.assignement.screens.PlayScreen;
 import com.semtb001.major.assignement.tools.Assets;
 
 // Class for the Grounded enemy (slime)
-public class GroundEnemy extends Sprite {
+public class Sheep extends Sprite {
 
     // Enemy world and playscreen objects
     private World world;
@@ -36,13 +40,18 @@ public class GroundEnemy extends Sprite {
     // Enemy sounds
     private Music enemySound;
 
-    public GroundEnemy(World world, PlayScreen playScreen, Vector2 pos) {
+    private float health;
+    private double sheepSpeed;
+
+    public Sheep(World world, PlayScreen playScreen, Vector2 pos) {
 
         // Instantiate world, playscreen, and enemy position
         this.world = world;
         this.playScreen = playScreen;
         this.pos = pos;
         stateTimer = 0;
+
+        health = 100;
 
         // Define the enemy (Box2D)
         defineEnemy();
@@ -51,8 +60,8 @@ public class GroundEnemy extends Sprite {
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
         // Get the slime animation frames and add them to slime Animation
-        for (int i = 0; i < 2; i++) {
-            //tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("slime"), i * 160, 0, 160, 80));
+        for (int i = 0; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("N"), i * 128, 0, 128, 128));
         }
         slimeAnimation = new Animation(0.1f, tempFrames);
 
@@ -70,8 +79,8 @@ public class GroundEnemy extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
 
         // Setup body as an enemy that can collide with the the world (exclude the player)
-        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.ENEMY;
-        fixtureDef.filter.maskBits = Semtb001MajorAssignment.WORLD;
+        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.SHEEP;
+        fixtureDef.filter.maskBits = Semtb001MajorAssignment.WORLD | Semtb001MajorAssignment.PLAYER;
 
         // Setup the body as a dynamic body (ability to move)
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -82,15 +91,15 @@ public class GroundEnemy extends Sprite {
         // Create the body in the world
         box2dBody = world.createBody(bodyDef);
 
-        // Set the shape of the body to a 1x1 cube
-        shape.setAsBox(1, 1);
-        fixtureDef.shape = shape;
+        CircleShape cir = new CircleShape();
+        cir.setRadius(0.3f);
+        fixtureDef.shape = cir;
 
         // Add the fixture to the body
         box2dBody.createFixture(fixtureDef).setUserData(this);
 
         // Create a 'new' fixture (sensor) on the body that can detect player collisions
-        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.ENEMY;
+        fixtureDef.filter.categoryBits = Semtb001MajorAssignment.SHEEP;
 
         // Allow the fixture to detect collisions from the player and the world
         fixtureDef.filter.maskBits = Semtb001MajorAssignment.PLAYER | Semtb001MajorAssignment.WORLD;
@@ -112,67 +121,41 @@ public class GroundEnemy extends Sprite {
         stateTimer += delta;
         currentFrame = (TextureRegion) slimeAnimation.getKeyFrame(stateTimer, true);
 
-        // If the enemy is moving slower than -5f (velocity of 5 going left)
-        if (box2dBody.getLinearVelocity().x >= -5f) {
+        if(health <= 0){
+            setCategoryFilter(Semtb001MajorAssignment.DESTROYED);
+            box2dBody.setLinearVelocity(0,0);
+        }else{
+            if(playScreen.getBox2dWorldCreator().wheat.size() > 0) {
+                Wheat target = playScreen.getBox2dWorldCreator().wheat.get(0);
+                double xDistance = (target.rectangle.getX() + 0.5) - box2dBody.getPosition().x;
+                double yDistance = (target.rectangle.getY() + 0.5) - box2dBody.getPosition().y;
+                if(xDistance < 0){
+                    xDistance = xDistance * -1;
+                }
+                if(yDistance < 0){
+                    yDistance = yDistance * -1;
+                }
+                double distanceToTarget = Math.sqrt((xDistance * xDistance) + (yDistance * yDistance));
+                sheepSpeed = distanceToTarget * 2;
 
-            // Apply linear impulse to the enemy on the x axis
-            box2dBody.applyLinearImpulse(new Vector2(-0.5f, 0), box2dBody.getWorldCenter(), true);
-        }
+                Vector2 vector = new Vector2((float) ((float) ((target.rectangle.getX() + 0.5) - box2dBody.getPosition().x) / sheepSpeed),
+                        (float) ((float) ((target.rectangle.getY() + 0.5) - box2dBody.getPosition().y) / sheepSpeed));
 
-        /* This code makes the enemy sound gradually louder as they approach and gradually quieter
-        as they pass
+                box2dBody.setLinearVelocity(vector);
 
-        If the enemy is ahead of the player */
-        if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x) {
-
-            // If the player x position plus 10 is greater than the enemy position: play enemy sound at max volume
-            if (playScreen.getPlayer().box2dBody.getPosition().x + 10 > box2dBody.getPosition().x) {
-                enemySound.play();
-                enemySound.setVolume(1f);
-
-                // If the player x position plus 20 is greater than the enemy position: play enemy sound at 70% volume
-            } else if (playScreen.getPlayer().box2dBody.getPosition().x + 20 > box2dBody.getPosition().x) {
-                enemySound.play();
-                enemySound.setVolume(0.7f);
-
-                // If the player x position plus 30 is greater than the enemy position: play enemy sound at 40% volume
-            } else if (playScreen.getPlayer().box2dBody.getPosition().x + 30 > box2dBody.getPosition().x) {
-                enemySound.play();
-                enemySound.setVolume(0.4f);
-
-                // If the player x position plus 10 is greater than the enemy position: play enemy sound at 10% volume
-            } else if (playScreen.getPlayer().box2dBody.getPosition().x + 40 > box2dBody.getPosition().x) {
-                enemySound.play();
-                enemySound.setVolume(0.1f);
-
-                // Else, set enemy sound to 0% volume
-            } else {
-                enemySound.setVolume(0.0f);
-            }
-
-            // If the enemy is behind the player
-        } else {
-
-            // If the player x position is less than the enemy position plus 2: play enemy sound at 50% volume
-            if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 2) {
-                enemySound.play();
-                enemySound.setVolume(0.5f);
-
-                // If the player x position is less than the enemy position plus 10: play enemy sound at 50% volume
-            } else if (playScreen.getPlayer().box2dBody.getPosition().x < box2dBody.getPosition().x + 10) {
-                enemySound.play();
-                enemySound.setVolume(0.2f);
-
-                // Else, set enemy sound to 0% volume
-            } else {
-                enemySound.setVolume(0.0f);
+            }else{
+                box2dBody.setLinearVelocity(0,0);
             }
         }
+        
+        playScreen.getBox2dWorldCreator().destoryWheat(this);
+
 
     }
 
-    // Method to stop the enemy sound (used when the game is paused etc.)
-    public void stopSound() {
-        enemySound.stop();
+    public void setCategoryFilter(short filterBit){
+        Filter filter = new Filter();
+        filter.categoryBits = filterBit;
+        box2dBody.getFixtureList().get(0).setFilterData(filter);
     }
 }

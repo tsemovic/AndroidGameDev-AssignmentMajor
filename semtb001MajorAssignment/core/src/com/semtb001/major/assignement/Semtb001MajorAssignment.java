@@ -38,8 +38,9 @@ public class Semtb001MajorAssignment extends Game {
 	// Object types (used for Box2D collisions)
 	public static final short PLAYER = 1;
 	public static final short WORLD = 2;
-	public static final short ENEMY = 4;
-	public static final short COIN = 8;
+	public static final short SHEEP = 4;
+	public static final short DESTROYED = 8;
+
 
 	// Saved data objects
 	public static Preferences scoresPref;

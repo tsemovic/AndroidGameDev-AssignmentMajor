@@ -5,10 +5,6 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.semtb001.major.assignement.sprites.FlyingEnemy;
-import com.semtb001.major.assignement.sprites.Coin;
-import com.semtb001.major.assignement.sprites.Player;
-import com.semtb001.major.assignement.sprites.GroundEnemy;
 
 // Class for handling contact in the world (Box2d)
 public class WorldContactListener implements ContactListener {

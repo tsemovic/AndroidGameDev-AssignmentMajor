@@ -63,19 +63,18 @@ public class Gui {
         bucket = new Bucket();
 
         //add items to item array
-        items.put(seeds, seeds.getName());
         items.put(bucket, bucket.getName());
+        items.put(seeds, seeds.getName());
         items.put(hoe, hoe.getName());
 
 
         final Set<Item> itemSet = items.keySet();
         itemLabels = new HashMap<String, Label>();
 
-        Label.LabelStyle style1 = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
         for (final Item item : itemSet) {
             if(item.getName() == "seeds"){
                 System.out.println(player.getInventory().getItem(item.getName()));
-                Label itemLabel = new Label(Integer.toString(player.getInventory().getItem(item.getName())), style1);
+                Label itemLabel = new Label(Integer.toString(player.getInventory().getItem(item.getName())), Semtb001MajorAssignment.tinyFontFontWhite);
                 hotbarTable.add(itemLabel);
                 itemLabels.put(item.getName(), itemLabel);
             }else{

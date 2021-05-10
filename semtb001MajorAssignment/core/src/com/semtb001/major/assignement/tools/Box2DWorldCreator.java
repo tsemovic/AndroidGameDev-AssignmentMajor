@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.items.Wheat;
 import com.semtb001.major.assignement.screens.PlayScreen;
-import com.semtb001.major.assignement.sprites.Coin;
+import com.semtb001.major.assignement.sprites.Sheep;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,10 +36,7 @@ public class Box2DWorldCreator {
     private Body body;
 
     // List's of ground enemies, flying enemies and coins
-    private Queue<Vector2> groundEnemyPositions;
-    private Queue<Vector2> flyingEnemyPositions;
-    private Queue<ScreenShaker> screenShakers;
-    private List<Coin> coins;
+    private Queue<Vector2> sheepPositions;
 
     private PlayScreen screen;
 
@@ -59,13 +56,9 @@ public class Box2DWorldCreator {
         fixtureDef = new FixtureDef();
 
         // Instantiate List's of ground enemies, flying enemies and coins
-        groundEnemyPositions = new LinkedList<Vector2>();
-        flyingEnemyPositions = new LinkedList<Vector2>();
-        screenShakers = new LinkedList<ScreenShaker>();
-        coins = new ArrayList<Coin>();
+        sheepPositions = new LinkedList<Vector2>();
 
         wheat = new ArrayList<Wheat>();
-
 
         // Create world ground and objects (floor of map and boxes/platforms)
         for (MapObject object : map.getLayers().get("waterObject").getObjects().getByType(RectangleMapObject.class)) {
@@ -91,13 +84,13 @@ public class Box2DWorldCreator {
             body.createFixture(fixtureDef);
         }
 
-//        // Create grounded enemies
-//        for (MapObject object : map.getLayers().get("groundEnemyPositions").getObjects().getByType(RectangleMapObject.class)) {
-//
-//            // Add the grounded enemy position to the groundedEnemyPositions list
-//            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-//            groundEnemyPositions.offer(new Vector2(rect.x, rect.y));
-//        }
+        // Create grounded enemies
+        for (MapObject object : map.getLayers().get("sheepObject").getObjects().getByType(RectangleMapObject.class)) {
+
+            // Add the grounded enemy position to the groundedEnemyPositions list
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            sheepPositions.offer(new Vector2(rect.x, rect.y));
+        }
     }
 
     public void createWheat() {
@@ -127,43 +120,33 @@ public class Box2DWorldCreator {
         }
     }
 
-//    public void destoryWheat(Sheep s) {
-//        TiledMapTileSet tileSet = gameMap.getTileSets().getTileSet(0);
-//        Vector2 pos = new Vector2((int) (s.b2body.getPosition().x * IslandSurvival.PPM / 32),
-//                (int) (s.b2body.getPosition().y * IslandSurvival.PPM / 32));
-//        TiledMapTileLayer layer = (TiledMapTileLayer) gameMap.getLayers().get("seeds");
-//        TiledMapTileLayer.Cell cell = layer.getCell((int) (s.b2body.getPosition().x * IslandSurvival.PPM / 32),
-//                (int) (s.b2body.getPosition().y * IslandSurvival.PPM / 32));
-//        Wheat removeWheat = null;
-//
-//        for (Wheat w : gameScreen.getCreator().wheat) {
-//            if (w.rectangle.getX() == pos.x && w.rectangle.getY() == pos.y) {
-//                removeWheat = w;
-//                w.destroyed = true;
-//                w.dispose();
-//                cell.setTile(tileSet.getTile(231));
-//
-//            }
-//
-//        }
-//        wheat.remove(removeWheat);
-//    }
+    public void destoryWheat(Sheep s) {
+        TiledMapTileSet tileSet = map.getTileSets().getTileSet(0);
+        Vector2 pos = new Vector2((int) (s.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32),
+                (int) (s.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32));
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("seeds");
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (s.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32),
+                (int) (s.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32));
+        Wheat removeWheat = null;
+
+        for (Wheat w : screen.getBox2dWorldCreator().wheat) {
+            if (w.rectangle.getX() == pos.x && w.rectangle.getY() == pos.y) {
+                removeWheat = w;
+                w.destroyed = true;
+                w.dispose();
+                cell.setTile(tileSet.getTile(231));
+
+            }
+
+        }
+        wheat.remove(removeWheat);
+    }
 
     //Getters for the list's of enemys and coins
-    public Queue<Vector2> getGroundEnemyPositions() {
-        return groundEnemyPositions;
+    public Queue<Vector2> getSheepPositions() {
+        return sheepPositions;
     }
 
-    public Queue<Vector2> getFlyingEnemyPositions() {
-        return flyingEnemyPositions;
-    }
 
-    public Queue<ScreenShaker> getScreenShakerPositions() {
-        return screenShakers;
-    }
-
-    public List<Coin> getCoins() {
-        return coins;
-    }
 
 }

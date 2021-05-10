@@ -28,18 +28,12 @@ public class Player extends Sprite {
     private PlayScreen playScreen;
 
     // Player states
-    public enum State {STILL, N, NE, E, SE, S, SW, W, NW}
+    public enum State {N, NE, E, SE, S, SW, W, NW}
     public State currentState;
     public State previousState;
 
-    // Variables to determine if the player is dead and the game is over
-    public boolean playerIsDead;
-    public boolean gameOver;
-
     // State timers for the player states
     private float stateTimer;
-    private double slideStartTimer;
-    private double slideEndTimer;
 
     // Player animations
     private Animation N;
@@ -51,7 +45,6 @@ public class Player extends Sprite {
     private Animation W;
     private Animation NW;
 
-
     // Player's current animation frame
     public TextureRegion currentFrame;
 
@@ -62,12 +55,11 @@ public class Player extends Sprite {
     private Rectangle rect;
     private BodyDef bodyDef;
 
-
     private double angle;
-    public float maxSpeed = 5f;
+    public float maxSpeed = 2f;
     public double currentSpeed = 2f;
-    private Inventory inventory;
 
+    private Inventory inventory;
 
     public Player(World world, PlayScreen playScreen) {
 
@@ -77,12 +69,6 @@ public class Player extends Sprite {
 
         // Set the state timers to 0
         stateTimer = 0;
-        slideStartTimer = 0;
-        slideEndTimer = 0;
-
-        // Set the game over to false and playerIsDead to false
-        gameOver = false;
-        playerIsDead = false;
 
         // Setup the player current states (starts the game running)
         currentState = State.N;
@@ -97,9 +83,51 @@ public class Player extends Sprite {
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("N"), i * 256, 256, 256, 256));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("N"), i * 128, 0, 128, 128));
         }
         N = new Animation(0.1f, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NE"), i * 128, 0, 128, 128));
+        }
+        NE = new Animation(0.1f, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("E"), i * 128, 0, 128, 128));
+        }
+        E = new Animation(0.1f, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SE"), i * 128, 0, 128, 128));
+        }
+        SE = new Animation(0.1f, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("S"), i * 128, 0, 128, 128));
+        }
+        S = new Animation(0.1f, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SW"), i * 128, 0, 128, 128));
+        }
+        SW = new Animation(0.1f, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("W"), i * 128, 0, 128, 128));
+        }
+        W = new Animation(0.1f, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 4; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NW"), i * 128, 0, 128, 128));
+        }
+        NW = new Animation(0.1f, tempFrames);
         tempFrames.clear();
 
 
@@ -163,9 +191,45 @@ public class Player extends Sprite {
 
         // If the player state is "FAIL" return the fail animation frame
         if (currentState == State.N) {
-            returnRegion = (TextureRegion) N.getKeyFrame(stateTimer, false);
-
-            // If the player state is "JUMP_START" return the JUMP_START animation frame
+            returnRegion = (TextureRegion) N.getKeyFrame(stateTimer, true);
+            if (currentSpeed == 0.0){
+                returnRegion = (TextureRegion) N.getKeyFrame(2, true);
+            }
+        }else if(currentState == State.NE){
+            returnRegion = (TextureRegion) NE.getKeyFrame(stateTimer, true);
+            if (currentSpeed == 0.0){
+                returnRegion = (TextureRegion) NE.getKeyFrame(2, true);
+            }
+        }else if(currentState == State.E){
+            returnRegion = (TextureRegion) E.getKeyFrame(stateTimer, true);
+            if (currentSpeed == 0.0){
+                returnRegion = (TextureRegion) E.getKeyFrame(2, true);
+            }
+        }else if(currentState == State.SE){
+            returnRegion = (TextureRegion) SE.getKeyFrame(stateTimer, true);
+            if (currentSpeed == 0.0){
+                returnRegion = (TextureRegion) SE.getKeyFrame(2, true);
+            }
+        }else if(currentState == State.S){
+            returnRegion = (TextureRegion) S.getKeyFrame(stateTimer, true);
+            if (currentSpeed == 0.0){
+                returnRegion = (TextureRegion) S.getKeyFrame(2, true);
+            }
+        }else if(currentState == State.SW){
+            returnRegion = (TextureRegion) SW.getKeyFrame(stateTimer, true);
+            if (currentSpeed == 0.0){
+                returnRegion = (TextureRegion) SW.getKeyFrame(2, true);
+            }
+        }else if(currentState == State.W){
+            returnRegion = (TextureRegion) W.getKeyFrame(stateTimer, true);
+            if (currentSpeed == 0.0){
+                returnRegion = (TextureRegion) W.getKeyFrame(2, true);
+            }
+        }else if(currentState == State.NW){
+            returnRegion = (TextureRegion) NW.getKeyFrame(stateTimer, true);
+            if (currentSpeed == 0.0){
+                returnRegion = (TextureRegion) NW.getKeyFrame(2, true);
+            }
         }
 //        else if (currentState == State.JUMP_START) {
 //            returnRegion = (TextureRegion) jumpStart.getKeyFrame(stateTimer, false);
@@ -203,19 +267,6 @@ public class Player extends Sprite {
     // Method to update the player state
     public void getState(float delta) {
 
-    }
-
-    // Getters and Setters
-    public void setPlayerIsDead(boolean value){
-        playerIsDead = value;
-    }
-
-    public State getState() {
-        return currentState;
-    }
-
-    public boolean getGameOver() {
-        return gameOver;
     }
 
     public void setAngle(double a) {

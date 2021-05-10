@@ -3,9 +3,58 @@ textures.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+E
+  rotate: false
+  xy: 1, 261
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
 N
   rotate: false
+  xy: 1, 131
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+NE
+  rotate: false
+  xy: 643, 261
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+NW
+  rotate: false
   xy: 1, 1
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+S
+  rotate: false
+  xy: 643, 131
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+SE
+  rotate: false
+  xy: 1285, 261
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+SW
+  rotate: false
+  xy: 643, 1
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+W
+  rotate: false
+  xy: 1285, 131
   size: 640, 128
   orig: 640, 128
   offset: 0, 0

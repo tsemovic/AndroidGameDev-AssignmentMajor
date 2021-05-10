@@ -36,8 +36,6 @@ public class Gui {
 
     private Table hotbarTable;
 
-    OrthographicCamera guiCam;
-
     public Map<Item, String> items;
     Hoe hoe;
     Seeds seeds;
@@ -45,8 +43,7 @@ public class Gui {
     private HashMap<String, Label> itemLabels;
 
     public Gui(Player gamePlayer) {
-        guiCam = new OrthographicCamera();
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
+        viewport = Semtb001MajorAssignment.viewport;
         stage = new Stage();
         player = gamePlayer;
 
@@ -145,7 +142,6 @@ public class Gui {
                 }
             }
         }
-
 
     }
 

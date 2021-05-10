@@ -31,7 +31,7 @@ public class LevelBrief implements Disposable {
     public LevelBrief(SpriteBatch spriteBatch) {
 
         // Instantiate the viewport and stage
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
+        viewport = Semtb001MajorAssignment.viewport;
         stage = new Stage(viewport, spriteBatch);
 
         // Set the countdown timer to 3 seconds and set timeToPlay to false

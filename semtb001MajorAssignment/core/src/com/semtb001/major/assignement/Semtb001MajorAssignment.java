@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.major.assignement.screens.MainMenu;
 import com.semtb001.major.assignement.tools.Assets;
 
@@ -25,9 +28,9 @@ public class Semtb001MajorAssignment extends Game {
 	public static final float WORLD_WIDTH = WORLD_PIXEL_WIDTH / PPM; //in meter
 	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
 
-	public static final int NUMBER_OF_LEVELS = 2;
+	public static final Viewport viewport  = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
 
-	public static final float ICONSIZE = 4 * PPM;
+	public static final int NUMBER_OF_LEVELS = 2;
 
 	public static float SCREEN_WIDTH;
 	public static float SCREEN_HEIGHT;

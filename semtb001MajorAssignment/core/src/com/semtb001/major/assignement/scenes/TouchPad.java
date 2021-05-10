@@ -36,12 +36,12 @@ public class TouchPad {
 
     public boolean isTouched;
 
-    private Integer knobSize;
+    private float knobSize;
 
     public TouchPad() {
         camera = new OrthographicCamera();
 
-        knobSize = 6;
+        knobSize = Semtb001MajorAssignment.viewport.getScreenWidth()/(Semtb001MajorAssignment.PPM * 8);
 
         //create textures for active/inactive touchpad background and knob
         backgroundActive = new Texture("touchPad/touchBackgroundActive.png");
@@ -83,7 +83,7 @@ public class TouchPad {
         touchPad = new Touchpad(0, touchpadStyle);
 
         //setBounds(x,y,width,height)
-        touchPad.setBounds(Semtb001MajorAssignment.PPM / 2, Semtb001MajorAssignment.PPM / 2, Semtb001MajorAssignment.PPM * 15, Semtb001MajorAssignment.PPM * 15);
+        touchPad.setBounds(Semtb001MajorAssignment.PPM / 2, Semtb001MajorAssignment.PPM / 2, Semtb001MajorAssignment.viewport.getScreenWidth()/3.5f, Semtb001MajorAssignment.viewport.getScreenWidth()/3.5f);
 
         //Create a Stage and add TouchPad
         stage = new Stage();

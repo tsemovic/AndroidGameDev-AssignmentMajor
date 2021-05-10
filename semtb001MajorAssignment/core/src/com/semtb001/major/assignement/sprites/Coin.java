@@ -108,9 +108,9 @@ public class Coin {
             // Set the coin to 'collected'
             collected = true;
 
-            // Play the collected coin sound
-            Sound coin = Semtb001MajorAssignment.assetManager.manager.get(Assets.coin);
-            coin.play();
+//            // Play the collected coin sound
+//            Sound coin = Semtb001MajorAssignment.assetManager.manager.get(Assets.coin);
+//            coin.play();
         }
     }
 }

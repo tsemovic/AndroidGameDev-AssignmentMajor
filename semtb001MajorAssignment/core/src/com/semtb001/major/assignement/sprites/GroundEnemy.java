@@ -56,10 +56,10 @@ public class GroundEnemy extends Sprite {
         }
         slimeAnimation = new Animation(0.1f, tempFrames);
 
-        // Initialise the enemy sound
-        enemySound = Semtb001MajorAssignment.assetManager.manager.get(Assets.slime);
-        enemySound.play();
-        enemySound.setLooping(true);
+//        // Initialise the enemy sound
+//        enemySound = Semtb001MajorAssignment.assetManager.manager.get(Assets.slime);
+//        enemySound.play();
+//        enemySound.setLooping(true);
     }
 
     public void defineEnemy() {

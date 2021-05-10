@@ -40,14 +40,13 @@ public class Hud implements Disposable {
     public Hud(SpriteBatch spriteBatch, final PlayScreen playScreen) {
 
         // Instantiate the viewport and stage objects
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
+        viewport = Semtb001MajorAssignment.viewport;
 
         stage = new Stage(viewport, spriteBatch);
 
-        // Set the number of coints collected to 0
         wheatCount = 0;
         timeCount = 0;
-        worldTimer = 90;
+        worldTimer = 60;
 
         // Setup the table that is displayed in the HUD
         Table hudTable = new Table();
@@ -88,7 +87,7 @@ public class Hud implements Disposable {
             // If the paused label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                pause.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+                pause.setStyle(Semtb001MajorAssignment.tinyFontFontGrey);
                 pausedPressed = true;
                 return true;
             }
@@ -100,13 +99,13 @@ public class Hud implements Disposable {
                 /* If the user touch is dragged and still on the pause label
                 (change to grey font colour and active pausedPressed) */
                 if (x > 0 && x < pause.getWidth() && y > 0 && y < pause.getHeight()) {
-                    pause.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+                    pause.setStyle(Semtb001MajorAssignment.tinyFontFontGrey);
                     pausedPressed = true;
                 } else {
 
                     /* If the user touch is dragged and not over the pause label
                     (de-activate pausedPressed and set the font colour to white) */
-                    pause.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+                    pause.setStyle(Semtb001MajorAssignment.tinyFontFontWhite);
                     pausedPressed = false;
                 }
             }
@@ -119,7 +118,7 @@ public class Hud implements Disposable {
                     playScreen.setPaused(true);
                 }
                 pausedPressed = false;
-                pause.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+                pause.setStyle(Semtb001MajorAssignment.tinyFontFontWhite);
             }
         });
 
@@ -147,6 +146,10 @@ public class Hud implements Disposable {
     @Override
     public void dispose() {
 
+    }
+
+    public boolean getTimeUp(){
+        return timeUp;
     }
 
     // Getter for the coin count (number of coins collected by the player)

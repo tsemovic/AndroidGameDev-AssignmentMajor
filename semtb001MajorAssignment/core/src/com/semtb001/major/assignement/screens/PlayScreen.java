@@ -1,7 +1,6 @@
 package com.semtb001.major.assignement.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -18,6 +17,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.items.Bucket;
 import com.semtb001.major.assignement.items.Item;
 import com.semtb001.major.assignement.items.Wheat;
@@ -28,13 +28,10 @@ import com.semtb001.major.assignement.scenes.LevelBrief;
 import com.semtb001.major.assignement.scenes.Paused;
 import com.semtb001.major.assignement.scenes.TouchPad;
 import com.semtb001.major.assignement.sprites.FlyingEnemy;
-import com.semtb001.major.assignement.sprites.Coin;
-import com.semtb001.major.assignement.sprites.Player;
-import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.sprites.GroundEnemy;
+import com.semtb001.major.assignement.sprites.Player;
 import com.semtb001.major.assignement.tools.Assets;
 import com.semtb001.major.assignement.tools.Box2DWorldCreator;
-import com.semtb001.major.assignement.tools.ScreenShaker;
 import com.semtb001.major.assignement.tools.WorldContactListener;
 
 import java.util.ArrayList;
@@ -77,14 +74,13 @@ public class PlayScreen implements Screen {
     // Screen overlay objects
     private Paused paused;
     private Hud hud;
-    //private GameOver gameOver;
+    private GameOver gameOver;
     private LevelBrief levelBrief;
 
     // Player, Enemy and Coin objects
     public Player player;
     private Queue<GroundEnemy> groundEnemies;
     private Queue<FlyingEnemy> flyingEnemies;
-    private Queue<Coin> coins;
 
     // Music object for game music loop
     private Music music;
@@ -94,7 +90,6 @@ public class PlayScreen implements Screen {
 
     // Boolean to determine if the level brief is displayed
     private boolean levelBriefActive;
-
 
     public TouchPad touchPad;
     private Gui gui;
@@ -133,7 +128,6 @@ public class PlayScreen implements Screen {
         player = new Player(world, this);
         groundEnemies = new LinkedList<GroundEnemy>();
         flyingEnemies = new LinkedList<FlyingEnemy>();
-        coins = new LinkedList<Coin>();
 
         // Setup the game camera position
         gameCamera.position.x = player.box2dBody.getPosition().x + 9;
@@ -141,7 +135,7 @@ public class PlayScreen implements Screen {
 
         // Setup the screen overlay objects
         hud = new Hud(game.batch, this);
-        //gameOver = new GameOver(game.batch, game, this);
+        gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
         levelBrief = new LevelBrief(game.batch);
 
@@ -154,7 +148,7 @@ public class PlayScreen implements Screen {
         // Input multiplexer setup (allows multitouch between the game, hud, paused, and game over screens)
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(hud.stage);
-        //inputMultiplexer.addProcessor(gameOver.stage);
+        inputMultiplexer.addProcessor(gameOver.stage);
         inputMultiplexer.addProcessor(paused.stage);
         inputMultiplexer.addProcessor(touchPad.stage);
         inputMultiplexer.addProcessor(gui.stage);
@@ -316,7 +310,7 @@ public class PlayScreen implements Screen {
         // Begin the sprite batch for drawing the Player, Enemies, and Coins
         game.batch.begin();
 
-        // Draw Player, Enemies, and Coins
+        // Draw Player and Enemies
         drawPlayer();
 //        drawEnemies(delta);
 
@@ -329,28 +323,21 @@ public class PlayScreen implements Screen {
 
         // Draw transparent background when the game is paused or when the game is over
         game.batch.begin();
-//        if (isPaused) {
-//            paused.getBackgroundSprite().draw(game.batch);
-//        } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
-//            gameOver.getBackgroundSprite().draw(game.batch);
-//        }
+        if (isPaused) {
+            paused.getBackgroundSprite().draw(game.batch);
+        } else if (hud.getTimeUp()) {
+            gameOver.getBackgroundSprite().draw(game.batch);
+        }
         game.batch.end();
 
-//        // Draw the game paused and game over screen overlay
-//        if (isPaused) {
-//            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
-//            paused.stage.draw();
-//        } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
-//
-//            // If the game over screen has not yet been created, create it
-//            if (!isGameOverCreated) {
-//                gameOver = new GameOver(game.batch, game, this);
-//                inputMultiplexer.addProcessor(gameOver.stage);
-//                isGameOverCreated = true;
-//            }
-//            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
-//            gameOver.stage.draw();
-//        }
+        // Draw the game paused and game over screen overlay
+        if (isPaused) {
+            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
+            paused.stage.draw();
+        } else if (hud.getTimeUp()) {
+            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
+            gameOver.stage.draw();
+        }
     }
 
     // Method to update the world
@@ -365,10 +352,11 @@ public class PlayScreen implements Screen {
             // Handle application input
             inputHandler(deltaTime);
 
-            // Update player (sound, and animation frame depending on state)
+
             player.update(deltaTime);
             gui.update(deltaTime, player);
             hud.update(deltaTime);
+
             // Handle enemies (movement, sound, and animation frame depending on state)
             handleEnemies();
 
@@ -384,7 +372,7 @@ public class PlayScreen implements Screen {
         }
     }
 
-    public void moveCamera(){
+    public void moveCamera() {
         gameCamera.position.x = player.box2dBody.getPosition().x;
         gameCamera.position.y = player.box2dBody.getPosition().y;
     }
@@ -447,7 +435,7 @@ public class PlayScreen implements Screen {
         }
     }
 
-//    // Method to draw enemy sprites
+    //    // Method to draw enemy sprites
 //    public void drawEnemies(float delta) {
 //
 //        // Get all ground enemies that are spawned into the map
@@ -471,69 +459,66 @@ public class PlayScreen implements Screen {
 //        }
 //    }
 //https://stackoverflow.com/questions/42057796/move-the-player-only-in-45-steps-with-touchpad-in-libgdx
-public void movePlayer(float dx, float dy) {
-    int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 8) / (2 * Math.PI / 8));
+    public void movePlayer(float dx, float dy) {
+        int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 8) / (2 * Math.PI / 8));
 
-    if (direction == 8) direction = 0;
-    double angle = direction * (Math.PI / 4);
-    player.setAngle(angle);
+        if (direction == 8) direction = 0;
+        double angle = direction * (Math.PI / 4);
+        player.setAngle(angle);
 
-    //Set the player direction state
-    if (angle == 0) {
-        player.currentState = Player.State.E;
-    } else if (angle == -0.7853981633974483) {
-        player.currentState = Player.State.SE;
-    } else if (angle == -1.5707963267948966) {
-        player.currentState = Player.State.S;
-    } else if (angle == -2.356194490192345) {
-        player.currentState = Player.State.SW;
-    } else if (angle == -3.141592653589793) {
-        player.currentState = Player.State.W;
-    } else if (angle == 2.356194490192345) {
-        player.currentState = Player.State.NW;
-    } else if (angle == 1.5707963267948966) {
-        player.currentState = Player.State.N;
-    } else if (angle == 0.7853981633974483) {
-        player.currentState = Player.State.NE;
+        //Set the player direction state
+        if (angle == 0) {
+            player.currentState = Player.State.E;
+        } else if (angle == -0.7853981633974483) {
+            player.currentState = Player.State.SE;
+        } else if (angle == -1.5707963267948966) {
+            player.currentState = Player.State.S;
+        } else if (angle == -2.356194490192345) {
+            player.currentState = Player.State.SW;
+        } else if (angle == -3.141592653589793) {
+            player.currentState = Player.State.W;
+        } else if (angle == 2.356194490192345) {
+            player.currentState = Player.State.NW;
+        } else if (angle == 1.5707963267948966) {
+            player.currentState = Player.State.N;
+        } else if (angle == 0.7853981633974483) {
+            player.currentState = Player.State.NE;
+        }
+
+        //make player face the direction of travel
+        player.box2dBody.setTransform(player.box2dBody.getPosition(), (float) angle);
+
+        //change the x and y direction percentages to positive so that when they are used to
+        // move the player, the player doesn't move in the opposite direction due to negative velocity;
+        if (dx < 0) {
+            dx = dx * -1;
+        }
+        if (dy < 0) {
+            dy = dy * -1;
+        }
+        double angleSpeed = Math.sqrt((dx * dx) + (dy * dy));
+
+        player.box2dBody.setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.maxSpeed * angleSpeed)),
+                (float) (player.getY() + Math.sin(angle) * (player.maxSpeed * angleSpeed)));
+
+        // Set the players speed
+        if (angleSpeed > 0.9) {
+            player.currentSpeed = 1;
+        } else if (angleSpeed > 0.6) {
+            player.currentSpeed = 0.6;
+        } else if (angleSpeed > 0.3) {
+            player.currentSpeed = 0.3;
+        } else {
+            player.currentSpeed = angleSpeed;
+        }
     }
-
-    //make player face the direction of travel
-    player.box2dBody.setTransform(player.box2dBody.getPosition(), (float) angle);
-
-    //change the x and y direction percentages to positive so that when they are used to
-    // move the player, the player doesn't move in the opposite direction due to negative velocity;
-    if (dx < 0) {
-        dx = dx * -1;
-    }
-    if (dy < 0) {
-        dy = dy * -1;
-    }
-    double angleSpeed = Math.sqrt((dx * dx) + (dy * dy));
-
-    player.box2dBody.setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.maxSpeed * angleSpeed)),
-            (float) (player.getY() + Math.sin(angle) * (player.maxSpeed * angleSpeed)));
-
-    // Set the players speed
-    if(angleSpeed > 0.9){
-        player.currentSpeed = 1;
-    }else if(angleSpeed > 0.6){
-        player.currentSpeed = 0.6;
-    }else if(angleSpeed > 0.3){
-        player.currentSpeed = 0.3;
-    }else{
-        player.currentSpeed = angleSpeed;
-    }
-}
 
     // Method to draw the player
     public void drawPlayer() {
 
         /* This code draws the player in different positions due to the Box2D body shape changing
-        size depending on the state of the player
-
-         If the player is running and was previously sliding */
-
-            //game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 2.6), 8, 8);
+        size depending on the state of the player*/
+        game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 0.75f), (float) (player.box2dBody.getPosition().y - 0.25f), 1.5f, 1.5f);
 
     }
 

@@ -59,10 +59,10 @@ public class FlyingEnemy extends Sprite {
         // Set the gravity to 0 for the flying enemy (so it doesn't fall out of the sky)
         box2dBody.setGravityScale(0f);
 
-        // Initialise the enemy sound
-        enemySound = Semtb001MajorAssignment.assetManager.manager.get(Assets.bee);
-        enemySound.play();
-        enemySound.setLooping(true);
+//        // Initialise the enemy sound
+//        enemySound = Semtb001MajorAssignment.assetManager.manager.get(Assets.bee);
+//        enemySound.play();
+//        enemySound.setLooping(true);
     }
 
     public void defineEnemy() {

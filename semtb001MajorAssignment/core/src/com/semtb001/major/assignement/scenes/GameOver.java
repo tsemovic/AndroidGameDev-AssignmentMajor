@@ -45,8 +45,7 @@ public class GameOver implements Disposable {
         // Instantiate the GameOver spritebatch, viewport, stage, and PlayScreen
         this.playScreen = playScreen;
         batch = spriteBatch;
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM,
-                Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
+        viewport = Semtb001MajorAssignment.viewport;
         stage = new Stage(viewport, spriteBatch);
 
         // Setup the table that is displayed in the GameOver overlay
@@ -57,71 +56,6 @@ public class GameOver implements Disposable {
         // Set the exitText label to 'EXIT' (does not change if the player dies or completes the level)
         exitText = new Label("EXIT", Semtb001MajorAssignment.smallFontFontWhite);
 
-        // If the player is dead
-        if (playScreen.getPlayer().playerIsDead) {
-
-            // Set the header text to 'GAME OVER' and the subHeader text to 'TRY AGAIN'
-            headerText = new Label("GAME OVER", Semtb001MajorAssignment.largeFontWhite);
-            subHeaderText = new Label("TRY AGAIN", Semtb001MajorAssignment.smallFontFontWhite);
-
-            // Add the labels to the table
-            pausedTable.add(headerText).pad(Semtb001MajorAssignment.PPM * 2);
-            pausedTable.row();
-            pausedTable.add(subHeaderText);
-            pausedTable.row();
-            pausedTable.add(exitText);
-
-        } else {
-
-            // If the player is not dead (completes the level successfully)
-            // Set the header text to "LEVEL PASSED" and the subHeader text to "TRY AGAIN"
-            headerText = new Label("LEVEL PASSED", Semtb001MajorAssignment.mediumFontFontWhite);
-            subHeaderText = new Label("TRY AGAIN", Semtb001MajorAssignment.smallFontFontWhite);
-
-            /* If the player has collected all of the coins in the map: unlock the next level
-            (and save to the saved data) and set the subHeader text to "NEXT LEVEL" if there is
-            a another level to play*/
-//            if (playScreen.getHud().getCoinCount() == playScreen.getBox2dWorldCreator().getCoins().size()) {
-//                if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001MajorAssignment.NUMBER_OF_LEVELS) {
-//                    String newLevel = "LEVEL: " + Integer.toString(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) + 1);
-//                    Semtb001MajorAssignment.levelsPref.putBoolean(newLevel, true);
-//                    Semtb001MajorAssignment.levelsPref.flush();
-//                    System.out.println(newLevel + " unlcoked");
-//                    subHeaderText = new Label("NEXT LEVEL",
-//                            Semtb001MajorAssignment.smallFontFontWhite);
-//                } else {
-//
-//                    /* If there are no other levels to play (completed all levels), set the
-//                    subHeader text to "ALL LEVELS COMPLETE" */
-//                    subHeaderText = new Label("ALL LEVELS COMPLETE!",
-//                            Semtb001MajorAssignment.smallFontFontWhite);
-//                }
-//            }
-
-//            // Create the Level Completion Percentage label (percentage of coins collected)
-//            float jewelCount = playScreen.getHud().getCoinCount();
-//            float jewelTotal = playScreen.getBox2dWorldCreator().getCoins().size();
-//            Label levelCompletion = new Label("LEVEL COMPLETION: " +
-//                    (int) ((jewelCount / jewelTotal) * 100) + "%",
-//                    Semtb001MajorAssignment.smallFontFontWhite);
-//
-//            /* If percentage completed is greater than values in the saved data: update saved data
-//            with new completion percentage */
-//            if ((int) ((jewelCount / jewelTotal) * 100) > Semtb001MajorAssignment.scoresPref.getInteger(playScreen.currentLevel)) {
-//                Semtb001MajorAssignment.scoresPref.putInteger(playScreen.currentLevel, (int) ((jewelCount / jewelTotal) * 100));
-//                Semtb001MajorAssignment.scoresPref.flush();
-//            }
-
-            // Add the labels to the table
-            pausedTable.add(headerText).pad(Semtb001MajorAssignment.PPM * 2);
-            pausedTable.row();
-            //pausedTable.add(levelCompletion);
-            pausedTable.row();
-            pausedTable.add(subHeaderText);
-            pausedTable.row();
-            pausedTable.add(exitText);
-        }
-
         // Add the table to the stage
         stage.addActor(pausedTable);
 
@@ -130,117 +64,117 @@ public class GameOver implements Disposable {
         backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
         backgroundSprite.setAlpha(400);
 
-        //Listener for the subHeader text label
-        subHeaderText.addListener(new InputListener() {
-
-            // If the label is 'touched down' change the font colour to grey
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
-                subHeaderTextActive = true;
-
-                return true;
-            }
-
-            //If the user touches down on the label and drags
-            @Override
-            public void touchDragged(InputEvent event, float x, float y, int pointer) {
-
-                /* If the user touch is dragged and still on the label
-                (change to grey font colour and active subHeaderTextActive) */
-                if (x > 0 && x < subHeaderText.getWidth() && y > 0 && y < subHeaderText.getHeight()) {
-                    subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
-                    subHeaderTextActive = true;
-                } else {
-
-                    /* If the user touch is dragged and not over the label
-                    (de-activate subHeaderTextActive and set the font colour to white) */
-                    subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
-                    subHeaderTextActive = false;
-                }
-            }
-
-            /* If the user 'touches up' (lets go of the touch) and subHeaderTextActive is active:
-            get the level that user is going to play, dispose the playScreen and set the font
-            colour back to white */
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (subHeaderTextActive) {
-                    playScreen.dispose();
-                    dispose();
-
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
-                }
-                subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
-            }
-        });
-
-        //Listener for the exit text label
-        exitText.addListener(new InputListener() {
-
-            // If the exit label is 'touched down' change the font colour to grey
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
-                exitTextActive = true;
-                return true;
-            }
-
-            //If the user touches down on the exit label and drags
-            @Override
-            public void touchDragged(InputEvent event, float x, float y, int pointer) {
-
-                /* If the user touch is dragged and still on the exit label
-                (change to grey font colour and active exitTextActive) */
-                if (x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()) {
-                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
-                    exitTextActive = true;
-                } else {
-
-                    /* If the user touch is dragged and not over the exit label
-                    (de-activate exitTextActive and set the font colour to white) */
-                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
-                    exitTextActive = false;
-                }
-            }
-
-            /* If the user 'touches up' (lets go of the touch) and exitTextActive is active:
-            return to the main menu and dispose the playScreen and set the font colour back to white */
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (exitTextActive) {
-                    playScreen.dispose();
-                    dispose();
-
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
-
-                }
-                exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
-            }
-        });
+//        //Listener for the subHeader text label
+//        subHeaderText.addListener(new InputListener() {
+//
+//            // If the label is 'touched down' change the font colour to grey
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+//                subHeaderTextActive = true;
+//
+//                return true;
+//            }
+//
+//            //If the user touches down on the label and drags
+//            @Override
+//            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+//
+//                /* If the user touch is dragged and still on the label
+//                (change to grey font colour and active subHeaderTextActive) */
+//                if (x > 0 && x < subHeaderText.getWidth() && y > 0 && y < subHeaderText.getHeight()) {
+//                    subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+//                    subHeaderTextActive = true;
+//                } else {
+//
+//                    /* If the user touch is dragged and not over the label
+//                    (de-activate subHeaderTextActive and set the font colour to white) */
+//                    subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+//                    subHeaderTextActive = false;
+//                }
+//            }
+//
+//            /* If the user 'touches up' (lets go of the touch) and subHeaderTextActive is active:
+//            get the level that user is going to play, dispose the playScreen and set the font
+//            colour back to white */
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                if (subHeaderTextActive) {
+//                    playScreen.dispose();
+//                    dispose();
+//
+//                    //((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
+//                }
+//                subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+//            }
+//        });
+//
+//        //Listener for the exit text label
+//        exitText.addListener(new InputListener() {
+//
+//            // If the exit label is 'touched down' change the font colour to grey
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+//                exitTextActive = true;
+//                return true;
+//            }
+//
+//            //If the user touches down on the exit label and drags
+//            @Override
+//            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+//
+//                /* If the user touch is dragged and still on the exit label
+//                (change to grey font colour and active exitTextActive) */
+//                if (x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()) {
+//                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+//                    exitTextActive = true;
+//                } else {
+//
+//                    /* If the user touch is dragged and not over the exit label
+//                    (de-activate exitTextActive and set the font colour to white) */
+//                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+//                    exitTextActive = false;
+//                }
+//            }
+//
+//            /* If the user 'touches up' (lets go of the touch) and exitTextActive is active:
+//            return to the main menu and dispose the playScreen and set the font colour back to white */
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                if (exitTextActive) {
+//                    playScreen.dispose();
+//                    dispose();
+//
+//                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
+//
+//                }
+//                exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+//            }
+//        });
     }
 
-    // Method to get the next level that user is going to play
-    public String getNextLevel() {
-
-        String level = null;
-
-        // If the player is dead: return the current level that they are playing
-        if (playScreen.getPlayer().playerIsDead) {
-            level = playScreen.currentLevel;
-        } else {
-
-            // If the player player completes the level, reutn the next level
-            if (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001MajorAssignment.NUMBER_OF_LEVELS) {
-                level = "LEVEL: " + (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) + 1);
-            } else {
-
-                // If there is no next level, return the current level (all levels are completed)
-                level = playScreen.currentLevel;
-            }
-        }
-        return level;
-    }
+//    // Method to get the next level that user is going to play
+//    public String getNextLevel() {
+//
+//        String level = null;
+//
+//        // If the player is dead: return the current level that they are playing
+//        if (playScreen.getPlayer().playerIsDead) {
+//            level = playScreen.currentLevel;
+//        } else {
+//
+//            // If the player player completes the level, reutn the next level
+//            if (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) != Semtb001MajorAssignment.NUMBER_OF_LEVELS) {
+//                level = "LEVEL: " + (Integer.parseInt(playScreen.currentLevel.substring(7, 8)) + 1);
+//            } else {
+//
+//                // If there is no next level, return the current level (all levels are completed)
+//                level = playScreen.currentLevel;
+//            }
+//        }
+//        return level;
+//    }
 
     // Get the background sprite image
     public Sprite getBackgroundSprite() {

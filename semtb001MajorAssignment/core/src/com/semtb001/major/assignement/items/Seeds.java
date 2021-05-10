@@ -14,6 +14,8 @@ public class Seeds extends Item{
         activeTexture = new Texture("seedsActive.png");
         inactiveTexture = new Texture("seedsInactive.png");
 
+        float iconSize = Semtb001MajorAssignment.viewport.getScreenWidth()/(Semtb001MajorAssignment.PPM/2);
+
         activeImg = new Image(activeTexture);
         inActiveImg = new Image(inactiveTexture);
         if(active){
@@ -21,11 +23,10 @@ public class Seeds extends Item{
         }else{
             image = new Image(inactiveTexture);
         }
-        //image = new Image(activeTexture);
-        image.setSize(Semtb001MajorAssignment.ICONSIZE, Semtb001MajorAssignment.ICONSIZE);
+        image.setSize(iconSize, iconSize);
 
-        activeImg.setSize(Semtb001MajorAssignment.ICONSIZE, Semtb001MajorAssignment.ICONSIZE);
-        inActiveImg.setSize(Semtb001MajorAssignment.ICONSIZE, Semtb001MajorAssignment.ICONSIZE);
+        activeImg.setSize(iconSize, iconSize);
+        inActiveImg.setSize(iconSize, iconSize);
     }
 
     @Override

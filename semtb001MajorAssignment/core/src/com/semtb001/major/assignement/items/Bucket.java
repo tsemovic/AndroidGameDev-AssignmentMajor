@@ -15,13 +15,15 @@ public class Bucket extends Item{
         activeTexture = new Texture("bucketActive.png");
         inactiveTexture = new Texture("bucketInactive.png");
 
+        float iconSize = Semtb001MajorAssignment.viewport.getScreenWidth()/(Semtb001MajorAssignment.PPM/2);
+
         activeImg = new Image(activeTexture);
         inActiveImg = new Image(inactiveTexture);
         image = new Image(inactiveTexture);
-        image.setSize(Semtb001MajorAssignment.ICONSIZE, Semtb001MajorAssignment.ICONSIZE);
+        image.setSize(iconSize, iconSize);
 
-        activeImg.setSize(Semtb001MajorAssignment.ICONSIZE, Semtb001MajorAssignment.ICONSIZE);
-        inActiveImg.setSize(Semtb001MajorAssignment.ICONSIZE, Semtb001MajorAssignment.ICONSIZE);
+        activeImg.setSize(iconSize, iconSize);
+        inActiveImg.setSize(iconSize, iconSize);
     }
 
     public void updateWater(){

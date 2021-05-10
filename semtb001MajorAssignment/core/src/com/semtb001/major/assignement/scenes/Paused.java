@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.MainMenu;
@@ -44,8 +45,8 @@ public class Paused implements Disposable {
         // Instantiate the paused spritebatch, viewport, stage, and PlayScreen
         this.playScreen = playScreen;
         batch = spriteBatch;
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
-        stage = new Stage(viewport, spriteBatch);
+        viewport = Semtb001MajorAssignment.viewport;
+        stage = new Stage(viewport, batch);
 
         // Setup the table that is displayed in the paused overlay
         Table pausedTable = new Table();
@@ -109,6 +110,7 @@ public class Paused implements Disposable {
                 if(continueTextActive) {
                     playScreen.setPaused(false);
                 }
+
                 continueText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
@@ -121,6 +123,7 @@ public class Paused implements Disposable {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                 exitTextActive = true;
+
                 return true;
             }
 
@@ -146,10 +149,12 @@ public class Paused implements Disposable {
             return to the main menu and dispose the playScreen and set the font colour back to white */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if(exitTextActive) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
+                if(playScreen.isPaused) {
+                    if (exitTextActive) {
+                        ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
+                    }
+                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                 }
-                exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
     }

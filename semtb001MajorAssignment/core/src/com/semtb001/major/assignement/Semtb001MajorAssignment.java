@@ -20,11 +20,17 @@ public class Semtb001MajorAssignment extends Game {
 	// Variables for the world dimensions
 	public static final float PPM = 32; // PPM = Pixel per Meter
 	public static final float MPP = 1 / PPM; // MPP = Meter per Pixel
-	public static final int WORLD_PIXEL_WIDTH = 1920/2;
-	public static final int WORLD_PIXEL_HEIGHT = 1080/2;
+	public static final int WORLD_PIXEL_WIDTH = 1920/4;
+	public static final int WORLD_PIXEL_HEIGHT = 1080/4;
 	public static final float WORLD_WIDTH = WORLD_PIXEL_WIDTH / PPM; //in meter
 	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
+
 	public static final int NUMBER_OF_LEVELS = 2;
+
+	public static final float ICONSIZE = 4 * PPM;
+
+	public static float SCREEN_WIDTH;
+	public static float SCREEN_HEIGHT;
 
 	// Object types (used for Box2D collisions)
 	public static final short PLAYER = 1;
@@ -66,6 +72,11 @@ public class Semtb001MajorAssignment extends Game {
 		assetManager.load();
 		assetManager.manager.finishLoading();
 
+		SCREEN_WIDTH = Gdx.graphics.getWidth();
+		SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+
+		//ICONSIZE = (WORLD_PIXEL_HEIGHT / SCREEN_HEIGHT) * PPM * 2;
 		/* This code is from the Gdx-freetype repository in the libgdx github wiki
 		(https://github.com/libgdx/libgdx/wiki/Gdx-freetype). It is used to load in
 		 true type format fonts so they can be used in labels, buttons etc.*/

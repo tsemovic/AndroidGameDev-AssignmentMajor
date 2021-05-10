@@ -10,12 +10,19 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.semtb001.major.assignement.items.Bucket;
+import com.semtb001.major.assignement.items.Item;
+import com.semtb001.major.assignement.items.Wheat;
 import com.semtb001.major.assignement.scenes.GameOver;
+import com.semtb001.major.assignement.scenes.Gui;
 import com.semtb001.major.assignement.scenes.Hud;
 import com.semtb001.major.assignement.scenes.LevelBrief;
 import com.semtb001.major.assignement.scenes.Paused;
@@ -30,8 +37,11 @@ import com.semtb001.major.assignement.tools.Box2DWorldCreator;
 import com.semtb001.major.assignement.tools.ScreenShaker;
 import com.semtb001.major.assignement.tools.WorldContactListener;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 public class PlayScreen implements Screen {
 
@@ -67,11 +77,11 @@ public class PlayScreen implements Screen {
     // Screen overlay objects
     private Paused paused;
     private Hud hud;
-    private GameOver gameOver;
+    //private GameOver gameOver;
     private LevelBrief levelBrief;
 
     // Player, Enemy and Coin objects
-    private Player player;
+    public Player player;
     private Queue<GroundEnemy> groundEnemies;
     private Queue<FlyingEnemy> flyingEnemies;
     private Queue<Coin> coins;
@@ -87,6 +97,9 @@ public class PlayScreen implements Screen {
 
 
     public TouchPad touchPad;
+    private Gui gui;
+    public float timeCount;
+
 
     public PlayScreen(Semtb001MajorAssignment semtb001MajorAssignment, String currentLevel) {
 
@@ -103,7 +116,7 @@ public class PlayScreen implements Screen {
 
         // Load map level, render the map, and create the game world
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
+        map = mapLoader.load("island" + currentLevel.substring(7, 8) + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001MajorAssignment.MPP);
         world = new World(new Vector2(0, 0), true);
 
@@ -128,7 +141,7 @@ public class PlayScreen implements Screen {
 
         // Setup the screen overlay objects
         hud = new Hud(game.batch, this);
-        gameOver = new GameOver(game.batch, game, this);
+        //gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
         levelBrief = new LevelBrief(game.batch);
 
@@ -136,19 +149,20 @@ public class PlayScreen implements Screen {
         levelBriefActive = true;
 
         touchPad = new TouchPad();
-
+        gui = new Gui(player);
 
         // Input multiplexer setup (allows multitouch between the game, hud, paused, and game over screens)
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(hud.stage);
-        inputMultiplexer.addProcessor(gameOver.stage);
+        //inputMultiplexer.addProcessor(gameOver.stage);
         inputMultiplexer.addProcessor(paused.stage);
         inputMultiplexer.addProcessor(touchPad.stage);
+        inputMultiplexer.addProcessor(gui.stage);
 
-        // Setup game music loop
-        music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
-        music.setLooping(true);
-        music.play();
+//        // Setup game music loop
+//        music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
+//        music.setLooping(true);
+//        music.play();
 
     }
 
@@ -159,13 +173,91 @@ public class PlayScreen implements Screen {
 
     // Method for handling input for the game
     public void inputHandler(float delta) {
+        TiledMapTileSet tileSet = map.getTileSets().getTileSet(0);
+        Set<Item> itemSet = gui.items.keySet();
+
+        timeCount += dt;
+        Integer itemPressed = 0;
+
+        for (Item i : itemSet) {
+            if (i.getPressed()) {
+                gui.update(dt, player);
+                itemPressed = 1;
+            }
+        }
 
         if (touchPad.isTouched) {
             movePlayer(touchPad.touchPad.getKnobPercentX(), touchPad.touchPad.getKnobPercentY());
-            //itemPressed = 1;
+            itemPressed = 1;
         } else {
             player.box2dBody.setLinearVelocity(0, 0);
-            //player.currentSpeed = 0;
+            player.currentSpeed = 0;
+        }
+
+        if (Gdx.input.isTouched()) {
+            if (itemPressed == 0) {
+
+                for (Item i : itemSet) {
+                    if (i.getActive()) {
+
+                        if (i.getName() == "hoe") {
+                            if (getCell("grass").getTile() == tileSet.getTile(42)) {
+                                getCell("grass").setTile(tileSet.getTile(403));
+                            }
+                            box2dWorldCreator.harvestWheat();
+                        }
+
+                        if (i.getName() == "seeds") {
+                            if (getCell("grass").getTile() == tileSet.getTile(403)) {
+
+                                //stop multiple objects being created for the same bounds
+                                boolean create = true;
+                                for (Wheat w : box2dWorldCreator.wheat) {
+                                    if ((w.rectangle.x == (int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
+                                            (w.rectangle.y == (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
+
+                                        create = false;
+                                    }
+                                }
+                                //create seeds if there are seeds in inventory
+                                if (create) {
+                                    if (player.getInventory().getItem("seeds") > 0) {
+                                        box2dWorldCreator.createWheat();
+                                        player.getInventory().removeItem("seeds", 1);
+                                    }
+                                }
+                            } else {
+                                //System.out.println("NOT DIRT");
+                            }
+                        }
+
+                        if (i.getName() == "bucket") {
+                            //prevents picking up water and placing it instantly;
+                            if (timeCount >= 1) {
+                                if (i.getHealth() == 100) {
+                                    getCell("grass").setTile(tileSet.getTile(137));
+                                    i.setHealth(0);
+
+                                } else {
+                                    for (TiledMapTileLayer.Cell cell : getSurroundingBucketCells("water", getPlayerPos())) {
+                                        if (cell.getTile() == tileSet.getTile(137)) {
+                                            i.setHealth(100);
+                                        }
+                                    }
+                                    //pickup water block that has been placed
+                                    if (getCell("grass").getTile() == tileSet.getTile(137)) {
+                                        getCell("grass").setTile(tileSet.getTile(42));
+                                        i.setHealth(100);
+                                    }
+                                }
+                                timeCount = 0;
+                            }
+                            ((Bucket) i).updateWater();
+                            System.out.println(i.getHealth());
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -217,6 +309,7 @@ public class PlayScreen implements Screen {
         // Set the input processor
         Gdx.input.setInputProcessor(inputMultiplexer);
         touchPad.stage.draw();
+        gui.stage.draw();
 
         moveCamera();
 
@@ -236,28 +329,28 @@ public class PlayScreen implements Screen {
 
         // Draw transparent background when the game is paused or when the game is over
         game.batch.begin();
-        if (isPaused) {
-            paused.getBackgroundSprite().draw(game.batch);
-        } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
-            gameOver.getBackgroundSprite().draw(game.batch);
-        }
+//        if (isPaused) {
+//            paused.getBackgroundSprite().draw(game.batch);
+//        } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
+//            gameOver.getBackgroundSprite().draw(game.batch);
+//        }
         game.batch.end();
 
-        // Draw the game paused and game over screen overlay
-        if (isPaused) {
-            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
-            paused.stage.draw();
-        } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
-
-            // If the game over screen has not yet been created, create it
-            if (!isGameOverCreated) {
-                gameOver = new GameOver(game.batch, game, this);
-                inputMultiplexer.addProcessor(gameOver.stage);
-                isGameOverCreated = true;
-            }
-            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
-            gameOver.stage.draw();
-        }
+//        // Draw the game paused and game over screen overlay
+//        if (isPaused) {
+//            game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
+//            paused.stage.draw();
+//        } else if (player.getGameOver() || getPlayerPos().x >= worldEndPosition) {
+//
+//            // If the game over screen has not yet been created, create it
+//            if (!isGameOverCreated) {
+//                gameOver = new GameOver(game.batch, game, this);
+//                inputMultiplexer.addProcessor(gameOver.stage);
+//                isGameOverCreated = true;
+//            }
+//            game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
+//            gameOver.stage.draw();
+//        }
     }
 
     // Method to update the world
@@ -274,9 +367,14 @@ public class PlayScreen implements Screen {
 
             // Update player (sound, and animation frame depending on state)
             player.update(deltaTime);
-
+            gui.update(deltaTime, player);
             // Handle enemies (movement, sound, and animation frame depending on state)
             handleEnemies();
+
+            for (Wheat wheat : box2dWorldCreator.wheat) {
+                wheat.update(deltaTime);
+                wheat.updateWater();
+            }
 
         } else {
 
@@ -438,6 +536,76 @@ public void movePlayer(float dx, float dy) {
 
     }
 
+    public TiledMapTileLayer.Cell getCell(String layerName) {
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
+        return layer.getCell((int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32),
+                (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32));
+    }
+
+    public TiledMapTileLayer.Cell getCell(String layerName, Rectangle bounds) {
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
+        return layer.getCell((int) bounds.x, (int) bounds.y);
+    }
+
+    public List<TiledMapTileLayer.Cell> getSurroundingWheatCells(String layerName, Rectangle bounds) {
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
+        List<TiledMapTileLayer.Cell> cells = new ArrayList<TiledMapTileLayer.Cell>();
+
+        //layer of target
+        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y));
+        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y));
+        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y));
+        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y));
+
+        //layer 1 above target
+        cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 1));
+        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 1));
+        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y + 1));
+        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
+        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 1));
+
+        //layer 2 above target
+        cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 2));
+        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 2));
+        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y + 2));
+        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y + 2));
+        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y + 2));
+
+        //layer 1 below target
+        cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 1));
+        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 1));
+        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y - 1));
+        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
+        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 1));
+
+        //layer 2 below target
+        cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 2));
+        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 2));
+        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y - 2));
+        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 2));
+        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 2));
+
+        return cells;
+    }
+
+    public List<TiledMapTileLayer.Cell> getSurroundingBucketCells(String layerName, Vector2 bounds) {
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
+        List<TiledMapTileLayer.Cell> cells = new ArrayList<TiledMapTileLayer.Cell>();
+
+        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y));
+        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y));
+
+        cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 1));
+        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 1));
+        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
+
+        cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 1));
+        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 1));
+        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y + 1));
+
+        return cells;
+    }
+
     @Override
     public void resize(int width, int height) {
 
@@ -464,7 +632,7 @@ public void movePlayer(float dx, float dy) {
         world.dispose();
         renderer.dispose();
         hud.dispose();
-        gameOver.dispose();
+        //gameOver.dispose();
         levelBrief.dispose();
         paused.dispose();
     }

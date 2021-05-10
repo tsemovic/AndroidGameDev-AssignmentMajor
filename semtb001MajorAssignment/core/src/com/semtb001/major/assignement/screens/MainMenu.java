@@ -52,7 +52,7 @@ public class MainMenu implements Screen {
         camera.setToOrtho(false, Semtb001MajorAssignment.WORLD_WIDTH, Semtb001MajorAssignment.WORLD_HEIGHT);
 
         // Setup viewport
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
+        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
         camera.update();
 
         // Setup stage

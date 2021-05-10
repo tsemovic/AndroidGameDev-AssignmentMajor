@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.scenes.Inventory;
 import com.semtb001.major.assignement.screens.PlayScreen;
 import com.semtb001.major.assignement.tools.Assets;
 import java.util.Random;
@@ -63,8 +64,10 @@ public class Player extends Sprite {
 
 
     private double angle;
-    public float maxSpeed = 2f;
+    public float maxSpeed = 5f;
     public double currentSpeed = 2f;
+    private Inventory inventory;
+
 
     public Player(World world, PlayScreen playScreen) {
 
@@ -84,6 +87,8 @@ public class Player extends Sprite {
         // Setup the player current states (starts the game running)
         currentState = State.N;
         previousState = null;
+
+        inventory = new Inventory();
 
         // Define the player (Box2d)
         definePlayer();
@@ -121,7 +126,7 @@ public class Player extends Sprite {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         // Set the player starting position
-        bodyDef.position.set(10, 20);
+        bodyDef.position.set(40, 90);
 
         // Create the body in the world
         box2dBody = world.createBody(bodyDef);
@@ -129,7 +134,7 @@ public class Player extends Sprite {
         // Set the shape of the body to a circle
 
         CircleShape cir = new CircleShape();
-        cir.setRadius(1);
+        cir.setRadius(0.3f);
         fixtureDef.shape = cir;
 
         // Add the fixture to the body
@@ -217,5 +222,12 @@ public class Player extends Sprite {
         angle = a;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void addInventory(String item, int count) {
+        inventory.addItem(item, count);
+    }
 
 }

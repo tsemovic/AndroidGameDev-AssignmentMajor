@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="150" height="150" tilewidth="32" tileheight="32" infinite="0" nextlayerid="18" nextobjectid="31">
+ <tileset firstgid="1" source="!CL_DEMO_32x32.tsx"/>
+ <layer id="1" name="water" width="150" height="150">
+  <data encoding="base64" compression="zlib">
+   eJztzrERw0AMA7Bf31tylGzgJGoo+1Cgx3XOuQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBXylD7zW4Zar/ZLUPtN7tlqP1mtwy13+yWofab3TLUfrNbhtpvdssf2leeIz9oH3me3GjfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD47gNcZTsD
+  </data>
+ </layer>
+ <objectgroup id="10" name="waterObject">
+  <object id="14" x="1343.82" y="2111.82" width="149.091" height="11.4545"/>
+  <object id="16" x="1479.64" y="2072.91" width="14.3636" height="49.4545"/>
+  <object id="17" x="1480.36" y="2068.18" width="19.0909" height="4.90909"/>
+  <object id="18" x="1494" y="2051.64" width="61.4545" height="18.1818"/>
+  <object id="19" x="1552.36" y="2037.09" width="7.81818" height="17.4545"/>
+  <object id="20" x="1557.82" y="2021.27" width="106.182" height="19.6364"/>
+ </objectgroup>
+ <layer id="13" name="Copy of grass" width="150" height="150">
+  <data encoding="base64" compression="zlib">
+   eJzt1TEKwkAQhtEtg5XnyIm0M0exy7GzFmKYYiLCEFbeg7+f4mO3NQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOBfzT8OMrqigq6ooCsq6IoKuqKCrqigKyp829E9DDJHPU19l75nGGSypm7t09Sjb9kNMvF/2+/d1Kuj61kHMqT4v8Wt553GwJaDeacAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYwQYn8idu
+  </data>
+ </layer>
+ <layer id="2" name="grass" width="150" height="150">
+  <data encoding="base64" compression="zlib">
+   eJzt1bEJAkEQhtE1EyPrsArL0MwrxcyyXYPDY4I5EYdj5T348w0+ZlsDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/tXpy0FGV1TQFRXmTs47XfE77hUVdEUFXVFBV1T4tKNrGGTWetr3HfruYZDJmrq0d1O3vmkxyMT/bbm5qVdHx60eyJDi/xb32O5pDGxamTsFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADACJ7l3ieF
+  </data>
+ </layer>
+ <layer id="14" name="seeds" width="150" height="150">
+  <data encoding="base64" compression="zlib">
+   eJztw4EJAAAMAqD2eLf3x1Cwl1RVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVfXhAftinKI=
+  </data>
+ </layer>
+ <layer id="9" name="trees" width="150" height="150">
+  <data encoding="base64" compression="zlib">
+   eJztzrkNAkEURMGJhVMiFM5c2AVy4UyVNggA78OoSnpGe90aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8IsmaZpm1Ufoyjpt0vazV4Vf+G/ztEjLdExDGksf0YNd2qdDuqZbupc+ogendE6X6iN05ZGe6VV9BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAr7wBzAwJNw==
+  </data>
+ </layer>
+ <objectgroup id="15" name="sheepObject">
+  <object id="29" x="1248.25" y="1858.25" width="56.75" height="87.5"/>
+  <object id="30" x="1262.75" y="1715.25" width="44.25" height="46.5"/>
+ </objectgroup>
+ <objectgroup id="4" name="treeObject">
+  <object id="12" x="1471.45" y="1925.64" width="30.5455" height="55.2727"/>
+  <object id="13" x="1376.55" y="1990" width="30.1818" height="55.0909"/>
+ </objectgroup>
+</map>

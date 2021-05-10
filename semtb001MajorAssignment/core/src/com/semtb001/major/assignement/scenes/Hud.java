@@ -33,7 +33,8 @@ public class Hud implements Disposable {
     public Hud(SpriteBatch spriteBatch, final PlayScreen playScreen) {
 
         // Instantiate the viewport and stage objects
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
+        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
+
         stage = new Stage(viewport, spriteBatch);
 
         // Set the number of coints collected to 0

@@ -12,14 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.island.survival.IslandSurvival;
-import com.island.survival.items.Bucket;
-import com.island.survival.items.Hoe;
-import com.island.survival.items.Item;
-import com.island.survival.items.Seeds;
-import com.island.survival.sprites.Player;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.items.Bucket;
+import com.semtb001.major.assignement.items.Hoe;
+import com.semtb001.major.assignement.items.Item;
+import com.semtb001.major.assignement.items.Seeds;
+import com.semtb001.major.assignement.sprites.Player;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -45,7 +46,7 @@ public class Gui {
 
     public Gui(Player gamePlayer) {
         guiCam = new OrthographicCamera();
-        viewport = new FitViewport(IslandSurvival.WORLD_WIDTH * IslandSurvival.PPM, IslandSurvival.WORLD_HEIGHT * IslandSurvival.PPM);
+        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
         stage = new Stage();
         player = gamePlayer;
 
@@ -54,7 +55,7 @@ public class Gui {
         hotbarTable = new Table();
         hotbarTable.bottom();
         hotbarTable.setFillParent(true);
-        hotbarTable.padBottom(IslandSurvival.PPM / 4);
+        hotbarTable.padBottom(1);
 
         //init items array
         items = new HashMap<Item, String>();

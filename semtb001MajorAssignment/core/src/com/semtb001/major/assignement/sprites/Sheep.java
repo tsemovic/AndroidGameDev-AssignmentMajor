@@ -147,7 +147,7 @@ public class Sheep extends Sprite {
                 box2dBody.setLinearVelocity(0,0);
             }
         }
-        
+
         playScreen.getBox2dWorldCreator().destoryWheat(this);
 
 
@@ -158,4 +158,9 @@ public class Sheep extends Sprite {
         filter.categoryBits = filterBit;
         box2dBody.getFixtureList().get(0).setFilterData(filter);
     }
+
+    public void sheepHit(){
+        health = health - 50;
+    }
+
 }

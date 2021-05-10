@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.semtb001.major.assignement.sprites.Player;
+import com.semtb001.major.assignement.sprites.Sheep;
 
 // Class for handling contact in the world (Box2d)
 public class WorldContactListener implements ContactListener {
@@ -22,6 +24,18 @@ public class WorldContactListener implements ContactListener {
         // Contact fixtures setup
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
+
+        if(fixA.getUserData() instanceof Player){
+            if(fixB.getUserData() instanceof Sheep){
+                ((Sheep) fixB.getUserData()).sheepHit();
+            }
+        }
+
+        if(fixB.getUserData() instanceof Player){
+            if(fixA.getUserData() instanceof Sheep){
+                ((Sheep) fixA.getUserData()).sheepHit();
+            }
+        }
 
     }
 

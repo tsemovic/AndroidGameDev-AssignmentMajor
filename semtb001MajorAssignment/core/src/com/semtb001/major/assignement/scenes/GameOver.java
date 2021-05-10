@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.semtb001.major.assignement.screens.MainMenu;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.screens.MainMenu;
 import com.semtb001.major.assignement.screens.PlayScreen;
 import com.semtb001.major.assignement.tools.Assets;
 
@@ -24,7 +24,7 @@ public class GameOver implements Disposable {
     // GameOver stage viewport, and PlayScreen objects
     public Stage stage;
     private Viewport viewport;
-    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
+    private PlayScreen playScreen;
 
     // Objects that will be displayed in the GameOver overlay
     private Label headerText;
@@ -40,7 +40,7 @@ public class GameOver implements Disposable {
     public SpriteBatch batch;
 
     public GameOver(SpriteBatch spriteBatch, final Semtb001MajorAssignment game,
-                    final com.semtb001.major.assignement.screens.PlayScreen playScreen) {
+                    final PlayScreen playScreen) {
 
         // Instantiate the GameOver spritebatch, viewport, stage, and PlayScreen
         this.playScreen = playScreen;
@@ -167,8 +167,6 @@ public class GameOver implements Disposable {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (subHeaderTextActive) {
                     playScreen.dispose();
-                    playScreen.stopSounds();
-                    playScreen.stopMusic();
                     dispose();
 
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
@@ -212,8 +210,6 @@ public class GameOver implements Disposable {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (exitTextActive) {
                     playScreen.dispose();
-                    playScreen.stopSounds();
-                    playScreen.stopMusic();
                     dispose();
 
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));

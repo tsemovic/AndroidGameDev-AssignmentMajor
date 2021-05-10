@@ -19,7 +19,7 @@ public class Coin {
 
     // Coin world and playscreen objects
     private World world;
-    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
+    private PlayScreen playScreen;
 
     // Coin texture objects
     private Animation texture;
@@ -74,11 +74,11 @@ public class Coin {
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
         // For the number of frames in the coin animation
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 1; i <= 1; i++) {
 
             // Add the frame to the tempFrames list
             //tempFrames.add(new TextureRegion(new Texture("coin.png"), i * 16, 0, 16, 16));
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("coin"), i * 16, 0, 16, 16));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("N"), i * 16, 0, 16, 16));
 
         }
 
@@ -107,9 +107,6 @@ public class Coin {
 
             // Set the coin to 'collected'
             collected = true;
-
-            // Call the updateCollectedCoins method to update the coin counter in the hud
-            playScreen.updateCollectedCoins();
 
             // Play the collected coin sound
             Sound coin = Semtb001MajorAssignment.assetManager.manager.get(Assets.coin);

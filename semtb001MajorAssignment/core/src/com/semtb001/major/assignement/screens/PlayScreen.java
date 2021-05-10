@@ -13,16 +13,18 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.semtb001.major.assignement.scenes.GameOver;
 import com.semtb001.major.assignement.scenes.Hud;
+import com.semtb001.major.assignement.scenes.LevelBrief;
+import com.semtb001.major.assignement.scenes.Paused;
+import com.semtb001.major.assignement.scenes.TouchPad;
 import com.semtb001.major.assignement.sprites.FlyingEnemy;
 import com.semtb001.major.assignement.sprites.Coin;
 import com.semtb001.major.assignement.sprites.Player;
-import com.semtb001.major.assignement.sprites.GroundEnemy;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
-import com.semtb001.major.assignement.scenes.LevelBrief;
-import com.semtb001.major.assignement.scenes.Paused;
+import com.semtb001.major.assignement.sprites.GroundEnemy;
 import com.semtb001.major.assignement.tools.Assets;
 import com.semtb001.major.assignement.tools.Box2DWorldCreator;
 import com.semtb001.major.assignement.tools.ScreenShaker;
@@ -42,11 +44,12 @@ public class PlayScreen implements Screen {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private Box2DDebugRenderer box2DDebugRenderer;
     private World world;
     private float worldEndPosition;
 
     // Box2D objects
-    private com.semtb001.major.assignement.tools.Box2DWorldCreator box2dWorldCreator;
+    private Box2DWorldCreator box2dWorldCreator;
 
     // world step time calculation variables
     private static final float dt = (float) 0.01;
@@ -62,10 +65,10 @@ public class PlayScreen implements Screen {
     public boolean isGameOverCreated;
 
     // Screen overlay objects
-    private com.semtb001.major.assignement.scenes.Paused paused;
+    private Paused paused;
     private Hud hud;
     private GameOver gameOver;
-    private com.semtb001.major.assignement.scenes.LevelBrief levelBrief;
+    private LevelBrief levelBrief;
 
     // Player, Enemy and Coin objects
     private Player player;
@@ -82,6 +85,9 @@ public class PlayScreen implements Screen {
     // Boolean to determine if the level brief is displayed
     private boolean levelBriefActive;
 
+
+    public TouchPad touchPad;
+
     public PlayScreen(Semtb001MajorAssignment semtb001MajorAssignment, String currentLevel) {
 
         // Instantiate game and level objects
@@ -93,18 +99,19 @@ public class PlayScreen implements Screen {
         // Setup game camera
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Semtb001MajorAssignment.WORLD_WIDTH, Semtb001MajorAssignment.WORLD_HEIGHT);
+        box2DDebugRenderer = new Box2DDebugRenderer();
 
         // Load map level, render the map, and create the game world
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001MajorAssignment.MPP);
-        world = new World(new Vector2(0, -100), true);
+        world = new World(new Vector2(0, 0), true);
 
         // Setup the texture atlas for loading in the player and enemy textures
-        textureAtlas = Semtb001MajorAssignment.assetManager.manager.get(com.semtb001.major.assignement.tools.Assets.textureAtlas);
+        textureAtlas = Semtb001MajorAssignment.assetManager.manager.get(Assets.textureAtlas);
 
         // Setup the Box2D world creator (creates Box2D bodies and adds them to the world)
-        box2dWorldCreator = new com.semtb001.major.assignement.tools.Box2DWorldCreator(this);
+        box2dWorldCreator = new Box2DWorldCreator(this);
 
         // Setup the world contact listener
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
@@ -128,11 +135,15 @@ public class PlayScreen implements Screen {
         // Initially, set the level brief to active so that the level brief is displayed at start up
         levelBriefActive = true;
 
+        touchPad = new TouchPad();
+
+
         // Input multiplexer setup (allows multitouch between the game, hud, paused, and game over screens)
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(hud.stage);
         inputMultiplexer.addProcessor(gameOver.stage);
         inputMultiplexer.addProcessor(paused.stage);
+        inputMultiplexer.addProcessor(touchPad.stage);
 
         // Setup game music loop
         music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
@@ -149,24 +160,12 @@ public class PlayScreen implements Screen {
     // Method for handling input for the game
     public void inputHandler(float delta) {
 
-        // If the screen is touched when the game is not paused and the game is not over (excluding the pause button)
-        if (Gdx.input.isTouched() && !hud.pausedPressed && !isPaused && !isGameOverCreated) {
-
-            // If the top half of the screen is touched: player jump
-            if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
-                player.jump();
-            } else {
-
-                // If the bottom half of the screen is touched: player slide
-                player.slide();
-            }
-        }
-
-        // Inputs for keyboard use (up: jump, down: slide)
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.jump();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            player.slide();
+        if (touchPad.isTouched) {
+            movePlayer(touchPad.touchPad.getKnobPercentX(), touchPad.touchPad.getKnobPercentY());
+            //itemPressed = 1;
+        } else {
+            player.box2dBody.setLinearVelocity(0, 0);
+            //player.currentSpeed = 0;
         }
     }
 
@@ -212,18 +211,21 @@ public class PlayScreen implements Screen {
         gameCamera.update();
         renderer.setView(gameCamera);
         renderer.render();
+        box2DDebugRenderer.render(world, gameCamera.combined);
         game.batch.setProjectionMatrix(gameCamera.combined);
 
         // Set the input processor
         Gdx.input.setInputProcessor(inputMultiplexer);
+        touchPad.stage.draw();
+
+        moveCamera();
 
         // Begin the sprite batch for drawing the Player, Enemies, and Coins
         game.batch.begin();
 
         // Draw Player, Enemies, and Coins
         drawPlayer();
-        drawEnemies(delta);
-        drawCoins(delta);
+//        drawEnemies(delta);
 
         // End the sprite batch for drawing the Player, Enemies, and Coins
         game.batch.end();
@@ -273,105 +275,19 @@ public class PlayScreen implements Screen {
             // Update player (sound, and animation frame depending on state)
             player.update(deltaTime);
 
-            // Move player (constant running velocity)
-            movePlayer();
-
-            shakeCamera(deltaTime);
-
-            // Move the game camera
-            moveGameCamera();
-
-            // Check if the player is dead (off the left side of the screen)
-            checkIfDead();
-
             // Handle enemies (movement, sound, and animation frame depending on state)
             handleEnemies();
-
-            // If the music is not playing, play music
-            if (!music.isPlaying()) {
-                music.play();
-            }
 
         } else {
 
             // If the game is paused or the level brief is displayed: pause all game sounds
-            stopSounds();
-            pauseMusic();
+
         }
     }
 
-    // Method to stop enemy sounds from playing
-    public void stopSounds() {
-
-        // Stop flying enemy (bee) sounds
-        for (FlyingEnemy enemy : flyingEnemies) {
-            enemy.stopSound();
-        }
-
-        // Stop grounded enemy (slime) sounds
-        for (GroundEnemy enemy : groundEnemies) {
-            enemy.stopSound();
-        }
-    }
-
-    // Method to stop game loop music (used when the track needs to be restarted eg. new game)
-    public void stopMusic() {
-        music.stop();
-    }
-
-    // Method to pause game loop music (used when the track needs to be resumed where it was stopped)
-    public void pauseMusic() {
-        music.pause();
-    }
-
-    // Method to move the game camera so that it follows the player
-    private void moveGameCamera() {
-
-        // If the game is not paused and the player is not dead
-        if (!isPaused && !player.playerIsDead) {
-
-            // If the player hasn't reached the end of the world: move the camera. If the player has
-            // reached the end of the world, the camera will not move (player runs off the screen)
-            if (player.box2dBody.getPosition().x <= worldEndPosition) {
-
-                // Increase the camera x position by the players maximum linear velocity (15f)
-                gameCamera.position.x += 0.15003;
-            }
-        }
-    }
-
-    // Method to move the player along the map
-    private void movePlayer() {
-
-        // If the game is not paused
-        if (!isPaused) {
-
-            // If the player is not dead and the x axis velocity is less than 15f, move the player
-            if (player.box2dBody.getLinearVelocity().x <= 15f && player.playerIsDead == false) {
-
-                // Apply a linear impulse to the player on the x axis
-                player.box2dBody.applyLinearImpulse(new Vector2(0.5f, 0), player.box2dBody.getWorldCenter(), true);
-            }
-        } else {
-
-            // If the game is paused, stop the player from moving (set x and y velocity to 0)
-            player.box2dBody.setLinearVelocity(new Vector2(0, 0));
-        }
-    }
-
-    // Check if the player is dead (has gone off the left edge of the screen)
-    private void checkIfDead() {
-
-        // If the player's x position is 15 less than the camera's x position
-        if (player.box2dBody.getPosition().x <= gameCamera.position.x - 15 && !player.playerIsDead) {
-
-            // Create a new game over screen and add it to the input multiplexer processors
-            gameOver = new GameOver(game.batch, game, this);
-            inputMultiplexer.addProcessor(gameOver.stage);
-
-            // Set the player to 'dead'
-            player.playerIsDead = true;
-        }
+    public void moveCamera(){
+        gameCamera.position.x = player.box2dBody.getPosition().x;
+        gameCamera.position.y = player.box2dBody.getPosition().y;
     }
 
     // Method to handle enemy spawns (grounded and flying)
@@ -432,47 +348,83 @@ public class PlayScreen implements Screen {
         }
     }
 
-    // Method to draw enemy sprites
-    public void drawEnemies(float delta) {
+//    // Method to draw enemy sprites
+//    public void drawEnemies(float delta) {
+//
+//        // Get all ground enemies that are spawned into the map
+//        for (GroundEnemy enemy : groundEnemies) {
+//
+//            // Update the enemy (updates current animation frame, sound, and movement)
+//            enemy.update(delta);
+//
+//            // Draw the current enemy animation frame
+//            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
+//        }
+//
+//        // Get all flying enemies that are spawned into the map
+//        for (FlyingEnemy enemy : flyingEnemies) {
+//
+//            // Update the enemy (updates current animation frame, sound, and movement)
+//            enemy.update(delta);
+//
+//            // Draw the current enemy animation frame
+//            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 2, 2);
+//        }
+//    }
+//https://stackoverflow.com/questions/42057796/move-the-player-only-in-45-steps-with-touchpad-in-libgdx
+public void movePlayer(float dx, float dy) {
+    int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 8) / (2 * Math.PI / 8));
 
-        // Get all ground enemies that are spawned into the map
-        for (GroundEnemy enemy : groundEnemies) {
+    if (direction == 8) direction = 0;
+    double angle = direction * (Math.PI / 4);
+    player.setAngle(angle);
 
-            // Update the enemy (updates current animation frame, sound, and movement)
-            enemy.update(delta);
-
-            // Draw the current enemy animation frame
-            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 5, 5);
-        }
-
-        // Get all flying enemies that are spawned into the map
-        for (FlyingEnemy enemy : flyingEnemies) {
-
-            // Update the enemy (updates current animation frame, sound, and movement)
-            enemy.update(delta);
-
-            // Draw the current enemy animation frame
-            game.batch.draw(enemy.currentFrame, enemy.box2dBody.getPosition().x - 1, (float) (enemy.box2dBody.getPosition().y - 1), 2, 2);
-        }
+    //Set the player direction state
+    if (angle == 0) {
+        player.currentState = Player.State.E;
+    } else if (angle == -0.7853981633974483) {
+        player.currentState = Player.State.SE;
+    } else if (angle == -1.5707963267948966) {
+        player.currentState = Player.State.S;
+    } else if (angle == -2.356194490192345) {
+        player.currentState = Player.State.SW;
+    } else if (angle == -3.141592653589793) {
+        player.currentState = Player.State.W;
+    } else if (angle == 2.356194490192345) {
+        player.currentState = Player.State.NW;
+    } else if (angle == 1.5707963267948966) {
+        player.currentState = Player.State.N;
+    } else if (angle == 0.7853981633974483) {
+        player.currentState = Player.State.NE;
     }
 
-    // Method to draw coins in the map
-    public void drawCoins(float delta) {
+    //make player face the direction of travel
+    player.box2dBody.setTransform(player.box2dBody.getPosition(), (float) angle);
 
-        // Get all coins that are in the map
-        for (Coin coin : box2dWorldCreator.getCoins()) {
-
-            // Update the coin (updates current animation frame)
-            coin.update(delta);
-
-            // If the coin is not yet collected
-            if (!coin.collected) {
-
-                // Draw the current coin animation frame
-                game.batch.draw(coin.currentFrame, coin.box2dBody.getPosition().x - 0.75f, (float) (coin.box2dBody.getPosition().y - 0.75f), 1.5f, 1.5f);
-            }
-        }
+    //change the x and y direction percentages to positive so that when they are used to
+    // move the player, the player doesn't move in the opposite direction due to negative velocity;
+    if (dx < 0) {
+        dx = dx * -1;
     }
+    if (dy < 0) {
+        dy = dy * -1;
+    }
+    double angleSpeed = Math.sqrt((dx * dx) + (dy * dy));
+
+    player.box2dBody.setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.maxSpeed * angleSpeed)),
+            (float) (player.getY() + Math.sin(angle) * (player.maxSpeed * angleSpeed)));
+
+    // Set the players speed
+    if(angleSpeed > 0.9){
+        player.currentSpeed = 1;
+    }else if(angleSpeed > 0.6){
+        player.currentSpeed = 0.6;
+    }else if(angleSpeed > 0.3){
+        player.currentSpeed = 0.3;
+    }else{
+        player.currentSpeed = angleSpeed;
+    }
+}
 
     // Method to draw the player
     public void drawPlayer() {
@@ -481,72 +433,9 @@ public class PlayScreen implements Screen {
         size depending on the state of the player
 
          If the player is running and was previously sliding */
-        if (player.getState() == Player.State.RUN && (player.previousState == Player.State.SLIDE_START || player.previousState == Player.State.SLIDE_END)) {
 
-            // Draw the current player animtaion frame
-            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
+            //game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 2.6), 8, 8);
 
-            // If the player is sliding
-        } else if (player.getState() == Player.State.SLIDE_START || player.getState() == Player.State.SLIDE_END) {
-
-            // Draw the current player animtaion frame (lower than normal as the player is laying down)
-            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 1.5), 8, 8);
-
-            // If the player is starting to jump
-        } else if (player.getState() == Player.State.JUMP_START) {
-
-            // Draw the current player animtaion frame
-            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 3), 8, 8);
-
-            // If the player is ending the jump
-        } else if (player.getState() == Player.State.JUMP_END) {
-
-            // Draw the current player animtaion frame
-            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 2), 8, 8);
-
-        // Else, Draw the current player animation frame in the regular position
-        } else {
-            game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 4), (float) (player.box2dBody.getPosition().y - 2.6), 8, 8);
-        }
-    }
-
-    // Method to shake the game camera (to simulate an earthquake)
-    private void shakeCamera(float deltaTime) {
-
-        // If there are any screenShaker's in the map
-        if (box2dWorldCreator.getScreenShakerPositions().size() > 0) {
-
-            // set 'shaker' to the head of the queue (closest to player)
-            ScreenShaker shaker = box2dWorldCreator.getScreenShakerPositions().element();
-
-            // if the shaker's x position is greater than the player's x position
-            if (player.box2dBody.getPosition().x >= shaker.getPosition().x / 32) {
-
-                // If the shaker is not shaking and hasn't been shaked before
-                if(!shaker.isShaking() && !shaker.isShakeFinished()){
-
-                    // Set the shaker to 'shaking' for 2 seconds with a magnitude of 0.2f
-                    shaker.setShaking(true);
-                    shaker.shake(2f, 0.2f);
-
-                    // If the shaker is shaking
-                }else{
-
-                    // Update the shaker (translate the gameCamera randomly)
-                    shaker.update(deltaTime);
-                }
-
-                if(shaker.isShakeFinished()){
-                    box2dWorldCreator.getScreenShakerPositions().poll();
-                }
-
-            }
-        }
-    }
-
-    // Method to update the HUD coin counter (increase by 1)
-    public void updateCollectedCoins() {
-        hud.update();
     }
 
     @Override

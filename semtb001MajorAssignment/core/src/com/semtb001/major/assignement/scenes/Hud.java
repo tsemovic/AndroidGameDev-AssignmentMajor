@@ -46,7 +46,7 @@ public class Hud implements Disposable {
 
         // Setup the labels that will go inside of the table
         pause = new Label("ii", Semtb001MajorAssignment.smallFontFontWhite);
-        coins = new Label("COINS: ", Semtb001MajorAssignment.tinyFontFontWhite);
+        coins = new Label("HARVESTED: ", Semtb001MajorAssignment.tinyFontFontWhite);
         coinCountLabel = new Label(Integer.toString(coinCoint), Semtb001MajorAssignment.tinyFontFontWhite);
 
         // Set the HUD labels to have an opacity of 75% so that the game view isn't as obstructed
@@ -104,12 +104,6 @@ public class Hud implements Disposable {
             }
         });
 
-    }
-
-    // Method to update the coin counter and associated label (called when the user collects a coin)
-    public void update() {
-        coinCoint++;
-        coinCountLabel.setText(coinCoint);
     }
 
     @Override

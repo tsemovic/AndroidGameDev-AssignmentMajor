@@ -37,7 +37,7 @@ public class Semtb001MajorAssignment extends Game {
 	public static Preferences levelsPref;
 
 	// Asset manager object
-	public static com.semtb001.major.assignement.tools.Assets assetManager;
+	public static Assets assetManager;
 
 	// Font objects
 	public static BitmapFont largeFont;
@@ -62,7 +62,7 @@ public class Semtb001MajorAssignment extends Game {
 		batch = new SpriteBatch();
 
 		// Load game assets
-		assetManager = new com.semtb001.major.assignement.tools.Assets();
+		assetManager = new Assets();
 		assetManager.load();
 		assetManager.manager.finishLoading();
 

@@ -20,7 +20,7 @@ public class FlyingEnemy extends Sprite {
 
     // Enemy world and playscreen objects
     private World world;
-    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
+    private PlayScreen playScreen;
 
     // Enemy Box2D objects
     public Body box2dBody;
@@ -51,8 +51,8 @@ public class FlyingEnemy extends Sprite {
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
         // Get the bee animation frames and add them to bee Animation
-        tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("bee"), 0, 0, 56, 48));
-        tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("bee_fly"), 0, 0, 56, 48));
+        //tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("bee"), 0, 0, 56, 48));
+        //tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("bee_fly"), 0, 0, 56, 48));
 
         beeAnimation = new Animation(0.1f, tempFrames);
 

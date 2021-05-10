@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.MainMenu;
 import com.semtb001.major.assignement.screens.PlayScreen;
-import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.tools.Assets;
 
 // Class to present a overlay on the game screen showing the pause screen
@@ -147,8 +147,6 @@ public class Paused implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if(exitTextActive) {
-                    playScreen.stopMusic();
-                    playScreen.stopSounds();
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
                 }
                 exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);

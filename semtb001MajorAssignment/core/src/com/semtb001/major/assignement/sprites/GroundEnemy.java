@@ -20,7 +20,7 @@ public class GroundEnemy extends Sprite {
 
     // Enemy world and playscreen objects
     private World world;
-    private com.semtb001.major.assignement.screens.PlayScreen playScreen;
+    private PlayScreen playScreen;
 
     // Enemy Box2D objects
     public Body box2dBody;
@@ -52,7 +52,7 @@ public class GroundEnemy extends Sprite {
 
         // Get the slime animation frames and add them to slime Animation
         for (int i = 0; i < 2; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("slime"), i * 160, 0, 160, 80));
+            //tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("slime"), i * 160, 0, 160, 80));
         }
         slimeAnimation = new Animation(0.1f, tempFrames);
 

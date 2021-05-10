@@ -10,9 +10,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.PlayScreen;
 import com.semtb001.major.assignement.sprites.Coin;
-import com.semtb001.major.assignement.Semtb001MajorAssignment;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

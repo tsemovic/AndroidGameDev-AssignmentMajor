@@ -119,7 +119,7 @@ public class Box2DWorldCreator {
                     removeWheat = w;
                     w.destroyed = true;
                     w.dispose();
-                    //screen.addWheatHarvested(1);
+                    screen.getHud().wheatHarvested();
                     screen.getCell("seeds").setTile(tileSet.getTile(231));
                 }
             }

@@ -81,41 +81,41 @@ public class GameOver implements Disposable {
             /* If the player has collected all of the coins in the map: unlock the next level
             (and save to the saved data) and set the subHeader text to "NEXT LEVEL" if there is
             a another level to play*/
-            if (playScreen.getHud().getCoinCount() == playScreen.getBox2dWorldCreator().getCoins().size()) {
-                if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001MajorAssignment.NUMBER_OF_LEVELS) {
-                    String newLevel = "LEVEL: " + Integer.toString(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) + 1);
-                    Semtb001MajorAssignment.levelsPref.putBoolean(newLevel, true);
-                    Semtb001MajorAssignment.levelsPref.flush();
-                    System.out.println(newLevel + " unlcoked");
-                    subHeaderText = new Label("NEXT LEVEL",
-                            Semtb001MajorAssignment.smallFontFontWhite);
-                } else {
+//            if (playScreen.getHud().getCoinCount() == playScreen.getBox2dWorldCreator().getCoins().size()) {
+//                if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001MajorAssignment.NUMBER_OF_LEVELS) {
+//                    String newLevel = "LEVEL: " + Integer.toString(Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) + 1);
+//                    Semtb001MajorAssignment.levelsPref.putBoolean(newLevel, true);
+//                    Semtb001MajorAssignment.levelsPref.flush();
+//                    System.out.println(newLevel + " unlcoked");
+//                    subHeaderText = new Label("NEXT LEVEL",
+//                            Semtb001MajorAssignment.smallFontFontWhite);
+//                } else {
+//
+//                    /* If there are no other levels to play (completed all levels), set the
+//                    subHeader text to "ALL LEVELS COMPLETE" */
+//                    subHeaderText = new Label("ALL LEVELS COMPLETE!",
+//                            Semtb001MajorAssignment.smallFontFontWhite);
+//                }
+//            }
 
-                    /* If there are no other levels to play (completed all levels), set the
-                    subHeader text to "ALL LEVELS COMPLETE" */
-                    subHeaderText = new Label("ALL LEVELS COMPLETE!",
-                            Semtb001MajorAssignment.smallFontFontWhite);
-                }
-            }
-
-            // Create the Level Completion Percentage label (percentage of coins collected)
-            float jewelCount = playScreen.getHud().getCoinCount();
-            float jewelTotal = playScreen.getBox2dWorldCreator().getCoins().size();
-            Label levelCompletion = new Label("LEVEL COMPLETION: " +
-                    (int) ((jewelCount / jewelTotal) * 100) + "%",
-                    Semtb001MajorAssignment.smallFontFontWhite);
-
-            /* If percentage completed is greater than values in the saved data: update saved data
-            with new completion percentage */
-            if ((int) ((jewelCount / jewelTotal) * 100) > Semtb001MajorAssignment.scoresPref.getInteger(playScreen.currentLevel)) {
-                Semtb001MajorAssignment.scoresPref.putInteger(playScreen.currentLevel, (int) ((jewelCount / jewelTotal) * 100));
-                Semtb001MajorAssignment.scoresPref.flush();
-            }
+//            // Create the Level Completion Percentage label (percentage of coins collected)
+//            float jewelCount = playScreen.getHud().getCoinCount();
+//            float jewelTotal = playScreen.getBox2dWorldCreator().getCoins().size();
+//            Label levelCompletion = new Label("LEVEL COMPLETION: " +
+//                    (int) ((jewelCount / jewelTotal) * 100) + "%",
+//                    Semtb001MajorAssignment.smallFontFontWhite);
+//
+//            /* If percentage completed is greater than values in the saved data: update saved data
+//            with new completion percentage */
+//            if ((int) ((jewelCount / jewelTotal) * 100) > Semtb001MajorAssignment.scoresPref.getInteger(playScreen.currentLevel)) {
+//                Semtb001MajorAssignment.scoresPref.putInteger(playScreen.currentLevel, (int) ((jewelCount / jewelTotal) * 100));
+//                Semtb001MajorAssignment.scoresPref.flush();
+//            }
 
             // Add the labels to the table
             pausedTable.add(headerText).pad(Semtb001MajorAssignment.PPM * 2);
             pausedTable.row();
-            pausedTable.add(levelCompletion);
+            //pausedTable.add(levelCompletion);
             pausedTable.row();
             pausedTable.add(subHeaderText);
             pausedTable.row();

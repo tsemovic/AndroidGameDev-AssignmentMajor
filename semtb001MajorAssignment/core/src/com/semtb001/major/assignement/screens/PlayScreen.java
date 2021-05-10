@@ -368,6 +368,7 @@ public class PlayScreen implements Screen {
             // Update player (sound, and animation frame depending on state)
             player.update(deltaTime);
             gui.update(deltaTime, player);
+            hud.update(deltaTime);
             // Handle enemies (movement, sound, and animation frame depending on state)
             handleEnemies();
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.tools.InteractiveTileObjects;
 
 /* Class to present a overlay on the game screen showing the number of coins collected and the
 pause functionality */
@@ -22,13 +23,17 @@ public class Hud implements Disposable {
 
     // Objects that will be displayed in the HUD
     private Label pause;
-    private Label coins;
-    private Label coinCountLabel;
+    private Label harvested;
+    private Label harvestedCountLabel;
 
     // Variable for counting the coins that have been collected
-    private Integer coinCoint;
+    private Integer wheatCount;
 
     public boolean pausedPressed;
+
+    public Integer worldTimer;
+    private boolean timeUp; // true when the world timer reaches 0
+    private float timeCount;
 
     public Hud(SpriteBatch spriteBatch, final PlayScreen playScreen) {
 
@@ -38,7 +43,10 @@ public class Hud implements Disposable {
         stage = new Stage(viewport, spriteBatch);
 
         // Set the number of coints collected to 0
-        coinCoint = 0;
+        wheatCount = 0;
+
+        timeCount = 0;
+        worldTimer = 100;
 
         // Setup the table that is displayed in the HUD
         Table hudTable = new Table();
@@ -47,18 +55,18 @@ public class Hud implements Disposable {
 
         // Setup the labels that will go inside of the table
         pause = new Label("ii", Semtb001MajorAssignment.smallFontFontWhite);
-        coins = new Label("HARVESTED: ", Semtb001MajorAssignment.tinyFontFontWhite);
-        coinCountLabel = new Label(Integer.toString(coinCoint), Semtb001MajorAssignment.tinyFontFontWhite);
+        harvested = new Label("HARVESTED: ", Semtb001MajorAssignment.tinyFontFontWhite);
+        harvestedCountLabel = new Label(Integer.toString(wheatCount), Semtb001MajorAssignment.tinyFontFontWhite);
 
         // Set the HUD labels to have an opacity of 75% so that the game view isn't as obstructed
         float hudTextAlpha = 0.75f;
         pause.setColor(1, 1, 1, hudTextAlpha);
-        coins.setColor(1, 1, 1, hudTextAlpha);
-        coinCountLabel.setColor(1, 1, 1, hudTextAlpha);
+        harvested.setColor(1, 1, 1, hudTextAlpha);
+        harvestedCountLabel.setColor(1, 1, 1, hudTextAlpha);
 
         // Add the labels to the table
-        hudTable.add(coins).padLeft(Semtb001MajorAssignment.PPM * 2);
-        hudTable.add(coinCountLabel);
+        hudTable.add(harvested).padLeft(Semtb001MajorAssignment.PPM * 2);
+        hudTable.add(harvestedCountLabel);
         hudTable.add(pause).right().expandX().padRight(Semtb001MajorAssignment.PPM * 2);
 
         // Add the table to the stage
@@ -107,13 +115,32 @@ public class Hud implements Disposable {
 
     }
 
+    public void update(float dt){
+        timeCount += dt;
+        if(timeCount >= 1){
+            if (worldTimer > 0) {
+                worldTimer--;
+            } else {
+                timeUp = true;
+            }
+            //countdownLabel.setText(String.format("%03d", worldTimer));
+            timeCount = 0;
+        }
+        harvestedCountLabel.setText(Integer.toString(wheatCount));
+
+    }
+
+    public void wheatHarvested(){
+        wheatCount ++;
+    }
+
     @Override
     public void dispose() {
 
     }
 
     // Getter for the coin count (number of coins collected by the player)
-    public Integer getCoinCount() {
-        return coinCoint;
+    public Integer getWheatCount() {
+        return wheatCount;
     }
 }

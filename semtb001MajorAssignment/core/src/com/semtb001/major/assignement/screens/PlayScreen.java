@@ -425,6 +425,7 @@ public class PlayScreen implements Screen {
                 }
 
                 sheepWaves.remove(kv);
+                
 
             }
 

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level2.tmx",
+    "activeFile": "C:/Users/tully/Desktop/Android Studio/semtb001 Major Assignment/semtb001MajorAssignment/android/assets/island1.tmx",
     "expandedProjectPaths": [
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap"
     ],
@@ -117,6 +117,60 @@
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/tiles_spritesheet.tsx": {
             "scaleInDock": 1
         },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/background_tilesheet.tsx": {
+            "scaleInDock": 0.125,
+            "scaleInEditor": 1
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/buildings_spritesheet.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/buildings_trees_tilesheet.tsx": {
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/ground.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 8000,
+                "y": 638
+            }
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 8000,
+                "y": 640
+            }
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/platformPack_tilesheet.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/spritesheet_retina.tsx": {
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/tiles_spritesheet.tsx": {
+            "scaleInDock": 0.25,
+            "scaleInEditor": 4
+        },
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Major Assignment/semtb001MajorAssignment/android/assets/island1.tmx": {
+            "scale": 2,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 1452.5,
+                "y": 1863.75
+            }
+        },
         "C:/Users/tully/Desktop/Android Studio/set1.tsx": {
             "scaleInDock": 2,
             "scaleInEditor": 4
@@ -128,83 +182,38 @@
         "C:/Users/tully/Desktop/NES - Super Mario Bros - Tileset.tsx": {
             "scaleInDock": 4,
             "scaleInEditor": 5.5
-        },
-        "background_tilesheet.tsx": {
-            "scaleInDock": 0.125,
-            "scaleInEditor": 1
-        },
-        "buildings_spritesheet.tsx": {
-            "dynamicWrapping": true,
-            "scaleInDock": 0.5,
-            "scaleInEditor": 1
-        },
-        "buildings_trees_tilesheet.tsx": {
-            "scaleInDock": 0.33,
-            "scaleInEditor": 1
-        },
-        "ground.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 4
-        },
-        "level1.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 8000,
-                "y": 638
-            }
-        },
-        "level2.tmx": {
-            "scale": 0.25,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 8000,
-                "y": 640
-            }
-        },
-        "platformPack_tilesheet.tsx": {
-            "dynamicWrapping": false,
-            "scaleInDock": 1,
-            "scaleInEditor": 1.5
-        },
-        "spritesheet_retina.tsx": {
-            "scaleInDock": 0.33,
-            "scaleInEditor": 1
-        },
-        "tiles_spritesheet.tsx": {
-            "scaleInDock": 0.25,
-            "scaleInEditor": 4
         }
     },
-    "map.height": 20,
+    "map.height": 150,
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": null,
-    "map.tileHeight": 64,
-    "map.tileWidth": 64,
-    "map.width": 250,
+    "map.tileHeight": 32,
+    "map.tileWidth": 32,
+    "map.width": 150,
     "openFiles": [
-        "level1.tmx",
-        "level2.tmx"
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level1.tmx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Major Assignment/semtb001MajorAssignment/android/assets/island1.tmx"
     ],
-    "project": "maps.tiled-project",
+    "project": "level.tiled-project",
     "recentFiles": [
-        "level1.tmx",
-        "level2.tmx",
-        "ground.tsx",
-        "tiles_spritesheet.tsx",
-        "background_tilesheet.tsx",
-        "platformPack_tilesheet.tsx",
-        "buildings_trees_tilesheet.tsx",
-        "spritesheet_retina.tsx",
-        "buildings_spritesheet.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Major Assignment/semtb001MajorAssignment/android/assets/island1.tmx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level1.tmx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/ground.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/tiles_spritesheet.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/background_tilesheet.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/platformPack_tilesheet.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/buildings_trees_tilesheet.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/spritesheet_retina.tsx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/buildings_spritesheet.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/level1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/buildings_spritesheet.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/tiles_spritesheet.tsx"
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/buildings_spritesheet.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
-    "tileset.spacing": 5,
+    "tileset.spacing": 0,
     "tileset.tileSize": {
-        "height": 64,
-        "width": 64
+        "height": 32,
+        "width": 32
     }
 }

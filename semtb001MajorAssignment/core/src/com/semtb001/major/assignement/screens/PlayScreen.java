@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -27,8 +28,8 @@ import com.semtb001.major.assignement.scenes.Hud;
 import com.semtb001.major.assignement.scenes.LevelBrief;
 import com.semtb001.major.assignement.scenes.Paused;
 import com.semtb001.major.assignement.scenes.TouchPad;
-import com.semtb001.major.assignement.sprites.Sheep;
 import com.semtb001.major.assignement.sprites.Player;
+import com.semtb001.major.assignement.sprites.Sheep;
 import com.semtb001.major.assignement.tools.Assets;
 import com.semtb001.major.assignement.tools.Box2DWorldCreator;
 import com.semtb001.major.assignement.tools.WorldContactListener;
@@ -209,11 +210,19 @@ public class PlayScreen implements Screen {
                                         create = false;
                                     }
                                 }
-                                //create seeds if there are seeds in inventory
+
+
+                                //create seeds if there are seeds in inventory and seeds are already not growing
                                 if (create) {
                                     if (player.getInventory().getItem("seeds") > 0) {
-                                        box2dWorldCreator.createWheat();
-                                        player.getInventory().removeItem("seeds", 1);
+                                        System.out.println(getCell("seeds"));
+                                        System.out.println(getCell("seeds").getTile());
+                                        System.out.println(getCell("seeds").getTile().getId());
+
+
+                                        //box2dWorldCreator.createWheat();
+                                        //player.getInventory().removeItem("seeds", 1);
+
                                     }
                                 }
                             } else {
@@ -395,7 +404,7 @@ public class PlayScreen implements Screen {
         // If there are any ground enemies that are spawned into the map
         if (sheep.size() > 0) {
 
-            for(Sheep s : sheep){
+            for (Sheep s : sheep) {
                 s.update(deltaTime);
             }
         }
@@ -416,17 +425,13 @@ public class PlayScreen implements Screen {
         }
     }
 
-//https://stackoverflow.com/questions/42057796/move-the-player-only-in-45-steps-with-touchpad-in-libgdx
+    //https://stackoverflow.com/questions/42057796/move-the-player-only-in-45-steps-with-touchpad-in-libgdx
     public void movePlayer(float dx, float dy) {
+        int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 8) / (2 * Math.PI / 8));
 
-        int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 4) / (2 * Math.PI / 4));
-
-        if (direction == 4) direction = 0;
-        double angle = direction * (Math.PI / 2);
-
+        if (direction == 8) direction = 0;
+        double angle = direction * (Math.PI / 4);
         player.setAngle(angle);
-
-        System.out.println(angle);
 
         //Set the player direction state
         if (angle == 0) {

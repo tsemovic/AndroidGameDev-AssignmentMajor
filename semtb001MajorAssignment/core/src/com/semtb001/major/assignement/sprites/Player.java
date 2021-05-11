@@ -83,73 +83,73 @@ public class Player extends Sprite {
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("N"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerN"), i * 128, 0, 128, 128));
         }
         for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("N"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerN"), i * 128, 0, 128, 128));
         }
         N = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NE"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNE"), i * 128, 0, 128, 128));
         }
         for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NE"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNE"), i * 128, 0, 128, 128));
         }
         NE = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("E"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerE"), i * 128, 0, 128, 128));
         }
         for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("E"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerE"), i * 128, 0, 128, 128));
         }
         E = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SE"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSE"), i * 128, 0, 128, 128));
         }
         for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SE"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSE"), i * 128, 0, 128, 128));
         }
         SE = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("S"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerS"), i * 128, 0, 128, 128));
         }
         for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("S"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerS"), i * 128, 0, 128, 128));
         }
         S = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SW"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSW"), i * 128, 0, 128, 128));
         }
         for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("SW"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSW"), i * 128, 0, 128, 128));
         }
         SW = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("W"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerW"), i * 128, 0, 128, 128));
         }
         for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("W"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerW"), i * 128, 0, 128, 128));
         }
         W = new Animation(0.07f, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NW"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNW"), i * 128, 0, 128, 128));
         }
         for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("NW"), i * 128, 0, 128, 128));
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNW"), i * 128, 0, 128, 128));
         }
         NW = new Animation(0.07f, tempFrames);
         tempFrames.clear();

@@ -3,59 +3,87 @@ textures.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-E
+playerE
+  rotate: false
+  xy: 1, 521
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+playerN
+  rotate: false
+  xy: 1, 391
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+playerNE
+  rotate: false
+  xy: 643, 521
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+playerNW
   rotate: false
   xy: 1, 261
   size: 640, 128
   orig: 640, 128
   offset: 0, 0
   index: -1
-N
+playerS
+  rotate: false
+  xy: 643, 391
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+playerSE
+  rotate: false
+  xy: 1285, 521
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+playerSW
   rotate: false
   xy: 1, 131
   size: 640, 128
   orig: 640, 128
   offset: 0, 0
   index: -1
-NE
+playerW
   rotate: false
   xy: 643, 261
   size: 640, 128
   orig: 640, 128
   offset: 0, 0
   index: -1
-NW
+sheepE
+  rotate: false
+  xy: 1285, 391
+  size: 512, 128
+  orig: 512, 128
+  offset: 0, 0
+  index: -1
+sheepN
   rotate: false
   xy: 1, 1
-  size: 640, 128
-  orig: 640, 128
+  size: 512, 128
+  orig: 512, 128
   offset: 0, 0
   index: -1
-S
+sheepW
   rotate: false
   xy: 643, 131
-  size: 640, 128
-  orig: 640, 128
+  size: 512, 128
+  orig: 512, 128
   offset: 0, 0
   index: -1
-SE
+sheepS
   rotate: false
   xy: 1285, 261
-  size: 640, 128
-  orig: 640, 128
-  offset: 0, 0
-  index: -1
-SW
-  rotate: false
-  xy: 643, 1
-  size: 640, 128
-  orig: 640, 128
-  offset: 0, 0
-  index: -1
-W
-  rotate: false
-  xy: 1285, 131
-  size: 640, 128
-  orig: 640, 128
+  size: 512, 128
+  orig: 512, 128
   offset: 0, 0
   index: -1

@@ -62,28 +62,28 @@ playerW
 sheepE
   rotate: false
   xy: 1285, 391
-  size: 512, 128
-  orig: 512, 128
+  size: 640, 128
+  orig: 640, 128
   offset: 0, 0
   index: -1
 sheepN
   rotate: false
   xy: 1, 1
-  size: 512, 128
-  orig: 512, 128
-  offset: 0, 0
-  index: -1
-sheepW
-  rotate: false
-  xy: 643, 131
-  size: 512, 128
-  orig: 512, 128
+  size: 640, 128
+  orig: 640, 128
   offset: 0, 0
   index: -1
 sheepS
   rotate: false
+  xy: 643, 131
+  size: 640, 128
+  orig: 640, 128
+  offset: 0, 0
+  index: -1
+sheepW
+  rotate: false
   xy: 1285, 261
-  size: 512, 128
-  orig: 512, 128
+  size: 640, 128
+  orig: 640, 128
   offset: 0, 0
   index: -1

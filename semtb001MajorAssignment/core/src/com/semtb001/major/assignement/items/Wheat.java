@@ -49,7 +49,7 @@ public class Wheat extends InteractiveTileObjects implements Disposable {
 
     @Override
     public void onCollision() {
-        System.out.println("wheat");
+//        System.out.println("wheat");
     }
 
     public void update(float dt) {

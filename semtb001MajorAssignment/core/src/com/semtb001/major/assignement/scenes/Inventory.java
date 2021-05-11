@@ -49,8 +49,6 @@ public class Inventory {
 
     public void removeItem(String name, Integer value){
         Iterator itemIterator = inventory.entrySet().iterator();
-        System.out.println("INVENTORY");
-
         while (itemIterator.hasNext()) {
             Map.Entry mapElement = (Map.Entry)itemIterator.next();
 
@@ -62,14 +60,12 @@ public class Inventory {
 
     public void print(){
         Iterator itemIterator = inventory.entrySet().iterator();
-        System.out.println("INVENTORY");
 
         while (itemIterator.hasNext()) {
             Map.Entry mapElement = (Map.Entry)itemIterator.next();
 
             System.out.println(mapElement.getKey());
             System.out.println(mapElement.getValue());
-
 
         }
     }

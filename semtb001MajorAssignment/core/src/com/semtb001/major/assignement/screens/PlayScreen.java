@@ -162,11 +162,7 @@ public class PlayScreen implements Screen {
         int totalSheep = box2dWorldCreator.getSheepPositions().size();
         double waveTimeIncrements = hud.getWorldTimer() / numberOfWaves;
 
-        System.out.println(hud.getWorldTimer());
-        System.out.println(waveTimeIncrements);
-
-        for (int i = 0; i < numberOfWaves; i++) {
-
+        for (int i = numberOfWaves; i >= 0; i--) {
             Queue<Vector2> waveQueue = new LinkedList<>();
 
             if (totalSheep > numberOfWaves) {
@@ -280,7 +276,6 @@ public class PlayScreen implements Screen {
                                 timeCount = 0;
                             }
                             ((Bucket) i).updateWater();
-                            System.out.println(i.getHealth());
                         }
                     }
                 }
@@ -415,17 +410,17 @@ public class PlayScreen implements Screen {
         for (Map.Entry<Double, Queue<Vector2>> kv : sheepWaves.entrySet()) {
 
             // If the world time is
-            if(hud.getWorldTimer() <= kv.getKey()){
+            if (hud.getWorldTimer() <= kv.getKey()) {
 
                 // Create the enemy
-                for(Vector2 sheepPosition : kv.getValue()){
+                for (Vector2 sheepPosition : kv.getValue()) {
                     Sheep newSheep = new Sheep(world, this, sheepPosition);
                     sheep.offer(newSheep);
                     kv.getValue().remove(sheepPosition);
                 }
 
                 sheepWaves.remove(kv);
-                
+
 
             }
 
@@ -450,8 +445,11 @@ public class PlayScreen implements Screen {
             // Update the enemy (updates current animation frame, sound, and movement)
             sheep.update(delta);
 
-            // Draw the current enemy animation frame
-            game.batch.draw(sheep.currentFrame, sheep.box2dBody.getPosition().x - 1.75f, (float) (sheep.box2dBody.getPosition().y - 1.5f), 3.5f, 3.5f);
+            if (sheep.getHealth() > 0) {
+
+                // Draw the current enemy animation frame
+                game.batch.draw(sheep.currentFrame, sheep.box2dBody.getPosition().x - 1.75f, (float) (sheep.box2dBody.getPosition().y - 1.5f), 3.5f, 3.5f);
+            }
         }
     }
 

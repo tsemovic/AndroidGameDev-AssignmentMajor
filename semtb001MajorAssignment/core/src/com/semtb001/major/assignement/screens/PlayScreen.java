@@ -418,11 +418,15 @@ public class PlayScreen implements Screen {
 
 //https://stackoverflow.com/questions/42057796/move-the-player-only-in-45-steps-with-touchpad-in-libgdx
     public void movePlayer(float dx, float dy) {
-        int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 8) / (2 * Math.PI / 8));
 
-        if (direction == 8) direction = 0;
-        double angle = direction * (Math.PI / 4);
+        int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 4) / (2 * Math.PI / 4));
+
+        if (direction == 4) direction = 0;
+        double angle = direction * (Math.PI / 2);
+
         player.setAngle(angle);
+
+        System.out.println(angle);
 
         //Set the player direction state
         if (angle == 0) {

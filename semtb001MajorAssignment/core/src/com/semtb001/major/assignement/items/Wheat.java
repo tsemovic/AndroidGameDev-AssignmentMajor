@@ -84,18 +84,23 @@ public class Wheat extends InteractiveTileObjects implements Disposable {
 
     public void updateWater(){
         int water = 0;
-        for(TiledMapTileLayer.Cell cell: gameScreen.getSurroundingWheatCells("water", rectangle)){
-            if(cell.getTile() == tileSet.getTile(137)){
-                hasWater = true;
-                water += 1;
+        try{
+            for(TiledMapTileLayer.Cell cell: gameScreen.getSurroundingWheatCells("water", rectangle)){
+                if(cell.getTile() == tileSet.getTile(137)){
+                    hasWater = true;
+                    water += 1;
+                }
             }
-        }
-        for(TiledMapTileLayer.Cell cell: gameScreen.getSurroundingWheatCells("grass", rectangle)){
-            if(cell.getTile() == tileSet.getTile(137)){
-                hasWater = true;
-                water += 1;
+            for(TiledMapTileLayer.Cell cell: gameScreen.getSurroundingWheatCells("grass", rectangle)){
+                if(cell.getTile() == tileSet.getTile(137)){
+                    hasWater = true;
+                    water += 1;
+                }
             }
+        }catch (Exception e){
+
         }
+
         if(water == 0){
             hasWater = false;
         }

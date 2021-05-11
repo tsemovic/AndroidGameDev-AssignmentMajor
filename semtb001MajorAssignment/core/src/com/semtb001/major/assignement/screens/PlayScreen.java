@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -35,8 +34,10 @@ import com.semtb001.major.assignement.tools.Box2DWorldCreator;
 import com.semtb001.major.assignement.tools.WorldContactListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -93,6 +94,7 @@ public class PlayScreen implements Screen {
     private Gui gui;
     public float timeCount;
 
+    public HashMap<Double, Queue<Vector2>> sheepWaves;
 
     public PlayScreen(Semtb001MajorAssignment semtb001MajorAssignment, String currentLevel) {
 
@@ -109,7 +111,8 @@ public class PlayScreen implements Screen {
 
         // Load map level, render the map, and create the game world
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("island" + currentLevel.substring(7, 8) + ".tmx");
+        //map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
+        map = mapLoader.load("mapFiles/level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001MajorAssignment.MPP);
         world = new World(new Vector2(0, 0), true);
 
@@ -122,9 +125,10 @@ public class PlayScreen implements Screen {
         // Setup the world contact listener
         world.setContactListener(new WorldContactListener(box2dWorldCreator));
 
-        // Instantiate Player, Enemies and Coins
+        // Instantiate Player, Sheep and SheepWaves
         player = new Player(world, this);
         sheep = new LinkedList<Sheep>();
+        sheepWaves = new HashMap<Double, Queue<Vector2>>();
 
         // Setup the game camera position
         gameCamera.position.x = player.box2dBody.getPosition().x + 9;
@@ -154,6 +158,34 @@ public class PlayScreen implements Screen {
 //        music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
 //        music.setLooping(true);
 //        music.play();
+        int numberOfWaves = 3;
+        int totalSheep = box2dWorldCreator.getSheepPositions().size();
+        double waveTimeIncrements = hud.getWorldTimer() / numberOfWaves;
+
+        System.out.println(hud.getWorldTimer());
+        System.out.println(waveTimeIncrements);
+
+        for (int i = 0; i < numberOfWaves; i++) {
+
+            Queue<Vector2> waveQueue = new LinkedList<>();
+
+            if (totalSheep > numberOfWaves) {
+                for (int y = 0; y <= Math.floor(totalSheep / 3); y++) {
+                    if (box2dWorldCreator.getSheepPositions().size() > 0) {
+                        waveQueue.add(box2dWorldCreator.getSheepPositions().poll());
+                    }
+                }
+            } else {
+                if (box2dWorldCreator.getSheepPositions().size() > 0) {
+                    waveQueue.add(box2dWorldCreator.getSheepPositions().poll());
+                }
+            }
+
+            sheepWaves.put(i * waveTimeIncrements, waveQueue);
+
+        }
+
+        System.out.println(sheepWaves.toString());
 
     }
 
@@ -192,7 +224,7 @@ public class PlayScreen implements Screen {
                     if (i.getActive()) {
 
                         if (i.getName() == "hoe") {
-                            if (getCell("grass").getTile() == tileSet.getTile(42)) {
+                            if (getCell("grass").getTile() == tileSet.getTile(132)) {
                                 getCell("grass").setTile(tileSet.getTile(403));
                             }
                             box2dWorldCreator.harvestWheat();
@@ -215,14 +247,8 @@ public class PlayScreen implements Screen {
                                 //create seeds if there are seeds in inventory and seeds are already not growing
                                 if (create) {
                                     if (player.getInventory().getItem("seeds") > 0) {
-                                        System.out.println(getCell("seeds"));
-                                        System.out.println(getCell("seeds").getTile());
-                                        System.out.println(getCell("seeds").getTile().getId());
-
-
-                                        //box2dWorldCreator.createWheat();
-                                        //player.getInventory().removeItem("seeds", 1);
-
+                                        box2dWorldCreator.createWheat();
+                                        player.getInventory().removeItem("seeds", 1);
                                     }
                                 }
                             } else {
@@ -383,27 +409,30 @@ public class PlayScreen implements Screen {
         gameCamera.position.y = player.box2dBody.getPosition().y;
     }
 
-    // Method to handle enemy spawns (grounded and flying)
+    // Method to handle sheep spawns
     public void handleEnemies(float deltaTime) {
 
-        // If there are grounded enemies that need to be spawned in the map
-        if (box2dWorldCreator.getSheepPositions().size() > 0) {
+        for (Map.Entry<Double, Queue<Vector2>> kv : sheepWaves.entrySet()) {
 
-            // If the player is coming up to where a grounded enemy spawns
-            if (getPlayerPos().x + 50 > box2dWorldCreator.getSheepPositions().element().x / 32) {
+            // If the world time is
+            if(hud.getWorldTimer() <= kv.getKey()){
 
                 // Create the enemy
-                Sheep newGroundEnemy = new Sheep(world, this, box2dWorldCreator.getSheepPositions().element());
-                sheep.offer(newGroundEnemy);
+                for(Vector2 sheepPosition : kv.getValue()){
+                    Sheep newSheep = new Sheep(world, this, sheepPosition);
+                    sheep.offer(newSheep);
+                    kv.getValue().remove(sheepPosition);
+                }
 
-                // Remove the enemy from the 'enemies to be created' list
-                box2dWorldCreator.getSheepPositions().remove();
+                sheepWaves.remove(kv);
+
             }
+
         }
+
 
         // If there are any ground enemies that are spawned into the map
         if (sheep.size() > 0) {
-
             for (Sheep s : sheep) {
                 s.update(deltaTime);
             }
@@ -421,7 +450,7 @@ public class PlayScreen implements Screen {
             sheep.update(delta);
 
             // Draw the current enemy animation frame
-            game.batch.draw(sheep.currentFrame, sheep.box2dBody.getPosition().x - 1, (float) (sheep.box2dBody.getPosition().y - 1), 1.5f, 1.5f);
+            game.batch.draw(sheep.currentFrame, sheep.box2dBody.getPosition().x - 1.75f, (float) (sheep.box2dBody.getPosition().y - 1.5f), 3.5f, 3.5f);
         }
     }
 
@@ -463,6 +492,7 @@ public class PlayScreen implements Screen {
         if (dy < 0) {
             dy = dy * -1;
         }
+
         double angleSpeed = Math.sqrt((dx * dx) + (dy * dy));
 
         player.box2dBody.setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.maxSpeed * angleSpeed)),

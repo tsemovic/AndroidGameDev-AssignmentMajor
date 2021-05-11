@@ -178,7 +178,7 @@ public class Player extends Sprite {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         // Set the player starting position
-        bodyDef.position.set(40, 90);
+        bodyDef.position.set(75, 75);
 
         // Create the body in the world
         box2dBody = world.createBody(bodyDef);

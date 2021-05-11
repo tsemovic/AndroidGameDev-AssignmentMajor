@@ -152,6 +152,10 @@ public class Hud implements Disposable {
         return timeUp;
     }
 
+    public float getWorldTimer(){
+        return worldTimer;
+    }
+
     // Getter for the coin count (number of coins collected by the player)
     public Integer getWheatCount() {
         return wheatCount;

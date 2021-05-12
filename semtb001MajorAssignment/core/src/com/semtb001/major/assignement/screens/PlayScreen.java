@@ -206,7 +206,6 @@ public class PlayScreen implements Screen {
         }
 
         if (touchPad.isTouched) {
-            player.setCurrentState(Player.State.WALK);
             movePlayer(touchPad.touchPad.getKnobPercentX(), touchPad.touchPad.getKnobPercentY());
             itemPressed = 1;
         } else {
@@ -515,6 +514,8 @@ public class PlayScreen implements Screen {
         } else {
             player.currentSpeed = angleSpeed;
         }
+
+        player.setCurrentState(Player.State.WALK);
     }
 
     // Method to draw the player

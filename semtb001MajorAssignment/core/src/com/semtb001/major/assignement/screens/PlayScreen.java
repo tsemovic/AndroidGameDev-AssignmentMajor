@@ -206,6 +206,7 @@ public class PlayScreen implements Screen {
         }
 
         if (touchPad.isTouched) {
+            player.setCurrentState(Player.State.WALK);
             movePlayer(touchPad.touchPad.getKnobPercentX(), touchPad.touchPad.getKnobPercentY());
             itemPressed = 1;
         } else {
@@ -218,7 +219,7 @@ public class PlayScreen implements Screen {
 
                 for (Item i : itemSet) {
                     if (i.getActive()) {
-
+                        player.setCurrentState(Player.State.HOE);
                         if (i.getName() == "hoe") {
                             if (getCell("grass").getTile() == tileSet.getTile(132)) {
                                 getCell("grass").setTile(tileSet.getTile(403));
@@ -253,7 +254,6 @@ public class PlayScreen implements Screen {
                                     //System.out.println("NOT DIRT");
                                 }
 
-                                timeCount = 0;
                             }
                         }
 
@@ -278,7 +278,6 @@ public class PlayScreen implements Screen {
                                         i.setHealth(100);
                                     }
                                 }
-                                timeCount = 0;
                             }
                             ((Bucket) i).updateWater();
                         }
@@ -286,6 +285,10 @@ public class PlayScreen implements Screen {
                 }
             }
         }
+        timeCount = 0;
+
+
+
     }
 
     @Override
@@ -468,21 +471,21 @@ public class PlayScreen implements Screen {
 
         //Set the player direction state
         if (angle == 0) {
-            player.currentState = Player.State.E;
+            player.currentDirection = Player.Direction.E;
         } else if (angle == -0.7853981633974483) {
-            player.currentState = Player.State.SE;
+            player.currentDirection = Player.Direction.SE;
         } else if (angle == -1.5707963267948966) {
-            player.currentState = Player.State.S;
+            player.currentDirection = Player.Direction.S;
         } else if (angle == -2.356194490192345) {
-            player.currentState = Player.State.SW;
+            player.currentDirection = Player.Direction.SW;
         } else if (angle == -3.141592653589793) {
-            player.currentState = Player.State.W;
+            player.currentDirection = Player.Direction.W;
         } else if (angle == 2.356194490192345) {
-            player.currentState = Player.State.NW;
+            player.currentDirection = Player.Direction.NW;
         } else if (angle == 1.5707963267948966) {
-            player.currentState = Player.State.N;
+            player.currentDirection = Player.Direction.N;
         } else if (angle == 0.7853981633974483) {
-            player.currentState = Player.State.NE;
+            player.currentDirection = Player.Direction.NE;
         }
 
         //make player face the direction of travel

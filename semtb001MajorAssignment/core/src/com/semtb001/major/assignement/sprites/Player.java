@@ -1,11 +1,9 @@
 package com.semtb001.major.assignement.sprites;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -16,8 +14,6 @@ import com.badlogic.gdx.utils.Array;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.scenes.Inventory;
 import com.semtb001.major.assignement.screens.PlayScreen;
-import com.semtb001.major.assignement.tools.Assets;
-import java.util.Random;
 
 
 // Class for the player
@@ -27,23 +23,67 @@ public class Player extends Sprite {
     private World world;
     private PlayScreen playScreen;
 
+    // Player directions
+    public enum Direction {N, NE, E, SE, S, SW, W, NW}
+    public Direction currentDirection;
+    public Direction previousDirection;
+
     // Player states
-    public enum State {N, NE, E, SE, S, SW, W, NW}
+    public enum State {IDLE, WALK, HOE, SEEDS, BUCKET}
     public State currentState;
-    public State previousState;
 
     // State timers for the player states
     private float stateTimer;
 
-    // Player animations
-    private Animation N;
-    private Animation NE;
-    private Animation E;
-    private Animation SE;
-    private Animation S;
-    private Animation SW;
-    private Animation W;
-    private Animation NW;
+    // Player walk animations
+    private Animation Nwalk;
+    private Animation NEwalk;
+    private Animation Ewalk;
+    private Animation SEwalk;
+    private Animation Swalk;
+    private Animation SWwalk;
+    private Animation Wwalk;
+    private Animation NWwalk;
+
+    // Player idle animations
+    private Animation Nidle;
+    private Animation NEidle;
+    private Animation Eidle;
+    private Animation SEidle;
+    private Animation Sidle;
+    private Animation SWidle;
+    private Animation Widle;
+    private Animation NWidle;
+
+    // Player hoe animations
+    private Animation Nhoe;
+    private Animation NEhoe;
+    private Animation Ehoe;
+    private Animation SEhoe;
+    private Animation Shoe;
+    private Animation SWhoe;
+    private Animation Whoe;
+    private Animation NWhoe;
+
+    // Player seeds animations
+    private Animation Nseeds;
+    private Animation NEseeds;
+    private Animation Eseeds;
+    private Animation SEseeds;
+    private Animation Sseeds;
+    private Animation SWseeds;
+    private Animation Wseeds;
+    private Animation NWseeds;
+
+    // Player bucket animations
+    private Animation Nbucket;
+    private Animation NEbucket;
+    private Animation Ebucket;
+    private Animation SEbucket;
+    private Animation Sbucket;
+    private Animation SWbucket;
+    private Animation Wbucket;
+    private Animation NWbucket;
 
     // Player's current animation frame
     public TextureRegion currentFrame;
@@ -59,6 +99,13 @@ public class Player extends Sprite {
     public float maxSpeed = 2f;
     public double currentSpeed = 2f;
 
+    private float walkAnimationSpeed;
+    private float idleAnimationSpeed;
+    private float hoeAnimationSpeed;
+    private float seedsAnimationSpeed;
+    private float bucketAnimationSpeed;
+
+
     private Inventory inventory;
 
     public Player(World world, PlayScreen playScreen) {
@@ -71,92 +118,132 @@ public class Player extends Sprite {
         stateTimer = 0;
 
         // Setup the player current states (starts the game running)
-        currentState = State.N;
-        previousState = null;
+        currentDirection = Direction.N;
+        previousDirection = null;
+
+        currentState = State.IDLE;
 
         inventory = new Inventory();
 
         // Define the player (Box2d)
         definePlayer();
 
+        walkAnimationSpeed = 0.07f;
+        idleAnimationSpeed = 0.3f;
+        hoeAnimationSpeed = 0.07f;
+        seedsAnimationSpeed = 0.07f;
+        bucketAnimationSpeed = 0.07f;
+
         // Temporary array to hold animation frames
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
-        for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerN"), i * 128, 0, 128, 128));
+        // Player walk Animations
+        for (int i = 0; i <= 14; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNwalk"), i * 99, 0, 99, 137));
         }
-        for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerN"), i * 128, 0, 128, 128));
-        }
-        N = new Animation(0.07f, tempFrames);
+        Nwalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNE"), i * 128, 0, 128, 128));
+        for (int i = 0; i <= 14; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNEwalk"), i * 105, 0, 105, 135));
         }
-        for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNE"), i * 128, 0, 128, 128));
-        }
-        NE = new Animation(0.07f, tempFrames);
+        NEwalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerE"), i * 128, 0, 128, 128));
+        for (int i = 0; i <= 14; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerEwalk"), i * 109, 0, 109, 124));
         }
-        for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerE"), i * 128, 0, 128, 128));
-        }
-        E = new Animation(0.07f, tempFrames);
+        Ewalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSE"), i * 128, 0, 128, 128));
+        for (int i = 0; i <= 14; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSEwalk"), i * 107, 0, 107, 133));
         }
-        for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSE"), i * 128, 0, 128, 128));
-        }
-        SE = new Animation(0.07f, tempFrames);
+        SEwalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerS"), i * 128, 0, 128, 128));
+        for (int i = 0; i <= 14; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSwalk"), i * 101, 0, 101, 136));
         }
-        for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerS"), i * 128, 0, 128, 128));
-        }
-        S = new Animation(0.07f, tempFrames);
+        Swalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSW"), i * 128, 0, 128, 128));
+        for (int i = 0; i <= 14; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSWwalk"), i * 108, 0, 108, 133));
         }
-        for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSW"), i * 128, 0, 128, 128));
-        }
-        SW = new Animation(0.07f, tempFrames);
+        SWwalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerW"), i * 128, 0, 128, 128));
+        for (int i = 0; i <= 14; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerWwalk"), i * 114, 0, 114, 124));
         }
-        for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerW"), i * 128, 0, 128, 128));
-        }
-        W = new Animation(0.07f, tempFrames);
+        Wwalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        for (int i = 0; i <= 4; i++) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNW"), i * 128, 0, 128, 128));
+        for (int i = 0; i <= 14; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNWwalk"), i * 109, 0, 109, 134));
         }
-        for (int i = 4; i >= 0; i--) {
-            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNW"), i * 128, 0, 128, 128));
-        }
-        NW = new Animation(0.07f, tempFrames);
+        NWwalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
+        // Player idle Animations
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNidle"), i * 99, 0, 99, 123));
+        }
+        Nidle = new Animation(idleAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNEidle"), i * 95, 0, 95, 125));
+        }
+        NEidle = new Animation(idleAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerEidle"), i * 91, 0, 91, 127));
+        }
+        Eidle = new Animation(idleAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSEidle"), i * 95, 0, 95, 128));
+        }
+        SEidle = new Animation(idleAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSidle"), i * 100, 0, 100, 127));
+        }
+        Sidle = new Animation(idleAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSWidle"), i * 97, 0, 97, 128));
+        }
+        SWidle = new Animation(idleAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerWidle"), i * 92, 0, 92, 126));
+        }
+        Widle = new Animation(idleAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 3; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNWidle"), i * 97, 0, 97, 125));
+        }
+        NWidle = new Animation(idleAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        // Player hoe Animations
+        for (int i = 0; i <= 12; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNhoe"), i * 113, 0, 113, 181));
+        }
+        Nhoe = new Animation(hoeAnimationSpeed, tempFrames);
+        tempFrames.clear();
 
         // Set the starting animation frame to N
-        currentFrame = (TextureRegion) N.getKeyFrame(0.2f, false);
+        currentFrame = (TextureRegion) Nidle.getKeyFrame(idleAnimationSpeed, false);
 
 
     }
@@ -205,64 +292,79 @@ public class Player extends Sprite {
     private TextureRegion getFramesFromAnimation(float delta) {
 
         // Store the current state as 'previous state'
-        previousState = currentState;
+        previousDirection = currentDirection;
 
         // Texture region that will be returned
         TextureRegion returnRegion = null;
 
+
+        if(currentState == State.WALK && currentSpeed == 0.0){
+            currentState = State.IDLE;
+        }
+
         // If the player state is "FAIL" return the fail animation frame
-        if (currentState == State.N) {
-            N.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) N.getKeyFrame(stateTimer, true);
-            if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) N.getKeyFrame(0.2f, true);
+        if (currentDirection == Direction.N) {
+            switch(currentState){
+                case IDLE:  returnRegion = (TextureRegion) Nidle.getKeyFrame(stateTimer, true);
+                break;
+                case WALK:  returnRegion = (TextureRegion) Nwalk.getKeyFrame(stateTimer, true);
+                break;
+                case HOE:   returnRegion = (TextureRegion) Nhoe.getKeyFrame(stateTimer, false);
+                break;
             }
-        }else if(currentState == State.NE){
-            NE.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) NE.getKeyFrame(stateTimer, true);
+        }else if(currentDirection == Direction.NE){
+            NEwalk.setFrameDuration(getDurationFromSpeed(currentSpeed));
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) NE.getKeyFrame(0.2f, true);
+                returnRegion = (TextureRegion) NEidle.getKeyFrame(stateTimer, true);
+            }else{
+                returnRegion = (TextureRegion) NEwalk.getKeyFrame(stateTimer, true);
             }
-        }else if(currentState == State.E){
-            E.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) E.getKeyFrame(stateTimer, true);
+        }else if(currentDirection == Direction.E){
+            Ewalk.setFrameDuration(getDurationFromSpeed(currentSpeed));
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) E.getKeyFrame(0.2f, true);
+                returnRegion = (TextureRegion) Eidle.getKeyFrame(stateTimer, true);
+            }else{
+                returnRegion = (TextureRegion) Ewalk.getKeyFrame(stateTimer, true);
             }
-        }else if(currentState == State.SE){
-            SE.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) SE.getKeyFrame(stateTimer, true);
+        }else if(currentDirection == Direction.SE){
+            SEwalk.setFrameDuration(getDurationFromSpeed(currentSpeed));
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) SE.getKeyFrame(0.2f, true);
+                returnRegion = (TextureRegion)SEidle.getKeyFrame(stateTimer, true);
+            }else{
+                returnRegion = (TextureRegion) SEwalk.getKeyFrame(stateTimer, true);
             }
-        }else if(currentState == State.S){
-            S.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) S.getKeyFrame(stateTimer, true);
+        }else if(currentDirection == Direction.S){
+            Swalk.setFrameDuration(getDurationFromSpeed(currentSpeed));
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) S.getKeyFrame(0.2f, true);
+                returnRegion = (TextureRegion) Sidle.getKeyFrame(stateTimer, true);
+            }else{
+                returnRegion = (TextureRegion) Swalk.getKeyFrame(stateTimer, true);
             }
-        }else if(currentState == State.SW){
-            SW.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) SW.getKeyFrame(stateTimer, true);
+        }else if(currentDirection == Direction.SW){
+            SWwalk.setFrameDuration(getDurationFromSpeed(currentSpeed));
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) SW.getKeyFrame(0.2f, true);
+                returnRegion = (TextureRegion) SWidle.getKeyFrame(stateTimer, true);
+            }else{
+                returnRegion = (TextureRegion) SWwalk.getKeyFrame(stateTimer, true);
             }
-        }else if(currentState == State.W){
-            W.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) W.getKeyFrame(stateTimer, true);
+        }else if(currentDirection == Direction.W){
+            Wwalk.setFrameDuration(getDurationFromSpeed(currentSpeed));
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) W.getKeyFrame(0.2f, true);
+                returnRegion = (TextureRegion) Widle.getKeyFrame(stateTimer, true);
+            }else{
+                returnRegion = (TextureRegion) Wwalk.getKeyFrame(stateTimer, true);
             }
-        }else if(currentState == State.NW){
-            NW.setFrameDuration(getDurationFromSpeed(currentSpeed));
-            returnRegion = (TextureRegion) NW.getKeyFrame(stateTimer, true);
+        }else if(currentDirection == Direction.NW){
+            NWwalk.setFrameDuration(getDurationFromSpeed(currentSpeed));
             if (currentSpeed == 0.0){
-                returnRegion = (TextureRegion) NW.getKeyFrame(0.2f, true);
+                returnRegion = (TextureRegion) NWidle.getKeyFrame(stateTimer, true);
+            }else{
+                returnRegion = (TextureRegion) NWwalk.getKeyFrame(stateTimer, true);
             }
         }
 
         // If the current state and previous state aren't the same: reset the state timer
-        if (currentState != previousState) {
+        if (currentDirection != previousDirection) {
             stateTimer = 0;
             // If the current state and previous state are the same: increase the state timer
         } else {
@@ -300,6 +402,10 @@ public class Player extends Sprite {
 
     public void addInventory(String item, int count) {
         inventory.addItem(item, count);
+    }
+
+    public void setCurrentState(State state){
+        currentState = state;
     }
 
 }

@@ -3,87 +3,311 @@ textures.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-playerE
+playerEhoe
+  rotate: false
+  xy: 1, 1843
+  size: 2834, 155
+  orig: 2834, 155
+  offset: 0, 0
+  index: -1
+playerEbucket
+  rotate: false
+  xy: 1, 1699
+  size: 2700, 142
+  orig: 2700, 142
+  offset: 0, 0
+  index: -1
+playerNEbucket
+  rotate: false
+  xy: 2837, 1872
+  size: 2628, 126
+  orig: 2628, 126
+  offset: 0, 0
+  index: -1
+playerSEhoe
+  rotate: false
+  xy: 1, 1510
+  size: 2548, 187
+  orig: 2548, 187
+  offset: 0, 0
+  index: -1
+playerSEbucket
+  rotate: false
+  xy: 1, 1351
+  size: 2538, 157
+  orig: 2538, 157
+  offset: 0, 0
+  index: -1
+playerNEhoe
+  rotate: false
+  xy: 1, 1188
+  size: 2327, 161
+  orig: 2327, 161
+  offset: 0, 0
+  index: -1
+playerWhoe
+  rotate: false
+  xy: 1, 1006
+  size: 2210, 180
+  orig: 2210, 180
+  offset: 0, 0
+  index: -1
+playerSWhoe
+  rotate: false
+  xy: 1, 804
+  size: 2158, 200
+  orig: 2158, 200
+  offset: 0, 0
+  index: -1
+playerWbucket
+  rotate: false
+  xy: 5467, 1863
+  size: 2178, 135
+  orig: 2178, 135
+  offset: 0, 0
+  index: -1
+playerNbucket
+  rotate: false
+  xy: 1, 677
+  size: 2142, 125
+  orig: 2142, 125
+  offset: 0, 0
+  index: -1
+playerSWbucket
   rotate: false
   xy: 1, 521
-  size: 640, 128
-  orig: 640, 128
+  size: 2088, 154
+  orig: 2088, 154
   offset: 0, 0
   index: -1
-playerN
+playerNWbucket
   rotate: false
-  xy: 1, 391
-  size: 640, 128
-  orig: 640, 128
+  xy: 1, 393
+  size: 2088, 126
+  orig: 2088, 126
   offset: 0, 0
   index: -1
-playerNE
+playerNWhoe
   rotate: false
-  xy: 643, 521
-  size: 640, 128
-  orig: 640, 128
+  xy: 1, 206
+  size: 1950, 185
+  orig: 1950, 185
   offset: 0, 0
   index: -1
-playerNW
+playerSbucket
   rotate: false
-  xy: 1, 261
-  size: 640, 128
-  orig: 640, 128
+  xy: 1, 44
+  size: 1962, 160
+  orig: 1962, 160
   offset: 0, 0
   index: -1
-playerS
+playerShoe
   rotate: false
-  xy: 643, 391
-  size: 640, 128
-  orig: 640, 128
+  xy: 2837, 1661
+  size: 1833, 209
+  orig: 1833, 209
   offset: 0, 0
   index: -1
-playerSE
+playerWwalk
   rotate: false
-  xy: 1285, 521
-  size: 640, 128
-  orig: 640, 128
+  xy: 2551, 1535
+  size: 1710, 124
+  orig: 1710, 124
   offset: 0, 0
   index: -1
-playerSW
+playerEwalk
   rotate: false
-  xy: 1, 131
-  size: 640, 128
-  orig: 640, 128
+  xy: 2551, 1409
+  size: 1635, 124
+  orig: 1635, 124
   offset: 0, 0
   index: -1
-playerW
+playerNWwalk
   rotate: false
-  xy: 643, 261
-  size: 640, 128
-  orig: 640, 128
+  xy: 2541, 1273
+  size: 1635, 134
+  orig: 1635, 134
+  offset: 0, 0
+  index: -1
+playerSWwalk
+  rotate: false
+  xy: 2330, 1138
+  size: 1620, 133
+  orig: 1620, 133
+  offset: 0, 0
+  index: -1
+playerEseeds
+  rotate: false
+  xy: 2213, 1009
+  size: 1617, 127
+  orig: 1617, 127
+  offset: 0, 0
+  index: -1
+playerSEwalk
+  rotate: false
+  xy: 2213, 874
+  size: 1605, 133
+  orig: 1605, 133
+  offset: 0, 0
+  index: -1
+playerNEwalk
+  rotate: false
+  xy: 2161, 737
+  size: 1575, 135
+  orig: 1575, 135
+  offset: 0, 0
+  index: -1
+playerSwalk
+  rotate: false
+  xy: 2145, 599
+  size: 1515, 136
+  orig: 1515, 136
+  offset: 0, 0
+  index: -1
+playerNhoe
+  rotate: false
+  xy: 2091, 416
+  size: 1469, 181
+  orig: 1469, 181
+  offset: 0, 0
+  index: -1
+playerNwalk
+  rotate: false
+  xy: 2091, 277
+  size: 1485, 137
+  orig: 1485, 137
+  offset: 0, 0
+  index: -1
+playerSEseeds
+  rotate: false
+  xy: 1965, 129
+  size: 1408, 146
+  orig: 1408, 146
+  offset: 0, 0
+  index: -1
+playerNEseeds
+  rotate: false
+  xy: 1965, 1
+  size: 1408, 126
+  orig: 1408, 126
   offset: 0, 0
   index: -1
 sheepE
   rotate: false
-  xy: 1285, 391
+  xy: 4672, 1742
   size: 640, 128
   orig: 640, 128
+  offset: 0, 0
+  index: -1
+playerNseeds
+  rotate: false
+  xy: 5314, 1736
+  size: 1177, 125
+  orig: 1177, 125
+  offset: 0, 0
+  index: -1
+playerSseeds
+  rotate: false
+  xy: 6493, 1703
+  size: 1155, 158
+  orig: 1155, 158
   offset: 0, 0
   index: -1
 sheepN
   rotate: false
-  xy: 1, 1
+  xy: 4672, 1612
   size: 640, 128
   orig: 640, 128
+  offset: 0, 0
+  index: -1
+playerNWseeds
+  rotate: false
+  xy: 5314, 1608
+  size: 1144, 126
+  orig: 1144, 126
+  offset: 0, 0
+  index: -1
+playerSWseeds
+  rotate: false
+  xy: 6460, 1555
+  size: 1100, 146
+  orig: 1100, 146
+  offset: 0, 0
+  index: -1
+playerSidle
+  rotate: false
+  xy: 7647, 1871
+  size: 400, 127
+  orig: 400, 127
+  offset: 0, 0
+  index: -1
+playerNidle
+  rotate: false
+  xy: 4263, 1536
+  size: 396, 123
+  orig: 396, 123
   offset: 0, 0
   index: -1
 sheepS
   rotate: false
-  xy: 643, 131
+  xy: 4661, 1482
   size: 640, 128
   orig: 640, 128
   offset: 0, 0
   index: -1
+playerWseeds
+  rotate: false
+  xy: 5303, 1480
+  size: 1100, 126
+  orig: 1100, 126
+  offset: 0, 0
+  index: -1
 sheepW
   rotate: false
-  xy: 1285, 261
+  xy: 6405, 1425
   size: 640, 128
   orig: 640, 128
+  offset: 0, 0
+  index: -1
+playerSWidle
+  rotate: false
+  xy: 7047, 1425
+  size: 388, 128
+  orig: 388, 128
+  offset: 0, 0
+  index: -1
+playerNWidle
+  rotate: false
+  xy: 7650, 1744
+  size: 388, 125
+  orig: 388, 125
+  offset: 0, 0
+  index: -1
+playerNEidle
+  rotate: false
+  xy: 7650, 1617
+  size: 380, 125
+  orig: 380, 125
+  offset: 0, 0
+  index: -1
+playerSEidle
+  rotate: false
+  xy: 4263, 1406
+  size: 380, 128
+  orig: 380, 128
+  offset: 0, 0
+  index: -1
+playerWidle
+  rotate: false
+  xy: 4645, 1354
+  size: 368, 126
+  orig: 368, 126
+  offset: 0, 0
+  index: -1
+playerEidle
+  rotate: false
+  xy: 4178, 1277
+  size: 364, 127
+  orig: 364, 127
   offset: 0, 0
   index: -1

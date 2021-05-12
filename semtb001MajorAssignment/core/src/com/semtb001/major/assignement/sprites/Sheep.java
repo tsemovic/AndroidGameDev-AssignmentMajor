@@ -205,7 +205,6 @@ public class Sheep extends Sprite {
     // Method to update the enemy
     public void update(float delta) {
 
-        System.out.println(currentSpeed);
         if(hit) {
             timeCount += delta;
             if (timeCount >= 1) {

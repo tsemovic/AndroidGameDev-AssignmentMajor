@@ -28,14 +28,14 @@ public class Player extends Sprite {
 
     // Player directions
     public enum Direction {N, NE, E, SE, S, SW, W, NW}
-
     public Direction currentDirection;
     public Direction previousDirection;
 
     // Player states
     public enum State {IDLE, WALK, HOE, SEEDS, BUCKET}
-
     public State currentState;
+    public State previousState;
+
 
     // State timers for the player states
     private float stateTimer;
@@ -130,6 +130,7 @@ public class Player extends Sprite {
         previousDirection = null;
 
         currentState = State.IDLE;
+        previousState = null;
 
         animationTimeCounter = 0;
         animationTimeDuration = 0.07f * 13;
@@ -295,6 +296,104 @@ public class Player extends Sprite {
         NWhoe = new Animation(hoeAnimationSpeed, tempFrames);
         tempFrames.clear();
 
+        // Player seeds Animations
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNseeds"), i * 107, 0, 107, 125));
+        }
+        Nseeds = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNEseeds"), i * 128, 0, 128, 126));
+        }
+        NEseeds = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerEseeds"), i * 147, 0, 147, 127));
+        }
+        Eseeds = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSEseeds"), i * 128, 0, 128, 146));
+        }
+        SEseeds = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSseeds"), i * 105, 0, 105, 158));
+        }
+        Sseeds = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSWseeds"), i * 100, 0, 100, 146));
+        }
+        SWseeds = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerWseeds"), i * 100, 0, 100, 126));
+        }
+        Wseeds = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNWseeds"), i * 104, 0, 104, 126));
+        }
+        NWseeds = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        // Player seeds Animations
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNbucket"), i * 119, 0, 119, 125));
+        }
+        Nbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNEbucket"), i * 146, 0, 146, 126));
+        }
+        NEbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerEbucket"), i * 150, 0, 150, 142));
+        }
+        Ebucket = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSEbucket"), i * 141, 0, 141, 157));
+        }
+        SEbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSbucket"), i * 109, 0, 109, 160));
+        }
+        Sbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSWbucket"), i * 116, 0, 116, 154));
+        }
+        SWbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerWbucket"), i * 121, 0, 121, 154));
+        }
+        Wbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
+        for (int i = 0; i <= 10; i++) {
+            tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNWbucket"), i * 116, 0, 116, 126));
+        }
+        NWbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        tempFrames.clear();
+
 
         // Set the starting animation frame to N
         currentFrame = (TextureRegion) Nidle.getKeyFrame(idleAnimationSpeed, false);
@@ -349,6 +448,7 @@ public class Player extends Sprite {
 
         // Store the current state as 'previous state'
         previousDirection = currentDirection;
+        previousState = currentState;
 
         // Texture region that will be returned
         TextureRegion returnRegion = null;
@@ -506,7 +606,7 @@ public class Player extends Sprite {
         }
 
         // If the current state and previous state aren't the same: reset the state timer
-        if (currentDirection != previousDirection) {
+        if (currentDirection != previousDirection && currentState != previousState) {
             stateTimer = 0;
             // If the current state and previous state are the same: increase the state timer
         } else {
@@ -580,7 +680,6 @@ public class Player extends Sprite {
         float x = 0;
         float y = 0;
 
-
         switch (currentState){
             case HOE:
                 switch (currentDirection){
@@ -634,6 +733,7 @@ public class Player extends Sprite {
                         break;
                 }
                 break;
+
             case WALK:
                 switch (currentDirection){
                     case N:
@@ -683,6 +783,112 @@ public class Player extends Sprite {
                         y = box2dBody.getPosition().y - 0.5f;
                         height = baseSize * 2.25f;
                         width = baseSize * 2.25f;
+                        break;
+                }
+                break;
+
+            case SEEDS:
+                switch (currentDirection){
+                    case N:
+                        x = box2dBody.getPosition().x - 1.75f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.4f;
+                        break;
+                    case NE:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.75f;
+                        break;
+                    case E:
+                        x = box2dBody.getPosition().x - 1.675f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 3.25f;
+                        break;
+                    case SE:
+                        x = box2dBody.getPosition().x - 1.42f;
+                        y = box2dBody.getPosition().y - 0.565f;
+                        height = baseSize * 2.27f;
+                        width = baseSize * 2.67f;
+                        break;
+                    case S:
+                        x = box2dBody.getPosition().x - 1.72f;
+                        y = box2dBody.getPosition().y - 0.785f;
+                        height = baseSize * 2.5f;
+                        width = baseSize * 2.35f;
+                        break;
+                    case SW:
+                        x = box2dBody.getPosition().x - 1.55f;
+                        y = box2dBody.getPosition().y - 0.55f;
+                        height = baseSize * 2.25f;
+                        width = baseSize * 2.075f;
+                        break;
+                    case W:
+                        x = box2dBody.getPosition().x - 1.95f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.475f;
+                        break;
+                    case NW:
+                        x = box2dBody.getPosition().x - 1.575f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.175f;
+                        break;
+                }
+                break;
+
+            case BUCKET:
+                switch (currentDirection){
+                    case N:
+                        x = box2dBody.getPosition().x - 1.8f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.7f;
+                        break;
+                    case NE:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.75f;
+                        break;
+                    case E:
+                        x = box2dBody.getPosition().x - 1.675f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 3.25f;
+                        break;
+                    case SE:
+                        x = box2dBody.getPosition().x - 1.42f;
+                        y = box2dBody.getPosition().y - 0.565f;
+                        height = baseSize * 2.27f;
+                        width = baseSize * 2.67f;
+                        break;
+                    case S:
+                        x = box2dBody.getPosition().x - 1.72f;
+                        y = box2dBody.getPosition().y - 0.785f;
+                        height = baseSize * 2.5f;
+                        width = baseSize * 2.35f;
+                        break;
+                    case SW:
+                        x = box2dBody.getPosition().x - 1.55f;
+                        y = box2dBody.getPosition().y - 0.55f;
+                        height = baseSize * 2.25f;
+                        width = baseSize * 2.075f;
+                        break;
+                    case W:
+                        x = box2dBody.getPosition().x - 1.95f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.475f;
+                        break;
+                    case NW:
+                        x = box2dBody.getPosition().x - 1.575f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.175f;
                         break;
                 }
                 break;

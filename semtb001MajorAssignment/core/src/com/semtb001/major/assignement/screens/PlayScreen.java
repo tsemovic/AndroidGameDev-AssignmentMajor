@@ -218,8 +218,8 @@ public class PlayScreen implements Screen {
 
                 for (Item i : itemSet) {
                     if (i.getActive()) {
-                        player.setCurrentState(Player.State.HOE);
                         if (i.getName() == "hoe") {
+                            player.setCurrentState(Player.State.HOE);
                             if (getCell("grass").getTile() == tileSet.getTile(132)) {
                                 getCell("grass").setTile(tileSet.getTile(403));
                             }
@@ -227,6 +227,8 @@ public class PlayScreen implements Screen {
                         }
 
                         if (i.getName() == "seeds") {
+                            player.setCurrentState(Player.State.SEEDS);
+
                             if (timeCount >= 1) {
 
                                 if (getCell("grass").getTile() == tileSet.getTile(403)) {
@@ -254,9 +256,13 @@ public class PlayScreen implements Screen {
                                 }
 
                             }
+                            timeCount = 0;
+
                         }
 
                         if (i.getName() == "bucket") {
+                            player.setCurrentState(Player.State.BUCKET);
+
                             //prevents picking up water and placing it instantly;
                             if (timeCount >= 1) {
                                 if (i.getHealth() == 100) {
@@ -279,12 +285,13 @@ public class PlayScreen implements Screen {
                                 }
                             }
                             ((Bucket) i).updateWater();
+                            timeCount = 0;
+
                         }
                     }
                 }
             }
         }
-        timeCount = 0;
 
 
 

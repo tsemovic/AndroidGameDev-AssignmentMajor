@@ -227,28 +227,33 @@ public class PlayScreen implements Screen {
                         }
 
                         if (i.getName() == "seeds") {
-                            if (getCell("grass").getTile() == tileSet.getTile(403)) {
+                            if (timeCount >= 1) {
 
-                                //stop multiple objects being created for the same bounds
-                                boolean create = true;
-                                for (Wheat w : box2dWorldCreator.wheat) {
-                                    if ((w.rectangle.x == (int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
-                                            (w.rectangle.y == (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
+                                if (getCell("grass").getTile() == tileSet.getTile(403)) {
 
-                                        create = false;
+                                    //stop multiple objects being created for the same bounds
+                                    boolean create = true;
+                                    for (Wheat w : box2dWorldCreator.wheat) {
+                                        if ((w.rectangle.x == (int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
+                                                (w.rectangle.y == (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
+
+                                            create = false;
+                                        }
                                     }
+
+
+                                    //create seeds if there are seeds in inventory and seeds are already not growing
+                                    if (create) {
+                                        if (player.getInventory().getItem("seeds") > 0) {
+                                            box2dWorldCreator.createWheat();
+                                            player.getInventory().removeItem("seeds", 1);
+                                        }
+                                    }
+                                } else {
+                                    //System.out.println("NOT DIRT");
                                 }
 
-
-                                //create seeds if there are seeds in inventory and seeds are already not growing
-                                if (create) {
-                                    if (player.getInventory().getItem("seeds") > 0) {
-                                        box2dWorldCreator.createWheat();
-                                        player.getInventory().removeItem("seeds", 1);
-                                    }
-                                }
-                            } else {
-                                //System.out.println("NOT DIRT");
+                                timeCount = 0;
                             }
                         }
 

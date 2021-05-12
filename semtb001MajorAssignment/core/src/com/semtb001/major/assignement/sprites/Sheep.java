@@ -28,6 +28,8 @@ public class Sheep extends Sprite {
     public Body box2dBody;
     private float stateTimer;
 
+    private boolean hasBeenDestroyed;
+
     // Sheep animations
     private Animation N;
     private Animation NE;
@@ -47,6 +49,8 @@ public class Sheep extends Sprite {
     private Animation hurtW;
     private Animation hurtNW;
 
+    private float sheepAnimationDuration;
+
     public TextureRegion currentFrame;
 
     // Enemy position
@@ -59,7 +63,7 @@ public class Sheep extends Sprite {
     public Sheep.State previousState;
 
     private float angle;
-    public double currentSpeed = 2f;
+    public double currentSpeed = 0f;
 
     private float health;
     private boolean hit;
@@ -78,10 +82,13 @@ public class Sheep extends Sprite {
         hit = false;
         hitTimer = 1;
         timeCount = 0;
+        hasBeenDestroyed = false;
 
         // Setup the sheep current states (starts the game running)
         currentState = Sheep.State.N;
         previousState = null;
+
+        sheepAnimationDuration = 0.4f;
 
         // Define the enemy (Box2D)
         defineEnemy();
@@ -92,61 +99,61 @@ public class Sheep extends Sprite {
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepN"), i * 128, 0, 128, 128));
         }
-        N = new Animation(0.3f, tempFrames);
+        N = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), i * 128, 0, 128, 128));
         }
-        NE = new Animation(0.3f, tempFrames);
+        NE = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), i * 128, 0, 128, 128));
         }
-        E = new Animation(0.3f, tempFrames);
+        E = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), i * 128, 0, 128, 128));
         }
-        SE = new Animation(0.3f, tempFrames);
+        SE = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepS"), i * 128, 0, 128, 128));
         }
-        S = new Animation(0.3f, tempFrames);
+        S = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), i * 128, 0, 128, 128));
         }
-        SW = new Animation(0.3f, tempFrames);
+        SW = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), i * 128, 0, 128, 128));
         }
-        W = new Animation(0.3f, tempFrames);
+        W = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), i * 128, 0, 128, 128));
         }
-        NW = new Animation(0.3f, tempFrames);
+        NW = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
         // Hurt Animations
 
-        hurtN = new Animation(0.3f, new TextureRegion(playScreen.textureAtlas.findRegion("sheepN"), 512, 0, 128, 128));
-        hurtNE = new Animation(0.3f, new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), 512, 0, 128, 128));
-        hurtE = new Animation(0.3f, new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), 512, 0, 128, 128));
-        hurtSE = new Animation(0.3f, new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), 512, 0, 128, 128));
-        hurtS = new Animation(0.3f, new TextureRegion(playScreen.textureAtlas.findRegion("sheepS"), 512, 0, 128, 128));
-        hurtSW = new Animation(0.3f, new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), 512, 0, 128, 128));
-        hurtW = new Animation(0.3f, new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), 512, 0, 128, 128));
-        hurtNW = new Animation(0.3f, new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), 512, 0, 128, 128));
+        hurtN = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepN"), 512, 0, 128, 128));
+        hurtNE = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), 512, 0, 128, 128));
+        hurtE = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), 512, 0, 128, 128));
+        hurtSE = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), 512, 0, 128, 128));
+        hurtS = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepS"), 512, 0, 128, 128));
+        hurtSW = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), 512, 0, 128, 128));
+        hurtW = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), 512, 0, 128, 128));
+        hurtNW = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepW"), 512, 0, 128, 128));
 
         // Set the starting animation frame to N
         currentFrame = (TextureRegion) N.getKeyFrame(0f, false);
@@ -198,6 +205,7 @@ public class Sheep extends Sprite {
     // Method to update the enemy
     public void update(float delta) {
 
+        System.out.println(currentSpeed);
         if(hit) {
             timeCount += delta;
             if (timeCount >= 1) {
@@ -216,9 +224,14 @@ public class Sheep extends Sprite {
         currentFrame = getFramesFromAnimation(delta);
 
         if (health <= 0) {
-            setCategoryFilter(Semtb001MajorAssignment.DESTROYED);
-            box2dBody.setLinearVelocity(0, 0);
-            currentSpeed = 0f;
+
+            if(!hasBeenDestroyed){
+                setCategoryFilter(Semtb001MajorAssignment.DESTROYED);
+                world.destroyBody(box2dBody);
+                hasBeenDestroyed = true;
+            }else{
+
+            }
         } else {
             if (playScreen.getBox2dWorldCreator().wheat.size() > 0) {
                 Wheat target = playScreen.getBox2dWorldCreator().wheat.get(0);
@@ -232,6 +245,7 @@ public class Sheep extends Sprite {
                     yDistance = yDistance * -1;
                 }
                 double distanceToTarget = Math.sqrt((xDistance * xDistance) + (yDistance * yDistance));
+
                 currentSpeed = distanceToTarget * 2;
 
                 Vector2 vector = new Vector2((float) ((float) ((target.rectangle.getX() + 0.5) - box2dBody.getPosition().x) / currentSpeed),
@@ -247,6 +261,7 @@ public class Sheep extends Sprite {
 
             } else {
                 box2dBody.setLinearVelocity(0, 0);
+                currentSpeed = 0;
             }
         }
 
@@ -300,7 +315,6 @@ public class Sheep extends Sprite {
 
         // If the player state is "FAIL" return the fail animation frame
         if (currentState == Sheep.State.N) {
-            N.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) N.getKeyFrame(stateTimer, true);
             if(hit){
                 returnRegion = (TextureRegion) hurtN.getKeyFrame(stateTimer, true);
@@ -308,7 +322,6 @@ public class Sheep extends Sprite {
                 returnRegion = (TextureRegion) N.getKeyFrame(0.2f, true);
             }
         } else if (currentState == Sheep.State.NE) {
-            NE.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) NE.getKeyFrame(stateTimer, true);
 
             if(hit){
@@ -317,7 +330,6 @@ public class Sheep extends Sprite {
                 returnRegion = (TextureRegion) NE.getKeyFrame(0.2f, true);
             }
         } else if (currentState == Sheep.State.E) {
-            E.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) E.getKeyFrame(stateTimer, true);
 
             if(hit){
@@ -326,7 +338,6 @@ public class Sheep extends Sprite {
                 returnRegion = (TextureRegion) E.getKeyFrame(0.2f, true);
             }
         } else if (currentState == Sheep.State.SE) {
-            SE.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) SE.getKeyFrame(stateTimer, true);
 
             if(hit){
@@ -335,7 +346,6 @@ public class Sheep extends Sprite {
                 returnRegion = (TextureRegion) SE.getKeyFrame(0.2f, true);
             }
         } else if (currentState == Sheep.State.S) {
-            S.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) S.getKeyFrame(stateTimer, true);
 
             if(hit){
@@ -344,7 +354,6 @@ public class Sheep extends Sprite {
                 returnRegion = (TextureRegion) S.getKeyFrame(0.2f, true);
             }
         } else if (currentState == Sheep.State.SW) {
-            SW.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) SW.getKeyFrame(stateTimer, true);
 
             if(hit){
@@ -353,7 +362,6 @@ public class Sheep extends Sprite {
                 returnRegion = (TextureRegion) SW.getKeyFrame(0.2f, true);
             }
         } else if (currentState == Sheep.State.W) {
-            W.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) W.getKeyFrame(stateTimer, true);
 
             if(hit){
@@ -362,7 +370,6 @@ public class Sheep extends Sprite {
                 returnRegion = (TextureRegion) W.getKeyFrame(0.2f, true);
             }
         } else if (currentState == Sheep.State.NW) {
-            NW.setFrameDuration(getDurationFromSpeed(currentSpeed));
             returnRegion = (TextureRegion) NW.getKeyFrame(stateTimer, true);
 
             if(hit){
@@ -402,7 +409,7 @@ public class Sheep extends Sprite {
     }
 
     public void sheepHit() {
-        health = health - 30;
+        health = health - 40;
         hit = true;
         System.out.println("HIT");
     }

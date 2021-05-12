@@ -523,7 +523,9 @@ public class PlayScreen implements Screen {
 
         /* This code draws the player in different positions due to the Box2D body shape changing
         size depending on the state of the player*/
-        game.batch.draw(player.currentFrame, (float) (player.box2dBody.getPosition().x - 0.75f), (float) (player.box2dBody.getPosition().y - 0.25f), 1.5f, 1.5f);
+        HashMap<String, Float> dimensions = player.getFrameDimensions();
+        game.batch.draw(player.currentFrame, dimensions.get("x"), dimensions.get("y"), dimensions.get("width"), dimensions.get("height"));
+
 
     }
 

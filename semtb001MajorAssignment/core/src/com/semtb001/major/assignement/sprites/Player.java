@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.utils.Array;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.scenes.Inventory;
 import com.semtb001.major.assignement.screens.PlayScreen;
+
+import java.util.HashMap;
 
 
 // Class for the player
@@ -540,7 +543,6 @@ public class Player extends Sprite {
         switch (currentState) {
             case HOE:
                 if (animationTimeDuration > 0) {
-                    System.out.println(animationTimeDuration);
                     animationTimeDuration -= delta;
                 } else {
                     currentState = State.IDLE;
@@ -550,7 +552,6 @@ public class Player extends Sprite {
 
             case BUCKET:
                 if (animationTimeDuration > 0) {
-                    System.out.println(animationTimeDuration);
                     animationTimeDuration -= delta;
                 } else {
                     currentState = State.IDLE;
@@ -560,7 +561,6 @@ public class Player extends Sprite {
 
             case SEEDS:
                 if (animationTimeDuration > 0) {
-                    System.out.println(animationTimeDuration);
                     animationTimeDuration -= delta;
                 } else {
                     currentState = State.IDLE;
@@ -568,6 +568,191 @@ public class Player extends Sprite {
                 }
                 animationTimeCounter = 0;
         }
+    }
+
+    public HashMap<String, Float> getFrameDimensions(){
+        HashMap<String, Float> dimensions = new HashMap<>();
+
+        float baseSize = 1;
+
+        float height = 0;
+        float width = 0;
+        float x = 0;
+        float y = 0;
+
+
+        switch (currentState){
+            case HOE:
+                switch (currentDirection){
+                    case N:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.5f;
+                        width = baseSize * 2.5f;
+                        break;
+                    case NE:
+                        x = box2dBody.getPosition().x - 2f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.5f;
+                        width = baseSize * 3.5f;
+                        break;
+                    case E:
+                        x = box2dBody.getPosition().x - 2.75f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.75f;
+                        width = baseSize * 4.5f;
+                        break;
+                    case SE:
+                        x = box2dBody.getPosition().x - 3.25f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.75f;
+                        width = baseSize * 4.5f;
+                        break;
+                    case S:
+                        x = box2dBody.getPosition().x - 3.25f;
+                        y = box2dBody.getPosition().y - 0.75f;
+                        height = baseSize * 3f;
+                        width = baseSize * 3.5f;
+                        break;
+                    case SW:
+                        x = box2dBody.getPosition().x - 3f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.75f;
+                        width = baseSize * 3.75f;
+                        break;
+                    case W:
+                        x = box2dBody.getPosition().x - 2.75f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2.75f;
+                        width = baseSize * 4f;
+                        break;
+                    case NW:
+                        x = box2dBody.getPosition().x - 2f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.5f;
+                        width = baseSize * 3.5f;
+                        break;
+                }
+                break;
+            case WALK:
+                switch (currentDirection){
+                    case N:
+                        x = box2dBody.getPosition().x - 1.75f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.25f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case NE:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.25f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case E:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case SE:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.375f;
+                        height = baseSize * 2.15f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case S:
+                        x = box2dBody.getPosition().x - 1.7f;
+                        y = box2dBody.getPosition().y - 0.375f;
+                        height = baseSize * 2.15f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case SW:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case W:
+                        x = box2dBody.getPosition().x - 1.6f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.75f;
+                        break;
+                    case NW:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.5f;
+                        height = baseSize * 2.25f;
+                        width = baseSize * 2.25f;
+                        break;
+                }
+                break;
+            case IDLE:
+                switch (currentDirection){
+                    case N:
+                        x = box2dBody.getPosition().x - 1.75f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case NE:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2f;
+                        break;
+                    case E:
+                        x = box2dBody.getPosition().x - 1.75f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2f;
+                        break;
+                    case SE:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2f;
+                        break;
+                    case S:
+                        x = box2dBody.getPosition().x - 1.75f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case SW:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2f;
+                        break;
+                    case W:
+                        x = box2dBody.getPosition().x - 1.75f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2.25f;
+                        break;
+                    case NW:
+                        x = box2dBody.getPosition().x - 1.5f;
+                        y = box2dBody.getPosition().y - 0.25f;
+                        height = baseSize * 2f;
+                        width = baseSize * 2f;
+                        break;
+                }
+                break;
+            default:
+                x = box2dBody.getPosition().x - 1.5f;
+                y = box2dBody.getPosition().y - 0.25f;
+                height = 2f;
+                width = 2f;
+        }
+
+        dimensions.put("x", x);
+        dimensions.put("y", y);
+        dimensions.put("height", height);
+        dimensions.put("width", width);
+
+
+        return dimensions;
+
     }
 
     public void setAngle(double a) {

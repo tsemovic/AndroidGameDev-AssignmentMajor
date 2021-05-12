@@ -35,7 +35,7 @@ public class LevelBrief implements Disposable {
         stage = new Stage(viewport, spriteBatch);
 
         // Set the countdown timer to 3 seconds and set timeToPlay to false
-        countdown = 3;
+        countdown = 0;
         timeToPlay = false;
 
         // Setup table that is displayed in the LevelBrief

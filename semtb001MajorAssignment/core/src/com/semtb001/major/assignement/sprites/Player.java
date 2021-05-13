@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -28,11 +27,13 @@ public class Player extends Sprite {
 
     // Player directions
     public enum Direction {N, NE, E, SE, S, SW, W, NW}
+
     public Direction currentDirection;
     public Direction previousDirection;
 
     // Player states
     public enum State {IDLE, WALK, HOE, SEEDS, BUCKET}
+
     public State currentState;
     public State previousState;
 
@@ -458,151 +459,160 @@ public class Player extends Sprite {
             currentState = State.IDLE;
         }
 
-        // If the player state is "FAIL" return the fail animation frame
-        if (currentDirection == Direction.N) {
-            switch (currentState) {
-                case IDLE:
-                    returnRegion = (TextureRegion) Nidle.getKeyFrame(stateTimer, true);
-                    break;
-                case WALK:
-                    returnRegion = (TextureRegion) Nwalk.getKeyFrame(stateTimer, true);
-                    break;
-                case HOE:
-                    returnRegion = (TextureRegion) Nhoe.getKeyFrame(stateTimer, true);
-                    break;
-                case SEEDS:
-                    returnRegion = (TextureRegion) Nseeds.getKeyFrame(stateTimer, true);
-                    break;
-                case BUCKET:
-                    returnRegion = (TextureRegion) Nbucket.getKeyFrame(stateTimer, true);
-                    break;
-            }
-        } else if (currentDirection == Direction.NE) {
-            switch (currentState) {
-                case IDLE:
-                    returnRegion = (TextureRegion) NEidle.getKeyFrame(stateTimer, true);
-                    break;
-                case WALK:
-                    returnRegion = (TextureRegion) NEwalk.getKeyFrame(stateTimer, true);
-                    break;
-                case HOE:
-                    returnRegion = (TextureRegion) NEhoe.getKeyFrame(stateTimer, true);
-                    break;
-                case SEEDS:
-                    returnRegion = (TextureRegion) NEseeds.getKeyFrame(stateTimer, true);
-                    break;
-                case BUCKET:
-                    returnRegion = (TextureRegion) NEbucket.getKeyFrame(stateTimer, true);
-                    break;
-            }
-        } else if (currentDirection == Direction.E) {
-            switch (currentState) {
-                case IDLE:
-                    returnRegion = (TextureRegion) Eidle.getKeyFrame(stateTimer, true);
-                    break;
-                case WALK:
-                    returnRegion = (TextureRegion) Ewalk.getKeyFrame(stateTimer, true);
-                    break;
-                case HOE:
-                    returnRegion = (TextureRegion) Ehoe.getKeyFrame(stateTimer, true);
-                    break;
-                case SEEDS:
-                    returnRegion = (TextureRegion) Eseeds.getKeyFrame(stateTimer, true);
-                    break;
-                case BUCKET:
-                    returnRegion = (TextureRegion) Ebucket.getKeyFrame(stateTimer, true);
-                    break;
-            }
-        } else if (currentDirection == Direction.SE) {
-            switch (currentState) {
-                case IDLE:
-                    returnRegion = (TextureRegion) SEidle.getKeyFrame(stateTimer, true);
-                    break;
-                case WALK:
-                    returnRegion = (TextureRegion) SEwalk.getKeyFrame(stateTimer, true);
-                    break;
-                case HOE:
-                    returnRegion = (TextureRegion) SEhoe.getKeyFrame(stateTimer, true);
-                    break;
-                case SEEDS:
-                    returnRegion = (TextureRegion) SEseeds.getKeyFrame(stateTimer, true);
-                    break;
-                case BUCKET:
-                    returnRegion = (TextureRegion) SEbucket.getKeyFrame(stateTimer, true);
-                    break;
-            }
-        } else if (currentDirection == Direction.S) {
-            switch (currentState) {
-                case IDLE:
-                    returnRegion = (TextureRegion) Sidle.getKeyFrame(stateTimer, true);
-                    break;
-                case WALK:
-                    returnRegion = (TextureRegion) Swalk.getKeyFrame(stateTimer, true);
-                    break;
-                case HOE:
-                    returnRegion = (TextureRegion) Shoe.getKeyFrame(stateTimer, true);
-                    break;
-                case SEEDS:
-                    returnRegion = (TextureRegion) Sseeds.getKeyFrame(stateTimer, true);
-                    break;
-                case BUCKET:
-                    returnRegion = (TextureRegion) Sbucket.getKeyFrame(stateTimer, true);
-                    break;
-            }
-        } else if (currentDirection == Direction.SW) {
-            switch (currentState) {
-                case IDLE:
-                    returnRegion = (TextureRegion) SWidle.getKeyFrame(stateTimer, true);
-                    break;
-                case WALK:
-                    returnRegion = (TextureRegion) SWwalk.getKeyFrame(stateTimer, true);
-                    break;
-                case HOE:
-                    returnRegion = (TextureRegion) SWhoe.getKeyFrame(stateTimer, true);
-                    break;
-                case SEEDS:
-                    returnRegion = (TextureRegion) SWseeds.getKeyFrame(stateTimer, true);
-                    break;
-                case BUCKET:
-                    returnRegion = (TextureRegion) SWbucket.getKeyFrame(stateTimer, true);
-                    break;
-            }
-        } else if (currentDirection == Direction.W) {
-            switch (currentState) {
-                case IDLE:
-                    returnRegion = (TextureRegion) Widle.getKeyFrame(stateTimer, true);
-                    break;
-                case WALK:
-                    returnRegion = (TextureRegion) Wwalk.getKeyFrame(stateTimer, true);
-                    break;
-                case HOE:
-                    returnRegion = (TextureRegion) Whoe.getKeyFrame(stateTimer, true);
-                    break;
-                case SEEDS:
-                    returnRegion = (TextureRegion) Wseeds.getKeyFrame(stateTimer, true);
-                    break;
-                case BUCKET:
-                    returnRegion = (TextureRegion) Wbucket.getKeyFrame(stateTimer, true);
-                    break;
-            }
-        } else if (currentDirection == Direction.NW) {
-            switch (currentState) {
-                case IDLE:
-                    returnRegion = (TextureRegion) NWidle.getKeyFrame(stateTimer, true);
-                    break;
-                case WALK:
-                    returnRegion = (TextureRegion) NWwalk.getKeyFrame(stateTimer, true);
-                    break;
-                case HOE:
-                    returnRegion = (TextureRegion) NWhoe.getKeyFrame(stateTimer, true);
-                    break;
-                case SEEDS:
-                    returnRegion = (TextureRegion) NWseeds.getKeyFrame(stateTimer, true);
-                    break;
-                case BUCKET:
-                    returnRegion = (TextureRegion) NWbucket.getKeyFrame(stateTimer, true);
-                    break;
-            }
+        // Embedded switch statement to set the return region for each direction within each state
+        switch(currentDirection){
+            case N:
+                switch (currentState) {
+                    case IDLE:
+                        returnRegion = (TextureRegion) Nidle.getKeyFrame(stateTimer, true);
+                        break;
+                    case WALK:
+                        returnRegion = (TextureRegion) Nwalk.getKeyFrame(stateTimer, true);
+                        break;
+                    case HOE:
+                        returnRegion = (TextureRegion) Nhoe.getKeyFrame(stateTimer, true);
+                        break;
+                    case SEEDS:
+                        returnRegion = (TextureRegion) Nseeds.getKeyFrame(stateTimer, true);
+                        break;
+                    case BUCKET:
+                        returnRegion = (TextureRegion) Nbucket.getKeyFrame(stateTimer, true);
+                        break;
+                }
+                break;
+            case NE:
+                switch (currentState) {
+                    case IDLE:
+                        returnRegion = (TextureRegion) NEidle.getKeyFrame(stateTimer, true);
+                        break;
+                    case WALK:
+                        returnRegion = (TextureRegion) NEwalk.getKeyFrame(stateTimer, true);
+                        break;
+                    case HOE:
+                        returnRegion = (TextureRegion) NEhoe.getKeyFrame(stateTimer, true);
+                        break;
+                    case SEEDS:
+                        returnRegion = (TextureRegion) NEseeds.getKeyFrame(stateTimer, true);
+                        break;
+                    case BUCKET:
+                        returnRegion = (TextureRegion) NEbucket.getKeyFrame(stateTimer, true);
+                        break;
+                }
+                break;
+            case E:
+                switch (currentState) {
+                    case IDLE:
+                        returnRegion = (TextureRegion) Eidle.getKeyFrame(stateTimer, true);
+                        break;
+                    case WALK:
+                        returnRegion = (TextureRegion) Ewalk.getKeyFrame(stateTimer, true);
+                        break;
+                    case HOE:
+                        returnRegion = (TextureRegion) Ehoe.getKeyFrame(stateTimer, true);
+                        break;
+                    case SEEDS:
+                        returnRegion = (TextureRegion) Eseeds.getKeyFrame(stateTimer, true);
+                        break;
+                    case BUCKET:
+                        returnRegion = (TextureRegion) Ebucket.getKeyFrame(stateTimer, true);
+                        break;
+                }
+                break;
+            case SE:
+                switch (currentState) {
+                    case IDLE:
+                        returnRegion = (TextureRegion) SEidle.getKeyFrame(stateTimer, true);
+                        break;
+                    case WALK:
+                        returnRegion = (TextureRegion) SEwalk.getKeyFrame(stateTimer, true);
+                        break;
+                    case HOE:
+                        returnRegion = (TextureRegion) SEhoe.getKeyFrame(stateTimer, true);
+                        break;
+                    case SEEDS:
+                        returnRegion = (TextureRegion) SEseeds.getKeyFrame(stateTimer, true);
+                        break;
+                    case BUCKET:
+                        returnRegion = (TextureRegion) SEbucket.getKeyFrame(stateTimer, true);
+                        break;
+                }
+                break;
+            case S:
+                switch (currentState) {
+                    case IDLE:
+                        returnRegion = (TextureRegion) Sidle.getKeyFrame(stateTimer, true);
+                        break;
+                    case WALK:
+                        returnRegion = (TextureRegion) Swalk.getKeyFrame(stateTimer, true);
+                        break;
+                    case HOE:
+                        returnRegion = (TextureRegion) Shoe.getKeyFrame(stateTimer, true);
+                        break;
+                    case SEEDS:
+                        returnRegion = (TextureRegion) Sseeds.getKeyFrame(stateTimer, true);
+                        break;
+                    case BUCKET:
+                        returnRegion = (TextureRegion) Sbucket.getKeyFrame(stateTimer, true);
+                        break;
+                }
+                break;
+            case SW:
+                switch (currentState) {
+                    case IDLE:
+                        returnRegion = (TextureRegion) SWidle.getKeyFrame(stateTimer, true);
+                        break;
+                    case WALK:
+                        returnRegion = (TextureRegion) SWwalk.getKeyFrame(stateTimer, true);
+                        break;
+                    case HOE:
+                        returnRegion = (TextureRegion) SWhoe.getKeyFrame(stateTimer, true);
+                        break;
+                    case SEEDS:
+                        returnRegion = (TextureRegion) SWseeds.getKeyFrame(stateTimer, true);
+                        break;
+                    case BUCKET:
+                        returnRegion = (TextureRegion) SWbucket.getKeyFrame(stateTimer, true);
+                        break;
+                }
+                break;
+            case W:
+                switch (currentState) {
+                    case IDLE:
+                        returnRegion = (TextureRegion) Widle.getKeyFrame(stateTimer, true);
+                        break;
+                    case WALK:
+                        returnRegion = (TextureRegion) Wwalk.getKeyFrame(stateTimer, true);
+                        break;
+                    case HOE:
+                        returnRegion = (TextureRegion) Whoe.getKeyFrame(stateTimer, true);
+                        break;
+                    case SEEDS:
+                        returnRegion = (TextureRegion) Wseeds.getKeyFrame(stateTimer, true);
+                        break;
+                    case BUCKET:
+                        returnRegion = (TextureRegion) Wbucket.getKeyFrame(stateTimer, true);
+                        break;
+                }
+                break;
+            case NW:
+                switch (currentState) {
+                    case IDLE:
+                        returnRegion = (TextureRegion) NWidle.getKeyFrame(stateTimer, true);
+                        break;
+                    case WALK:
+                        returnRegion = (TextureRegion) NWwalk.getKeyFrame(stateTimer, true);
+                        break;
+                    case HOE:
+                        returnRegion = (TextureRegion) NWhoe.getKeyFrame(stateTimer, true);
+                        break;
+                    case SEEDS:
+                        returnRegion = (TextureRegion) NWseeds.getKeyFrame(stateTimer, true);
+                        break;
+                    case BUCKET:
+                        returnRegion = (TextureRegion) NWbucket.getKeyFrame(stateTimer, true);
+                        break;
+                }
+                break;
         }
 
         // If the current state and previous state aren't the same: reset the state timer
@@ -617,52 +627,48 @@ public class Player extends Sprite {
         return returnRegion;
     }
 
-    private float getDurationFromSpeed(double currentSpeed) {
+    /* Method to update the animations when items are being used.
 
-        float returnSpeed = 0;
-
-        if (currentSpeed > 0.9) {
-            returnSpeed = 0.06f;
-        } else if (currentSpeed > 0.06) {
-            returnSpeed = 0.1f;
-        } else if (currentSpeed > 0.3) {
-            returnSpeed = 0.125f;
-        } else {
-            returnSpeed = 0.15f;
-        }
-
-        return returnSpeed;
-    }
-
+    Essentially starts a countdown when the player state is either 'HOE', 'SEEDS', or 'BUCKET',
+    when the timer reaches 0, the player state is set back to 'IDLE' */
     public void updateItemAnimation(float delta) {
-        if (currentState == State.HOE) {
 
-
-        }
-
+        // Switch statement if the current state is 'HOE', 'SEEDS', or 'BUCKET'
         switch (currentState) {
             case HOE:
+
+                // If the animation still has time left, decrease it by delta
                 if (animationTimeDuration > 0) {
                     animationTimeDuration -= delta;
                 } else {
+
+                    // If the animation has no time left, set the current state to 'IDLE' and reset the animation timer
                     currentState = State.IDLE;
                     animationTimeDuration = hoeAnimationSpeed * 13;
                 }
                 animationTimeCounter = 0;
 
             case BUCKET:
+
+                // If the animation still has time left, decrease it by delta
                 if (animationTimeDuration > 0) {
                     animationTimeDuration -= delta;
                 } else {
+
+                    // If the animation has no time left, set the current state to 'IDLE' and reset the animation timer
                     currentState = State.IDLE;
                     animationTimeDuration = bucketAnimationSpeed * 18;
                 }
                 animationTimeCounter = 0;
 
             case SEEDS:
+
+                // If the animation still has time left, decrease it by delta
                 if (animationTimeDuration > 0) {
                     animationTimeDuration -= delta;
                 } else {
+
+                    // If the animation has no time left, set the current state to 'IDLE' and reset the animation timer
                     currentState = State.IDLE;
                     animationTimeDuration = seedsAnimationSpeed * 11;
                 }
@@ -670,19 +676,28 @@ public class Player extends Sprite {
         }
     }
 
-    public HashMap<String, Float> getFrameDimensions(){
+    // Method to get the frame size and position to be drawn for the player
+    // (All player images are unfortunately different dimensions so scaling is required for each frame)
+    public HashMap<String, Float> getFrameDimensions() {
+
+        // HashMap to store the x, y, width and height dimensions
         HashMap<String, Float> dimensions = new HashMap<>();
 
+        // Base scale of the images
         float baseSize = 1;
 
+        // Instantiate the with, height, x and y values
         float height = 0;
         float width = 0;
         float x = 0;
         float y = 0;
 
-        switch (currentState){
+        // Embedded switch statements to go though all of the player directions within all of the player states
+        switch (currentState) {
+
+            // If the player state is 'HOE'
             case HOE:
-                switch (currentDirection){
+                switch (currentDirection) {
                     case N:
                         x = box2dBody.getPosition().x - 1.5f;
                         y = box2dBody.getPosition().y - 0.5f;
@@ -734,8 +749,9 @@ public class Player extends Sprite {
                 }
                 break;
 
+            // If the player state is 'SEEDS'
             case SEEDS:
-                switch (currentDirection){
+                switch (currentDirection) {
                     case N:
                         x = box2dBody.getPosition().x - 1.75f;
                         y = box2dBody.getPosition().y - 0.25f;
@@ -787,8 +803,9 @@ public class Player extends Sprite {
                 }
                 break;
 
+            // If the player state is 'BUCKET'
             case BUCKET:
-                switch (currentDirection){
+                switch (currentDirection) {
                     case N:
                         x = box2dBody.getPosition().x - 1.8f;
                         y = box2dBody.getPosition().y - 0.25f;
@@ -839,8 +856,10 @@ public class Player extends Sprite {
                         break;
                 }
                 break;
+
+            // If the player state is 'IDLE'
             case IDLE:
-                switch (currentDirection){
+                switch (currentDirection) {
                     case N:
                         x = box2dBody.getPosition().x - 1.75f;
                         y = box2dBody.getPosition().y - 0.25f;
@@ -892,8 +911,9 @@ public class Player extends Sprite {
                 }
                 break;
 
+            // If the player state is 'WALK'
             case WALK:
-                switch (currentDirection){
+                switch (currentDirection) {
                     case N:
                         x = box2dBody.getPosition().x - 1.75f;
                         y = box2dBody.getPosition().y - 0.5f;
@@ -945,6 +965,7 @@ public class Player extends Sprite {
                 }
                 break;
 
+            // Default (just in case)
             default:
                 x = box2dBody.getPosition().x - 1.5f;
                 y = box2dBody.getPosition().y - 0.25f;
@@ -952,12 +973,13 @@ public class Player extends Sprite {
                 width = 2f;
         }
 
+        // Add the dimensions to the hashMap
         dimensions.put("x", x);
         dimensions.put("y", y);
         dimensions.put("height", height);
         dimensions.put("width", width);
 
-
+        // Return the dimensions hashmap
         return dimensions;
 
     }

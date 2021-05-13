@@ -94,6 +94,10 @@ public class PlayScreen implements Screen {
     private Gui gui;
     public float timeCount;
 
+    public boolean levelPassed;
+    public int wheatHarvested;
+    public int wheatToPassLevel;
+
     public HashMap<Double, Queue<Vector2>> sheepWaves;
 
     public PlayScreen(Semtb001MajorAssignment semtb001MajorAssignment, String currentLevel) {
@@ -104,6 +108,10 @@ public class PlayScreen implements Screen {
         this.currentLevel = currentLevel;
         isGameOverCreated = false;
 
+        levelPassed = false;
+        wheatHarvested = 0;
+        wheatToPassLevel = Integer.parseInt(currentLevel.substring(7, 8)) * 2;
+
         // Setup game camera
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Semtb001MajorAssignment.WORLD_WIDTH, Semtb001MajorAssignment.WORLD_HEIGHT);
@@ -111,8 +119,8 @@ public class PlayScreen implements Screen {
 
         // Load map level, render the map, and create the game world
         mapLoader = new TmxMapLoader();
-        //map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
-        map = mapLoader.load("mapFiles/level1.tmx");
+        map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
+        //map = mapLoader.load("mapFiles/level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001MajorAssignment.MPP);
         world = new World(new Vector2(0, 0), true);
 
@@ -134,14 +142,14 @@ public class PlayScreen implements Screen {
         gameCamera.position.x = player.box2dBody.getPosition().x + 9;
         gameCamera.position.y = 23;
 
+        // Initially, set the level brief to active so that the level brief is displayed at start up
+        levelBriefActive = true;
+
         // Setup the screen overlay objects
         hud = new Hud(game.batch, this);
         gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
         levelBrief = new LevelBrief(game.batch);
-
-        // Initially, set the level brief to active so that the level brief is displayed at start up
-        levelBriefActive = true;
 
         touchPad = new TouchPad();
         gui = new Gui(player);
@@ -158,6 +166,7 @@ public class PlayScreen implements Screen {
 //        music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
 //        music.setLooping(true);
 //        music.play();
+
         int numberOfWaves = 3;
         int totalSheep = box2dWorldCreator.getSheepPositions().size();
         double waveTimeIncrements = hud.getWorldTimer() / numberOfWaves;
@@ -219,15 +228,14 @@ public class PlayScreen implements Screen {
                 for (Item i : itemSet) {
                     if (i.getActive()) {
                         if (i.getName() == "hoe") {
-                            player.setCurrentState(Player.State.HOE);
                             if (getCell("grass").getTile() == tileSet.getTile(132)) {
+                                player.setCurrentState(Player.State.HOE);
                                 getCell("grass").setTile(tileSet.getTile(403));
                             }
                             box2dWorldCreator.harvestWheat();
                         }
 
                         if (i.getName() == "seeds") {
-                            player.setCurrentState(Player.State.SEEDS);
 
                             if (timeCount >= 1) {
 
@@ -247,6 +255,7 @@ public class PlayScreen implements Screen {
                                     //create seeds if there are seeds in inventory and seeds are already not growing
                                     if (create) {
                                         if (player.getInventory().getItem("seeds") > 0) {
+                                            player.setCurrentState(Player.State.SEEDS);
                                             box2dWorldCreator.createWheat();
                                             player.getInventory().removeItem("seeds", 1);
                                         }
@@ -261,10 +270,11 @@ public class PlayScreen implements Screen {
                         }
 
                         if (i.getName() == "bucket") {
-                            player.setCurrentState(Player.State.BUCKET);
 
                             //prevents picking up water and placing it instantly;
                             if (timeCount >= 1) {
+                                player.setCurrentState(Player.State.BUCKET);
+
                                 if (i.getHealth() == 100) {
                                     if (getCell("grass").getTile() == tileSet.getTile(42)) {
                                         getCell("grass").setTile(tileSet.getTile(137));
@@ -377,6 +387,13 @@ public class PlayScreen implements Screen {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
         } else if (hud.getTimeUp()) {
+
+            // If the game over screen has not yet been created, create it
+            if (!isGameOverCreated) {
+                gameOver = new GameOver(game.batch, game, this);
+                inputMultiplexer.addProcessor(gameOver.stage);
+                isGameOverCreated = true;
+            }
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
         }
@@ -404,6 +421,10 @@ public class PlayScreen implements Screen {
             for (Wheat wheat : box2dWorldCreator.wheat) {
                 wheat.update(deltaTime);
                 wheat.updateWater();
+            }
+
+            if(wheatHarvested >= wheatToPassLevel){
+                levelPassed = true;
             }
 
         } else {
@@ -670,6 +691,22 @@ public class PlayScreen implements Screen {
 
     public void setPaused(boolean value) {
         isPaused = value;
+    }
+
+    public int getWheatHarvested(){
+        return wheatHarvested;
+    }
+
+    public void addWheatHarvested(){
+        wheatHarvested ++;
+    }
+
+    public boolean getLevelPassed(){
+        return levelPassed;
+    }
+
+    public int getWheatToPassLevel(){
+        return wheatToPassLevel;
     }
 
 }

@@ -147,7 +147,7 @@
             "selectedLayer": 5,
             "viewCenter": {
                 "x": 8000,
-                "y": 640
+                "y": 642
             }
         },
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/platformPack_tilesheet.tsx": {
@@ -182,6 +182,14 @@
         "C:/Users/tully/Desktop/NES - Super Mario Bros - Tileset.tsx": {
             "scaleInDock": 4,
             "scaleInEditor": 5.5
+        },
+        "level1.tmx": {
+            "scale": 2,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 2133,
+                "y": 2403.75
+            }
         }
     },
     "map.height": 150,
@@ -197,9 +205,9 @@
     ],
     "project": "level.tiled-project",
     "recentFiles": [
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Major Assignment/semtb001MajorAssignment/android/assets/island1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level1.tmx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx",
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Major Assignment/semtb001MajorAssignment/android/assets/island1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/ground.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/tiles_spritesheet.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/background_tilesheet.tsx",

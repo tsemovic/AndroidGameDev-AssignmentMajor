@@ -53,7 +53,7 @@ public class Statistics implements Screen {
         camera.setToOrtho(false, Semtb001MajorAssignment.WORLD_WIDTH, Semtb001MajorAssignment.WORLD_HEIGHT);
 
         // Setup viewport
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM);
+        viewport = Semtb001MajorAssignment.viewport;
         camera.update();
 
         // Setup stage
@@ -90,7 +90,7 @@ public class Statistics implements Screen {
         // Create label to be displayed in the 'level' table
         levelsLabel = new Label("STATISTICS" , Semtb001MajorAssignment.largeFontWhite);
         levelsLabel.setColor(Color.WHITE);
-        descriptionLabel = new Label("LEVEL COMPLETION PERCENTAGE", Semtb001MajorAssignment.tinyFontFontWhite);
+        descriptionLabel = new Label("WHEAT HARVESTED", Semtb001MajorAssignment.tinyFontFontWhite);
         descriptionLabel.setColor(Color.WHITE);
 
         // Create 'back' label to be displayed in the 'back' table
@@ -120,8 +120,8 @@ public class Statistics implements Screen {
         for(int i = 1; i <= Semtb001MajorAssignment.NUMBER_OF_LEVELS; i++){
 
             // Create a new label for the current level in the loop (level completion percentage)
-            Label currentLevel = new Label("LEVEL: " + Integer.toString(i) + " = " +
-                    game.scoresPref.getInteger("LEVEL: " + Integer.toString(i)) + "%", Semtb001MajorAssignment.tinyFontFontWhite);
+            Label currentLevel = new Label("LEVEL: " + i + " = " +
+                    game.scoresPref.getInteger("LEVEL: " + i), Semtb001MajorAssignment.tinyFontFontWhite);
             currentLevel.setColor(Color.WHITE);
 
             // Add the current level label to the main table

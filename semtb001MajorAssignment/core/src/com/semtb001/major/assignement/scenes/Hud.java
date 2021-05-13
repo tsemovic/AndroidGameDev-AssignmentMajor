@@ -20,6 +20,7 @@ public class Hud implements Disposable {
     // HUD stage and viewport objects
     public Stage stage;
     private Viewport viewport;
+    private PlayScreen screen;
 
     // Objects that will be displayed in the HUD
     private Label pause;
@@ -28,25 +29,24 @@ public class Hud implements Disposable {
     private Label time;
     private Label timeCountLabel;
 
-    // Variable for counting the coins that have been collected
-    private Integer wheatCount;
-
     public boolean pausedPressed;
 
     public Integer worldTimer;
     private boolean timeUp; // true when the world timer reaches 0
     private float timeCount;
 
+
+
     public Hud(SpriteBatch spriteBatch, final PlayScreen playScreen) {
 
         // Instantiate the viewport and stage objects
         viewport = Semtb001MajorAssignment.viewport;
+        screen = playScreen;
 
         stage = new Stage(viewport, spriteBatch);
 
-        wheatCount = 0;
         timeCount = 0;
-        worldTimer = 60;
+        worldTimer = 30;
 
         // Setup the table that is displayed in the HUD
         Table hudTable = new Table();
@@ -56,7 +56,7 @@ public class Hud implements Disposable {
         // Setup the labels that will go inside of the table
         pause = new Label("II", Semtb001MajorAssignment.tinyFontFontWhite);
         harvested = new Label("HARVESTED: ", Semtb001MajorAssignment.tinyFontFontWhite);
-        harvestedCountLabel = new Label(Integer.toString(wheatCount), Semtb001MajorAssignment.tinyFontFontWhite);
+        harvestedCountLabel = new Label(Integer.toString(screen.getWheatHarvested()), Semtb001MajorAssignment.tinyFontFontWhite);
 
         time = new Label("TIME: ", Semtb001MajorAssignment.tinyFontFontWhite);
         timeCountLabel = new Label(String.format("%02d", worldTimer), Semtb001MajorAssignment.tinyFontFontWhite);
@@ -135,12 +135,8 @@ public class Hud implements Disposable {
             timeCountLabel.setText(String.format("%02d", worldTimer));
             timeCount = 0;
         }
-        harvestedCountLabel.setText(Integer.toString(wheatCount));
+        harvestedCountLabel.setText(Integer.toString(screen.getWheatHarvested()));
 
-    }
-
-    public void wheatHarvested(){
-        wheatCount ++;
     }
 
     @Override
@@ -156,8 +152,4 @@ public class Hud implements Disposable {
         return worldTimer;
     }
 
-    // Getter for the coin count (number of coins collected by the player)
-    public Integer getWheatCount() {
-        return wheatCount;
-    }
 }

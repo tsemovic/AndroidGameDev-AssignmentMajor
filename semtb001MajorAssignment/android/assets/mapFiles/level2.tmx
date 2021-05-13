@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="150" height="150" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="6">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="150" height="150" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="6">
  <tileset firstgid="1" source="!CL_DEMO_32x32.tsx"/>
  <layer id="1" name="water" width="150" height="150">
   <data encoding="base64" compression="zlib">
@@ -9,6 +9,11 @@
  <layer id="2" name="grass" width="150" height="150">
   <data encoding="base64" compression="zlib">
    eJzt10tKA0EUhtE79DExuhGfoLgRow6MK1FwIO5EQVBXaBXdjWWl0ygRY+I58I8y6cHH7U4EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALBKTtJeix0v9nFYAbmpt7TbYi+hM+bzEE1LB2mP1fbb3+4X9nQsk/K9l29Vbmov7a7abjRtdffL3aJP11Nu6SLtsl1fU3Vb7hazlO+8oZbq3YSu6Jdv1Wl8v6myK+9DSvM0dZa2ER//FbfTtn738fmDyqae4mstraWN25VNXYWmaIzSrtM2086j/x6Nq9X3aZK2E76v+KxuK7e0HtPvuO4mTYp19yl/8+uKWm4r35zDtKNoGnuO6ZZmvedGA7/xv+U2cjv5dvlm4qd1fQ3dJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGbv3SdPYA==
+  </data>
+ </layer>
+ <layer id="8" name="Tile Layer 5" width="150" height="150">
+  <data encoding="base64" compression="zlib">
+   eJztxsENQFAURcHfCapBNagG3brrt30ryUxykjMGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANWU5rSUh441bWkvDx1HOtNVHjru9KS3PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwB9957EIoQ==
   </data>
  </layer>
  <layer id="3" name="seeds" width="150" height="150">

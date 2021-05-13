@@ -150,10 +150,10 @@ public class Paused implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if(playScreen.isPaused) {
+                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     if (exitTextActive) {
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
                     }
-                    exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                 }
             }
         });

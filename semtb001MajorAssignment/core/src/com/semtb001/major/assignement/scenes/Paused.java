@@ -106,6 +106,7 @@ public class Paused implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if(continueTextActive) {
+                    Semtb001MajorAssignment.playMenuClick();
                     playScreen.setPaused(false);
                 }
 
@@ -148,6 +149,7 @@ public class Paused implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if(playScreen.isPaused) {
+                    Semtb001MajorAssignment.playMenuClick();
                     exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     if (exitTextActive) {
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));

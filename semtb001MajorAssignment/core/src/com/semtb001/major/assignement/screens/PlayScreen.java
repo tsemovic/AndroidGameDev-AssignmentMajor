@@ -357,8 +357,6 @@ public class PlayScreen implements Screen {
 
         // Set the input processor
         Gdx.input.setInputProcessor(inputMultiplexer);
-        touchPad.stage.draw();
-        gui.stage.draw();
 
         moveCamera();
 
@@ -375,6 +373,12 @@ public class PlayScreen implements Screen {
         // Draw the heads up display
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+
+        // Draw the touchpad
+        touchPad.stage.draw();
+
+        // Draw the gui
+        gui.stage.draw();
 
         // Draw transparent background when the game is paused or when the game is over
         game.batch.begin();

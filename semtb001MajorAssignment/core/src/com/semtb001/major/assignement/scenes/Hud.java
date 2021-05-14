@@ -115,6 +115,7 @@ public class Hud implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (pausedPressed) {
+                    Semtb001MajorAssignment.playMenuClick();
                     playScreen.setPaused(true);
                 }
                 pausedPressed = false;

@@ -15,7 +15,7 @@ public class Inventory {
         inventory = new HashMap<String, Integer>();
 
         inventory.put("hoe", 1);
-        inventory.put("bucket", 1);
+        inventory.put("wateringCan", 1);
         inventory.put("seeds", 5);
 
     }

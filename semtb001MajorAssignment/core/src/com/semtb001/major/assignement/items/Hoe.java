@@ -3,6 +3,7 @@ package com.semtb001.major.assignement.items;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.tools.Assets;
 
 public class Hoe extends Item{
 
@@ -12,8 +13,8 @@ public class Hoe extends Item{
         active = false;
         pressed = false;
 
-        activeTexture = new Texture("gui/hoeActive.png");
-        inactiveTexture = new Texture("gui/hoeInactive.png");
+        activeTexture = Semtb001MajorAssignment.assetManager.manager.get(Assets.hoeActive);
+        inactiveTexture = Semtb001MajorAssignment.assetManager.manager.get(Assets.hoeInactive);
 
         float iconSize = Semtb001MajorAssignment.viewport.getScreenWidth()/(Semtb001MajorAssignment.PPM/2);
 

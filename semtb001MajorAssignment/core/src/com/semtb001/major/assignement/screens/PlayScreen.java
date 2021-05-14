@@ -18,7 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
-import com.semtb001.major.assignement.items.Bucket;
+import com.semtb001.major.assignement.items.WateringCan;
 import com.semtb001.major.assignement.items.Item;
 import com.semtb001.major.assignement.items.Wheat;
 import com.semtb001.major.assignement.scenes.GameOver;
@@ -273,10 +273,12 @@ public class PlayScreen implements Screen {
 
                             //prevents picking up water and placing it instantly;
                             if (timeCount >= 1) {
+
+                                System.out.println(i.getHealth());
                                 player.setCurrentState(Player.State.BUCKET);
 
                                 if (i.getHealth() == 100) {
-                                    if (getCell("grass").getTile() == tileSet.getTile(42)) {
+                                    if (getCell("grass").getTile() == tileSet.getTile(132)) {
                                         getCell("grass").setTile(tileSet.getTile(137));
                                         i.setHealth(0);
                                     }
@@ -287,14 +289,15 @@ public class PlayScreen implements Screen {
                                             i.setHealth(100);
                                         }
                                     }
+
                                     //pickup water block that has been placed
                                     if (getCell("grass").getTile() == tileSet.getTile(137)) {
-                                        getCell("grass").setTile(tileSet.getTile(42));
+                                        getCell("grass").setTile(tileSet.getTile(132));
                                         i.setHealth(100);
                                     }
                                 }
                             }
-                            ((Bucket) i).updateWater();
+                            ((WateringCan) i).updateWater();
                             timeCount = 0;
 
                         }

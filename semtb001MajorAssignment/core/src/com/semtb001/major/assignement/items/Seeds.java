@@ -3,6 +3,7 @@ package com.semtb001.major.assignement.items;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.tools.Assets;
 
 public class Seeds extends Item{
 
@@ -11,8 +12,9 @@ public class Seeds extends Item{
         health = 100;
         active = false;
         pressed = false;
-        activeTexture = new Texture("gui/seedsActive.png");
-        inactiveTexture = new Texture("gui/seedsInactive.png");
+
+        activeTexture = Semtb001MajorAssignment.assetManager.manager.get(Assets.seedsActive);
+        inactiveTexture = Semtb001MajorAssignment.assetManager.manager.get(Assets.seedsInactive);
 
         float iconSize = Semtb001MajorAssignment.viewport.getScreenWidth()/(Semtb001MajorAssignment.PPM/2);
 

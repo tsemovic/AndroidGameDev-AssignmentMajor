@@ -1,10 +1,7 @@
 package com.semtb001.major.assignement.scenes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -12,11 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
-import com.semtb001.major.assignement.items.Bucket;
+import com.semtb001.major.assignement.items.WateringCan;
 import com.semtb001.major.assignement.items.Hoe;
 import com.semtb001.major.assignement.items.Item;
 import com.semtb001.major.assignement.items.Seeds;
@@ -39,7 +34,7 @@ public class Gui {
     public Map<Item, String> items;
     Hoe hoe;
     Seeds seeds;
-    Bucket bucket;
+    WateringCan wateringCan;
     private HashMap<String, Label> itemLabels;
 
     public Gui(Player gamePlayer) {
@@ -60,10 +55,10 @@ public class Gui {
         //init items
         hoe = new Hoe();
         seeds = new Seeds();
-        bucket = new Bucket();
+        wateringCan = new WateringCan();
 
         //add items to item array
-        items.put(bucket, bucket.getName());
+        items.put(wateringCan, wateringCan.getName());
         items.put(seeds, seeds.getName());
         items.put(hoe, hoe.getName());
 
@@ -112,7 +107,7 @@ public class Gui {
     }
 
     public void update(float dt, Player p) {
-        Bucket b = null;
+        WateringCan b = null;
 
         Set<Item> itemSet = items.keySet();
         for (Item i : itemSet) {
@@ -124,8 +119,8 @@ public class Gui {
                 texture = i.getInactiveTexture();
             }
 
-            if (i.getName() == "bucket") {
-                b = (Bucket) i;
+            if (i.getName() == "wateringCan") {
+                b = (WateringCan) i;
                 b.updateWater();
             }
             i.getImage().setDrawable(new TextureRegionDrawable(new TextureRegion(texture)));

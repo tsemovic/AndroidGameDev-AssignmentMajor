@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.items.Wheat;
 import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.sprites.Player;
 import com.semtb001.major.assignement.sprites.Sheep;
 
 import java.util.ArrayList;
@@ -114,6 +115,7 @@ public class Box2DWorldCreator {
                     w.dispose();
                     screen.addWheatHarvested();
                     screen.getCell("seeds").setTile(tileSet.getTile(231));
+                    screen.getPlayer().setCurrentState(Player.State.HOE);
                 }
             }
             wheat.remove(removeWheat);

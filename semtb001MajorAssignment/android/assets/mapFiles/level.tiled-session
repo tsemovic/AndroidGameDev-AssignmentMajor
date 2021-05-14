@@ -190,6 +190,14 @@
                 "x": 2133,
                 "y": 2403.75
             }
+        },
+        "level2.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2119,
+                "y": 2467.75
+            }
         }
     },
     "map.height": 150,
@@ -205,6 +213,7 @@
     ],
     "project": "level.tiled-project",
     "recentFiles": [
+        "level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Major Assignment/semtb001MajorAssignment/android/assets/island1.tmx",
@@ -215,8 +224,7 @@
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/buildings_trees_tilesheet.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/spritesheet_retina.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/buildings_spritesheet.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/level1.tmx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/buildings_spritesheet.tsx"
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap/level1.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.spacing": 0,

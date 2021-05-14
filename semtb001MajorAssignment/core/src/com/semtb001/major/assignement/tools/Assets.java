@@ -14,6 +14,12 @@ public class Assets {
     public static final AssetDescriptor<Sound> menuClick =
             new AssetDescriptor<Sound>("audio/sounds/menuClick.ogg", Sound.class);
 
+    public static final AssetDescriptor<Music> music =
+            new AssetDescriptor<Music>("audio/music/music.ogg", Music.class);
+
+    public static final AssetDescriptor<Sound> hoeSound =
+            new AssetDescriptor<Sound>("audio/sounds/hoe.ogg", Sound.class);
+
     // Provide image assets and their path
     public static final AssetDescriptor<Texture> backgroundTint =
             new AssetDescriptor<Texture>("gui/backgroundTint.png", Texture.class);
@@ -52,8 +58,12 @@ public class Assets {
 
     public void load() {
 
-        // Load menu click sound
+        // Load audio
         manager.load(menuClick);
+        manager.load(music);
+
+        manager.load(hoeSound);
+
 
         // Load texture images
         manager.load(backgroundTint);

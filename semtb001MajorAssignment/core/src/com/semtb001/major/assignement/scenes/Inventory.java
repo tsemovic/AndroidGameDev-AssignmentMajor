@@ -58,16 +58,4 @@ public class Inventory {
         }
     }
 
-    public void print(){
-        Iterator itemIterator = inventory.entrySet().iterator();
-
-        while (itemIterator.hasNext()) {
-            Map.Entry mapElement = (Map.Entry)itemIterator.next();
-
-            System.out.println(mapElement.getKey());
-            System.out.println(mapElement.getValue());
-
-        }
-    }
-
 }

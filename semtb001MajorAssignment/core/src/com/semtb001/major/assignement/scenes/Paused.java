@@ -105,12 +105,11 @@ public class Paused implements Disposable {
             resume the game and set the font colour to white */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if(continueTextActive) {
+                continueText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+                if(continueTextActive && playScreen.isPaused()) {
                     Semtb001MajorAssignment.playMenuClick();
                     playScreen.setPaused(false);
                 }
-
-                continueText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
 
@@ -149,9 +148,9 @@ public class Paused implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if(playScreen.isPaused) {
-                    Semtb001MajorAssignment.playMenuClick();
                     exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
-                    if (exitTextActive) {
+                    if (exitTextActive && playScreen.isPaused()) {
+                        Semtb001MajorAssignment.playMenuClick();
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
                     }
                 }

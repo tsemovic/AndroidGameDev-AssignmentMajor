@@ -18,8 +18,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
-import com.semtb001.major.assignement.items.WateringCan;
 import com.semtb001.major.assignement.items.Item;
+import com.semtb001.major.assignement.items.WateringCan;
 import com.semtb001.major.assignement.items.Wheat;
 import com.semtb001.major.assignement.scenes.GameOver;
 import com.semtb001.major.assignement.scenes.Gui;
@@ -77,7 +77,7 @@ public class PlayScreen implements Screen {
     private GameOver gameOver;
     private LevelBrief levelBrief;
 
-    // Player, Enemy and Coin objects
+    // Player and sheep objects
     public Player player;
     private Queue<Sheep> sheep;
 
@@ -162,11 +162,6 @@ public class PlayScreen implements Screen {
         inputMultiplexer.addProcessor(touchPad.stage);
         inputMultiplexer.addProcessor(gui.stage);
 
-//        // Setup game music loop
-//        music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
-//        music.setLooping(true);
-//        music.play();
-
         int numberOfWaves = 3;
         int totalSheep = box2dWorldCreator.getSheepPositions().size();
         double waveTimeIncrements = hud.getWorldTimer() / numberOfWaves;
@@ -188,6 +183,14 @@ public class PlayScreen implements Screen {
 
             sheepWaves.put(i * waveTimeIncrements, waveQueue);
 
+        }
+
+        // Set the hoe to be the active item in the player's hotbar
+        Set<Item> itemSet = gui.items.keySet();
+        for (Item i : itemSet) {
+            if (i.getName() == "hoe") {
+                i.setActive(true);
+            }
         }
 
         System.out.println(sheepWaves.toString());
@@ -229,7 +232,9 @@ public class PlayScreen implements Screen {
                     if (i.getActive()) {
                         if (i.getName() == "hoe") {
                             if (getCell("grass").getTile() == tileSet.getTile(132)) {
+                                player.resetStateTimer();
                                 player.setCurrentState(Player.State.HOE);
+                                player.playItemSound();
                                 getCell("grass").setTile(tileSet.getTile(403));
                             }
                             box2dWorldCreator.harvestWheat();
@@ -238,6 +243,7 @@ public class PlayScreen implements Screen {
                         if (i.getName() == "seeds") {
 
                             if (timeCount >= 1) {
+                                player.resetStateTimer();
 
                                 if (getCell("grass").getTile() == tileSet.getTile(403)) {
 
@@ -273,6 +279,7 @@ public class PlayScreen implements Screen {
 
                             //prevents picking up water and placing it instantly;
                             if (timeCount >= 1) {
+                                player.resetStateTimer();
 
                                 System.out.println(i.getHealth());
                                 player.setCurrentState(Player.State.BUCKET);
@@ -305,7 +312,6 @@ public class PlayScreen implements Screen {
                 }
             }
         }
-
 
 
     }
@@ -430,7 +436,7 @@ public class PlayScreen implements Screen {
                 wheat.updateWater();
             }
 
-            if(wheatHarvested >= wheatToPassLevel){
+            if (wheatHarvested >= wheatToPassLevel) {
                 levelPassed = true;
             }
 
@@ -560,7 +566,6 @@ public class PlayScreen implements Screen {
         size depending on the state of the player*/
         HashMap<String, Float> dimensions = player.getFrameDimensions();
         game.batch.draw(player.currentFrame, dimensions.get("x"), dimensions.get("y"), dimensions.get("width"), dimensions.get("height"));
-
 
     }
 
@@ -700,20 +705,23 @@ public class PlayScreen implements Screen {
         isPaused = value;
     }
 
-    public int getWheatHarvested(){
+    public int getWheatHarvested() {
         return wheatHarvested;
     }
 
-    public void addWheatHarvested(){
-        wheatHarvested ++;
+    public void addWheatHarvested() {
+        wheatHarvested++;
     }
 
-    public boolean getLevelPassed(){
+    public boolean getLevelPassed() {
         return levelPassed;
     }
 
-    public int getWheatToPassLevel(){
+    public int getWheatToPassLevel() {
         return wheatToPassLevel;
     }
 
+    public boolean isPaused() {
+        return isPaused;
+    }
 }

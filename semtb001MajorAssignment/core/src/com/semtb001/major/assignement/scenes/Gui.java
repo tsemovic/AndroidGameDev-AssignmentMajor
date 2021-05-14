@@ -68,11 +68,12 @@ public class Gui {
 
         for (final Item item : itemSet) {
             if(item.getName() == "seeds"){
-                System.out.println(player.getInventory().getItem(item.getName()));
+                //System.out.println(player.getInventory().getItem(item.getName()));
                 Label itemLabel = new Label(Integer.toString(player.getInventory().getItem(item.getName())), Semtb001MajorAssignment.tinyFontFontWhite);
                 hotbarTable.add(itemLabel);
                 itemLabels.put(item.getName(), itemLabel);
             }else{
+                //Label itemLabel = new Label(Integer.toString(player.getInventory().getItem(item.getName())), Semtb001MajorAssignment.tinyFontFontWhite);
                 hotbarTable.add();
             }
         }

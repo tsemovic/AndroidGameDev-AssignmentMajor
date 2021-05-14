@@ -157,10 +157,9 @@ public class GameOver implements Disposable {
             colour back to white */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (subHeaderTextActive) {
+                if (subHeaderTextActive && screen.isGameOverCreated) {
                     playScreen.dispose();
                     dispose();
-
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, getNextLevel()));
                 }
                 subHeaderText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
@@ -200,14 +199,12 @@ public class GameOver implements Disposable {
             return to the main menu and dispose the playScreen and set the font colour back to white */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (exitTextActive) {
+                if (exitTextActive && screen.isGameOverCreated) {
                     playScreen.dispose();
                     dispose();
 
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));
-
                 }
-                exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
 

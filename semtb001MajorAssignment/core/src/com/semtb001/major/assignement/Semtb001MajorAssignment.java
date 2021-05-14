@@ -3,6 +3,7 @@ package com.semtb001.major.assignement;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -84,7 +85,7 @@ public class Semtb001MajorAssignment extends Game {
 		/* This code is from the Gdx-freetype repository in the libgdx github wiki
 		(https://github.com/libgdx/libgdx/wiki/Gdx-freetype). It is used to load in
 		 true type format fonts so they can be used in labels, buttons etc.*/
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/poxel.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/KBTheFlowerFarm.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
 		// Setup large font style
@@ -138,6 +139,11 @@ public class Semtb001MajorAssignment extends Game {
 
 		// Set the screen to the main menu on startup
 		setScreen(new MainMenu(this));
+
+		// Setup game music loop
+		Music music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
+		music.setLooping(true);
+		music.play();
 	}
 
 	// Method to play the 'menu click' sound (used when buttons are pressed in any of the menu's)

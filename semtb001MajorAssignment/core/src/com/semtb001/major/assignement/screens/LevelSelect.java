@@ -149,7 +149,6 @@ public class LevelSelect implements Screen {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         Semtb001MajorAssignment.playMenuClick();
-
                         // If the level is touched: play the game on that level
                         ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, currentLevel.getText().toString()));
                     }

@@ -1,8 +1,10 @@
 package com.semtb001.major.assignement.sprites;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.utils.Array;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.scenes.Inventory;
 import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.tools.Assets;
 
 import java.util.HashMap;
 
@@ -91,6 +94,9 @@ public class Player extends Sprite {
     private Animation Wbucket;
     private Animation NWbucket;
 
+    // Player item sounds
+    private Sound hoeSound;
+
     float animationTimeCounter;
     float animationTimeDuration;
 
@@ -123,7 +129,7 @@ public class Player extends Sprite {
         this.world = world;
         this.playScreen = playScreen;
 
-        // Set the state timers to 0
+        // Set the state timer to 0
         stateTimer = 0;
 
         // Setup the player current states (starts the game running)
@@ -395,9 +401,11 @@ public class Player extends Sprite {
         NWbucket = new Animation(seedsAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-
         // Set the starting animation frame to N
         currentFrame = (TextureRegion) Nidle.getKeyFrame(idleAnimationSpeed, false);
+
+        hoeSound = Semtb001MajorAssignment.assetManager.manager.get(Assets.hoeSound);
+
 
 
     }
@@ -437,7 +445,7 @@ public class Player extends Sprite {
     // Method called to update the player (sounds, animation frame, and states)
     public void update(float delta) {
 
-        updateItemAnimation(delta);
+        //updateItemAnimation(delta);
 
         // Set the current frame of the player depending on the player state (eg. running, jumping, etc.)
         currentFrame = getFramesFromAnimation(delta);
@@ -470,13 +478,22 @@ public class Player extends Sprite {
                         returnRegion = (TextureRegion) Nwalk.getKeyFrame(stateTimer, true);
                         break;
                     case HOE:
-                        returnRegion = (TextureRegion) Nhoe.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Nhoe.getKeyFrame(stateTimer, false);
+                        if(Nhoe.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case SEEDS:
-                        returnRegion = (TextureRegion) Nseeds.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Nseeds.getKeyFrame(stateTimer, false);
+                        if(Nseeds.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case BUCKET:
-                        returnRegion = (TextureRegion) Nbucket.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Nbucket.getKeyFrame(stateTimer, false);
+                        if(Nbucket.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                 }
                 break;
@@ -489,13 +506,22 @@ public class Player extends Sprite {
                         returnRegion = (TextureRegion) NEwalk.getKeyFrame(stateTimer, true);
                         break;
                     case HOE:
-                        returnRegion = (TextureRegion) NEhoe.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) NEhoe.getKeyFrame(stateTimer, false);
+                        if(NEhoe.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case SEEDS:
-                        returnRegion = (TextureRegion) NEseeds.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) NEseeds.getKeyFrame(stateTimer, false);
+                        if(NEseeds.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case BUCKET:
-                        returnRegion = (TextureRegion) NEbucket.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) NEbucket.getKeyFrame(stateTimer, false);
+                        if(NEbucket.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                 }
                 break;
@@ -508,13 +534,22 @@ public class Player extends Sprite {
                         returnRegion = (TextureRegion) Ewalk.getKeyFrame(stateTimer, true);
                         break;
                     case HOE:
-                        returnRegion = (TextureRegion) Ehoe.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Ehoe.getKeyFrame(stateTimer, false);
+                        if(Ehoe.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case SEEDS:
-                        returnRegion = (TextureRegion) Eseeds.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Eseeds.getKeyFrame(stateTimer, false);
+                        if(Nseeds.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case BUCKET:
-                        returnRegion = (TextureRegion) Ebucket.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Ebucket.getKeyFrame(stateTimer, false);
+                        if(Nbucket.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                 }
                 break;
@@ -527,13 +562,22 @@ public class Player extends Sprite {
                         returnRegion = (TextureRegion) SEwalk.getKeyFrame(stateTimer, true);
                         break;
                     case HOE:
-                        returnRegion = (TextureRegion) SEhoe.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) SEhoe.getKeyFrame(stateTimer, false);
+                        if(SEhoe.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case SEEDS:
-                        returnRegion = (TextureRegion) SEseeds.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) SEseeds.getKeyFrame(stateTimer, false);
+                        if(SEseeds.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case BUCKET:
-                        returnRegion = (TextureRegion) SEbucket.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) SEbucket.getKeyFrame(stateTimer, false);
+                        if(SEbucket.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                 }
                 break;
@@ -546,13 +590,22 @@ public class Player extends Sprite {
                         returnRegion = (TextureRegion) Swalk.getKeyFrame(stateTimer, true);
                         break;
                     case HOE:
-                        returnRegion = (TextureRegion) Shoe.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Shoe.getKeyFrame(stateTimer, false);
+                        if(Shoe.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case SEEDS:
-                        returnRegion = (TextureRegion) Sseeds.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Sseeds.getKeyFrame(stateTimer, false);
+                        if(Sseeds.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case BUCKET:
-                        returnRegion = (TextureRegion) Sbucket.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Sbucket.getKeyFrame(stateTimer, false);
+                        if(Sbucket.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                 }
                 break;
@@ -565,13 +618,22 @@ public class Player extends Sprite {
                         returnRegion = (TextureRegion) SWwalk.getKeyFrame(stateTimer, true);
                         break;
                     case HOE:
-                        returnRegion = (TextureRegion) SWhoe.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) SWhoe.getKeyFrame(stateTimer, false);
+                        if(SWhoe.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case SEEDS:
-                        returnRegion = (TextureRegion) SWseeds.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) SWseeds.getKeyFrame(stateTimer, false);
+                        if(SWseeds.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case BUCKET:
-                        returnRegion = (TextureRegion) SWbucket.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) SWbucket.getKeyFrame(stateTimer, false);
+                        if(SWbucket.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                 }
                 break;
@@ -584,13 +646,22 @@ public class Player extends Sprite {
                         returnRegion = (TextureRegion) Wwalk.getKeyFrame(stateTimer, true);
                         break;
                     case HOE:
-                        returnRegion = (TextureRegion) Whoe.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Whoe.getKeyFrame(stateTimer, false);
+                        if(Whoe.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case SEEDS:
-                        returnRegion = (TextureRegion) Wseeds.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Wseeds.getKeyFrame(stateTimer, false);
+                        if(Wseeds.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case BUCKET:
-                        returnRegion = (TextureRegion) Wbucket.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) Wbucket.getKeyFrame(stateTimer, false);
+                        if(Wbucket.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                 }
                 break;
@@ -603,20 +674,29 @@ public class Player extends Sprite {
                         returnRegion = (TextureRegion) NWwalk.getKeyFrame(stateTimer, true);
                         break;
                     case HOE:
-                        returnRegion = (TextureRegion) NWhoe.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) NWhoe.getKeyFrame(stateTimer, false);
+                        if(NWhoe.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case SEEDS:
-                        returnRegion = (TextureRegion) NWseeds.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) NWseeds.getKeyFrame(stateTimer, false);
+                        if(NWseeds.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                     case BUCKET:
-                        returnRegion = (TextureRegion) NWbucket.getKeyFrame(stateTimer, true);
+                        returnRegion = (TextureRegion) NWbucket.getKeyFrame(stateTimer, false);
+                        if(NWbucket.isAnimationFinished(stateTimer)){
+                            currentState = State.IDLE;
+                        }
                         break;
                 }
                 break;
         }
 
         // If the current state and previous state aren't the same: reset the state timer
-        if (currentDirection != previousDirection && currentState != previousState) {
+        if (currentDirection != previousDirection) {
             stateTimer = 0;
             // If the current state and previous state are the same: increase the state timer
         } else {
@@ -627,53 +707,8 @@ public class Player extends Sprite {
         return returnRegion;
     }
 
-    /* Method to update the animations when items are being used.
-
-    Essentially starts a countdown when the player state is either 'HOE', 'SEEDS', or 'BUCKET',
-    when the timer reaches 0, the player state is set back to 'IDLE' */
-    public void updateItemAnimation(float delta) {
-
-        // Switch statement if the current state is 'HOE', 'SEEDS', or 'BUCKET'
-        switch (currentState) {
-            case HOE:
-
-                // If the animation still has time left, decrease it by delta
-                if (animationTimeDuration > 0) {
-                    animationTimeDuration -= delta;
-                } else {
-
-                    // If the animation has no time left, set the current state to 'IDLE' and reset the animation timer
-                    currentState = State.IDLE;
-                    animationTimeDuration = hoeAnimationSpeed * 13;
-                }
-                animationTimeCounter = 0;
-
-            case BUCKET:
-
-                // If the animation still has time left, decrease it by delta
-                if (animationTimeDuration > 0) {
-                    animationTimeDuration -= delta;
-                } else {
-
-                    // If the animation has no time left, set the current state to 'IDLE' and reset the animation timer
-                    currentState = State.IDLE;
-                    animationTimeDuration = bucketAnimationSpeed * 18;
-                }
-                animationTimeCounter = 0;
-
-            case SEEDS:
-
-                // If the animation still has time left, decrease it by delta
-                if (animationTimeDuration > 0) {
-                    animationTimeDuration -= delta;
-                } else {
-
-                    // If the animation has no time left, set the current state to 'IDLE' and reset the animation timer
-                    currentState = State.IDLE;
-                    animationTimeDuration = seedsAnimationSpeed * 11;
-                }
-                animationTimeCounter = 0;
-        }
+    public void resetStateTimer(){
+        stateTimer = 0;
     }
 
     // Method to get the frame size and position to be drawn for the player
@@ -982,6 +1017,23 @@ public class Player extends Sprite {
         // Return the dimensions hashmap
         return dimensions;
 
+    }
+
+
+
+    public void playItemSound() {
+
+        switch (currentState) {
+            case HOE:
+                hoeSound.play();
+                break;
+            case BUCKET:
+
+                break;
+            case SEEDS:
+
+                break;
+        }
     }
 
     public void setAngle(double a) {

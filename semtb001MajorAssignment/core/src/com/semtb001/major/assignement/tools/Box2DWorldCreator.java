@@ -115,7 +115,10 @@ public class Box2DWorldCreator {
                     w.dispose();
                     screen.addWheatHarvested();
                     screen.getCell("seeds").setTile(tileSet.getTile(231));
+
                     screen.getPlayer().setCurrentState(Player.State.HOE);
+                    screen.getPlayer().resetStateTimer();
+
                 }
             }
             wheat.remove(removeWheat);

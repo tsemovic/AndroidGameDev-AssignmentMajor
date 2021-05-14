@@ -11,8 +11,8 @@ public class Seeds extends Item{
         health = 100;
         active = false;
         pressed = false;
-        activeTexture = new Texture("seedsActive.png");
-        inactiveTexture = new Texture("seedsInactive.png");
+        activeTexture = new Texture("gui/seedsActive.png");
+        inactiveTexture = new Texture("gui/seedsInactive.png");
 
         float iconSize = Semtb001MajorAssignment.viewport.getScreenWidth()/(Semtb001MajorAssignment.PPM/2);
 

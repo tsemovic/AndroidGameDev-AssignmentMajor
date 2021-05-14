@@ -12,8 +12,8 @@ public class Hoe extends Item{
         active = false;
         pressed = false;
 
-        activeTexture = new Texture("hoeActive.png");
-        inactiveTexture = new Texture("hoeInactive.png");
+        activeTexture = new Texture("gui/hoeActive.png");
+        inactiveTexture = new Texture("gui/hoeInactive.png");
 
         float iconSize = Semtb001MajorAssignment.viewport.getScreenWidth()/(Semtb001MajorAssignment.PPM/2);
 

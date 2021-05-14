@@ -24,7 +24,6 @@ public class Paused implements Disposable {
     // Paused stage, viewport and PlayScren objects
     public Stage stage;
     private Viewport viewport;
-    private PlayScreen playScreen;
 
     // Objects that will be displayed in the paused overlay
     private Label pausedText;
@@ -42,8 +41,7 @@ public class Paused implements Disposable {
     public Paused(SpriteBatch spriteBatch, final Semtb001MajorAssignment game,
                   final PlayScreen playScreen) {
 
-        // Instantiate the paused spritebatch, viewport, stage, and PlayScreen
-        this.playScreen = playScreen;
+        // Instantiate the paused spritebatch, viewport, and stage
         batch = spriteBatch;
         viewport = Semtb001MajorAssignment.viewport;
         stage = new Stage(viewport, batch);

@@ -12,8 +12,8 @@ public class Bucket extends Item{
         active = false;
         pressed = false;
 
-        activeTexture = new Texture("bucketActive.png");
-        inactiveTexture = new Texture("bucketInactive.png");
+        activeTexture = new Texture("gui/bucketActive.png");
+        inactiveTexture = new Texture("gui/bucketInactive.png");
 
         float iconSize = Semtb001MajorAssignment.viewport.getScreenWidth()/(Semtb001MajorAssignment.PPM/2);
 
@@ -28,11 +28,11 @@ public class Bucket extends Item{
 
     public void updateWater(){
         if(health == 100){
-            activeTexture = new Texture("waterBucketActive.png");
-            inactiveTexture = new Texture("waterBucketInactive.png");
+            activeTexture = new Texture("gui/waterBucketActive.png");
+            inactiveTexture = new Texture("gui/waterBucketInactive.png");
         }else{
-            activeTexture = new Texture("bucketActive.png");
-            inactiveTexture = new Texture("bucketInactive.png");
+            activeTexture = new Texture("gui/bucketActive.png");
+            inactiveTexture = new Texture("gui/bucketInactive.png");
         }
     }
 

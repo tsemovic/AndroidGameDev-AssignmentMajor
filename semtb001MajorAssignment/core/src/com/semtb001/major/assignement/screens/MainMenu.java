@@ -30,12 +30,14 @@ public class MainMenu implements Screen {
     // Objects that will be displayed in the Main Menu
     private Label title;
     private Label play;
-    private Label highscores;
+    private Label statistics;
+    private Label help;
     private Label exit;
 
     // Variables to determine if the labels are being touched
     private boolean playActive;
-    private boolean highscoresActive;
+    private boolean statisticsActive;
+    private boolean helpActive;
     private boolean exitActive;
 
     // Main Menu Background sprite object
@@ -74,17 +76,20 @@ public class MainMenu implements Screen {
         // Create labels to be displayed in the table
         title = new Label("ISLAND FARMER", Semtb001MajorAssignment.mediumFontFontWhite);
         play = new Label("PLAY", Semtb001MajorAssignment.smallFontFontWhite);
-        highscores = new Label("STATISTICS", Semtb001MajorAssignment.smallFontFontWhite);
+        statistics = new Label("STATISTICS", Semtb001MajorAssignment.smallFontFontWhite);
+        help = new Label("HELP", Semtb001MajorAssignment.smallFontFontWhite);
         exit = new Label("EXIT", Semtb001MajorAssignment.smallFontFontWhite);
 
         // Add the labels to the table
-        mainTable.add(title).pad(Semtb001MajorAssignment.PPM / 2);
+        mainTable.add(title).pad(Semtb001MajorAssignment.PPM / 4);
         mainTable.row();
-        mainTable.add(play).pad(Semtb001MajorAssignment.PPM / 4);
+        mainTable.add(play);
         mainTable.row();
-        mainTable.add(highscores).pad(Semtb001MajorAssignment.PPM / 4);
+        mainTable.add(statistics);
         mainTable.row();
-        mainTable.add(exit).pad(Semtb001MajorAssignment.PPM / 4);
+        mainTable.add(help);
+        mainTable.row();
+        mainTable.add(exit);
 
         // Add the table to the stage
         stage.addActor(mainTable);
@@ -135,14 +140,14 @@ public class MainMenu implements Screen {
             }
         });
 
-        // Highscores label input listener
-        highscores.addListener(new InputListener() {
+        // Statistics label input listener
+        statistics.addListener(new InputListener() {
 
             // If the label is 'touched down' change the font colour to grey
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                highscores.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
-                highscoresActive = true;
+                statistics.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+                statisticsActive = true;
                 return true;
             }
 
@@ -152,15 +157,15 @@ public class MainMenu implements Screen {
 
                 /* If the user touch is dragged and still on the label
                 (change to grey font colour and active highscoresActive) */
-                if (x > 0 && x < highscores.getWidth() && y > 0 && y < highscores.getHeight()) {
-                    highscores.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
-                    highscoresActive = true;
+                if (x > 0 && x < statistics.getWidth() && y > 0 && y < statistics.getHeight()) {
+                    statistics.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+                    statisticsActive = true;
                 } else {
 
                     /* If the user touch is dragged and not over the label
                     (de-activate highscoresActive and set the font colour to white) */
-                    highscores.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
-                    highscoresActive = false;
+                    statistics.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+                    statisticsActive = false;
                 }
             }
 
@@ -168,11 +173,52 @@ public class MainMenu implements Screen {
             set the screen to the Statistics menu and set the font colour back to white */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (highscoresActive) {
+                if (statisticsActive) {
                     Semtb001MajorAssignment.playMenuClick();
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new Statistics(game));
                 }
-                highscores.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+                statistics.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+            }
+        });
+
+        // Help label input listener
+        help.addListener(new InputListener() {
+
+            // If the label is 'touched down' change the font colour to grey
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                help.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+                helpActive = true;
+                return true;
+            }
+
+            //If the user touches down on the label and drags
+            @Override
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+
+                /* If the user touch is dragged and still on the label
+                (change to grey font colour and active highscoresActive) */
+                if (x > 0 && x < help.getWidth() && y > 0 && y < help.getHeight()) {
+                    statistics.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
+                    helpActive = true;
+                } else {
+
+                    /* If the user touch is dragged and not over the label
+                    (de-activate highscoresActive and set the font colour to white) */
+                    help.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
+                    helpActive = false;
+                }
+            }
+
+            /* If the user 'touches up' (lets go of the touch) and playActive is active:
+            set the screen to the Statistics menu and set the font colour back to white */
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (helpActive) {
+                    Semtb001MajorAssignment.playMenuClick();
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new Help(game));
+                }
+                help.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
             }
         });
 

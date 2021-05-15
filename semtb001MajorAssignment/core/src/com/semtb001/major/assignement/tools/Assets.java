@@ -17,8 +17,26 @@ public class Assets {
     public static final AssetDescriptor<Music> music =
             new AssetDescriptor<Music>("audio/music/music.ogg", Music.class);
 
-    public static final AssetDescriptor<Sound> hoeSound =
+    public static final AssetDescriptor<Sound> hoe =
             new AssetDescriptor<Sound>("audio/sounds/hoe.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> seeds =
+            new AssetDescriptor<Sound>("audio/sounds/seeds.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> waterIn =
+            new AssetDescriptor<Sound>("audio/sounds/waterIn.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> waterOut =
+            new AssetDescriptor<Sound>("audio/sounds/waterOut.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> walkFast =
+            new AssetDescriptor<Sound>("audio/sounds/walkFast.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> walkMedium =
+            new AssetDescriptor<Sound>("audio/sounds/walkMedium.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> walkSlow =
+            new AssetDescriptor<Sound>("audio/sounds/walkSlow.ogg", Sound.class);
 
     // Provide image assets and their path
     public static final AssetDescriptor<Texture> backgroundTint =
@@ -62,7 +80,13 @@ public class Assets {
         manager.load(menuClick);
         manager.load(music);
 
-        manager.load(hoeSound);
+        manager.load(hoe);
+        manager.load(seeds);
+        manager.load(waterIn);
+        manager.load(waterOut);
+        manager.load(walkFast);
+        manager.load(walkMedium);
+        manager.load(walkSlow);
 
 
         // Load texture images

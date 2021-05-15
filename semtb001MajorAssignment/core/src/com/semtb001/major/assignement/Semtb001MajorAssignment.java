@@ -55,6 +55,8 @@ public class Semtb001MajorAssignment extends Game {
 	public static BitmapFont mediumFont;
 	public static BitmapFont smallFont;
 	public static BitmapFont tinyFont;
+	public static BitmapFont miniFont;
+
 
 	// Label styles objects (used for all labels in the application)
 	public static Label.LabelStyle largeFontWhite;
@@ -65,6 +67,8 @@ public class Semtb001MajorAssignment extends Game {
 	public static Label.LabelStyle smallFontFontGrey;
 	public static Label.LabelStyle tinyFontFontWhite;
 	public static Label.LabelStyle tinyFontFontGrey;
+	public static Label.LabelStyle miniFontFontWhite;
+
 
 	@Override
 	public void create () {
@@ -89,7 +93,7 @@ public class Semtb001MajorAssignment extends Game {
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
 		// Setup large font style
-		parameter.size = (int) (Semtb001MajorAssignment.PPM * 4);
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 3);
 		largeFont = generator.generateFont(parameter);
 
 		// Setup medium font style
@@ -97,12 +101,16 @@ public class Semtb001MajorAssignment extends Game {
 		mediumFont = generator.generateFont(parameter);
 
 		// Setup small font style
-		parameter.size = (int) (Semtb001MajorAssignment.PPM * 2);
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 1.8);
 		smallFont = generator.generateFont(parameter);
 
 		// Setup tiny font style
-		parameter.size = (int) (Semtb001MajorAssignment.PPM * 1.5);
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 1.3);
 		tinyFont = generator.generateFont(parameter);
+
+		// Setup mini font style
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 0.9);
+		miniFont = generator.generateFont(parameter);
 
 		// Dispose the .ttf font generator as all fonts have now been created
 		generator.dispose();
@@ -122,6 +130,9 @@ public class Semtb001MajorAssignment extends Game {
 		// Setup tiny font style in white and grey
 		tinyFontFontWhite = new Label.LabelStyle(Semtb001MajorAssignment.tinyFont, Color.WHITE);
 		tinyFontFontGrey = new Label.LabelStyle(Semtb001MajorAssignment.tinyFont, Color.GRAY);
+
+		// Setup mini font style in white
+		miniFontFontWhite = new Label.LabelStyle(Semtb001MajorAssignment.miniFont, Color.WHITE);
 
 		// Setup the saved data for the scores and levels
 		scoresPref = Gdx.app.getPreferences("scores");
@@ -143,7 +154,7 @@ public class Semtb001MajorAssignment extends Game {
 		// Setup game music loop
 		Music music = Semtb001MajorAssignment.assetManager.manager.get(Assets.music);
 		music.setLooping(true);
-		music.play();
+		//music.play();
 	}
 
 	// Method to play the 'menu click' sound (used when buttons are pressed in any of the menu's)

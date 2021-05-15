@@ -118,6 +118,8 @@ public class Box2DWorldCreator {
 
                     screen.getPlayer().setCurrentState(Player.State.HOE);
                     screen.getPlayer().resetStateTimer();
+                    screen.getPlayer().playItemSound();
+
 
                 }
             }

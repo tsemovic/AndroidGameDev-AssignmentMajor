@@ -149,7 +149,7 @@ public class PlayScreen implements Screen {
         hud = new Hud(game.batch, this);
         gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
-        levelBrief = new LevelBrief(game.batch);
+        levelBrief = new LevelBrief(game.batch, this);
 
         touchPad = new TouchPad();
         gui = new Gui(player);
@@ -222,7 +222,7 @@ public class PlayScreen implements Screen {
             itemPressed = 1;
         } else {
             player.box2dBody.setLinearVelocity(0, 0);
-            player.currentSpeed = 0;
+            player.currentSpeed = Player.Speed.STOP;
         }
 
         if (Gdx.input.isTouched()) {
@@ -243,6 +243,7 @@ public class PlayScreen implements Screen {
                         if (i.getName() == "seeds") {
 
                             if (timeCount >= 1) {
+
                                 player.resetStateTimer();
 
                                 if (getCell("grass").getTile() == tileSet.getTile(403)) {
@@ -262,6 +263,7 @@ public class PlayScreen implements Screen {
                                     if (create) {
                                         if (player.getInventory().getItem("seeds") > 0) {
                                             player.setCurrentState(Player.State.SEEDS);
+                                            player.playItemSound();
                                             box2dWorldCreator.createWheat();
                                             player.getInventory().removeItem("seeds", 1);
                                         }
@@ -281,26 +283,34 @@ public class PlayScreen implements Screen {
                             if (timeCount >= 1) {
                                 player.resetStateTimer();
 
-                                System.out.println(i.getHealth());
-                                player.setCurrentState(Player.State.BUCKET);
-
+                                // If the bucket is full of water
                                 if (i.getHealth() == 100) {
+
+                                    // Set the player state to water
+                                    player.setCurrentState(Player.State.WATER);
+                                    player.playItemSound();
+
                                     if (getCell("grass").getTile() == tileSet.getTile(132)) {
                                         getCell("grass").setTile(tileSet.getTile(137));
                                         i.setHealth(0);
                                     }
 
                                 } else {
+
+                                    // Pick up water from ocean
                                     for (TiledMapTileLayer.Cell cell : getSurroundingBucketCells("water", getPlayerPos())) {
                                         if (cell.getTile() == tileSet.getTile(137)) {
                                             i.setHealth(100);
+                                            player.playItemSound();
+
                                         }
                                     }
 
-                                    //pickup water block that has been placed
+                                    // Pickup water block that has been placed
                                     if (getCell("grass").getTile() == tileSet.getTile(137)) {
                                         getCell("grass").setTile(tileSet.getTile(132));
                                         i.setHealth(100);
+                                        player.playItemSound();
                                     }
                                 }
                             }
@@ -341,6 +351,12 @@ public class PlayScreen implements Screen {
 
         // Display the level brief until the timer runs out and it's 'time to play' the game
         if (!levelBrief.timeToPlay) {
+
+            // Draw transparent overlay behind the level brief
+            game.batch.begin();
+            gameOver.getBackgroundSprite().draw(game.batch);
+            game.batch.end();
+
             game.batch.setProjectionMatrix(levelBrief.stage.getCamera().combined);
             levelBrief.stage.draw();
             levelBrief.update(delta);
@@ -541,21 +557,26 @@ public class PlayScreen implements Screen {
         }
 
         double angleSpeed = Math.sqrt((dx * dx) + (dy * dy));
-
-        player.box2dBody.setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.maxSpeed * angleSpeed)),
-                (float) (player.getY() + Math.sin(angle) * (player.maxSpeed * angleSpeed)));
+        double playerSpeed = 0;
+        player.setPreviousSpeed();
 
         // Set the players speed
         if (angleSpeed > 0.9) {
-            player.currentSpeed = 1;
+            player.currentSpeed = Player.Speed.FAST;
+            playerSpeed = 0.9;
         } else if (angleSpeed > 0.6) {
-            player.currentSpeed = 0.6;
+            player.currentSpeed = Player.Speed.MEDIUM;
+            playerSpeed = 0.6;
         } else if (angleSpeed > 0.3) {
-            player.currentSpeed = 0.3;
+            player.currentSpeed = Player.Speed.SLOW;
+            playerSpeed = 0.3;
         } else {
-            player.currentSpeed = angleSpeed;
+            player.currentSpeed = Player.Speed.STOP;
+            playerSpeed = 0;
         }
 
+        player.box2dBody.setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.maxSpeed * playerSpeed)),
+                (float) (player.getY() + Math.sin(angle) * (player.maxSpeed * playerSpeed)));
         player.setCurrentState(Player.State.WALK);
     }
 

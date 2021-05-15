@@ -1,10 +1,10 @@
 package com.semtb001.major.assignement.sprites;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -18,7 +18,10 @@ import com.semtb001.major.assignement.scenes.Inventory;
 import com.semtb001.major.assignement.screens.PlayScreen;
 import com.semtb001.major.assignement.tools.Assets;
 
+import java.awt.MediaTracker;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 // Class for the player
@@ -35,10 +38,14 @@ public class Player extends Sprite {
     public Direction previousDirection;
 
     // Player states
-    public enum State {IDLE, WALK, HOE, SEEDS, BUCKET}
+    public enum State {IDLE, WALK, HOE, SEEDS, WATER}
 
     public State currentState;
     public State previousState;
+
+    public enum Speed {STOP, SLOW, MEDIUM, FAST}
+    public Speed currentSpeed;
+    public Speed previousSpeed;
 
 
     // State timers for the player states
@@ -53,6 +60,7 @@ public class Player extends Sprite {
     private Animation SWwalk;
     private Animation Wwalk;
     private Animation NWwalk;
+    private HashMap<Direction, Animation> walkAnimations;
 
     // Player idle animations
     private Animation Nidle;
@@ -95,7 +103,16 @@ public class Player extends Sprite {
     private Animation NWbucket;
 
     // Player item sounds
-    private Sound hoeSound;
+    private Sound hoe;
+    private Sound seeds;
+    private Sound waterIn;
+    private Sound waterOut;
+
+    private Sound walkFast;
+    private Sound walkMedium;
+    private Sound walkSlow;
+
+    private Long walkID;
 
     float animationTimeCounter;
     float animationTimeDuration;
@@ -112,7 +129,6 @@ public class Player extends Sprite {
 
     private double angle;
     public float maxSpeed = 2f;
-    public double currentSpeed = 2f;
 
     private float walkAnimationSpeed;
     private float idleAnimationSpeed;
@@ -138,6 +154,8 @@ public class Player extends Sprite {
 
         currentState = State.IDLE;
         previousState = null;
+
+        currentSpeed = Speed.STOP;
 
         animationTimeCounter = 0;
         animationTimeDuration = 0.07f * 13;
@@ -401,12 +419,27 @@ public class Player extends Sprite {
         NWbucket = new Animation(seedsAnimationSpeed, tempFrames);
         tempFrames.clear();
 
+        walkAnimations = new HashMap<>();
+        walkAnimations.put(Direction.N, Nwalk);
+        walkAnimations.put(Direction.NE, NEwalk);
+        walkAnimations.put(Direction.E, Ewalk);
+        walkAnimations.put(Direction.SE, SEwalk);
+        walkAnimations.put(Direction.S, Swalk);
+        walkAnimations.put(Direction.SW, SWwalk);
+        walkAnimations.put(Direction.W, Wwalk);
+        walkAnimations.put(Direction.NW, NWwalk);
+
         // Set the starting animation frame to N
         currentFrame = (TextureRegion) Nidle.getKeyFrame(idleAnimationSpeed, false);
 
-        hoeSound = Semtb001MajorAssignment.assetManager.manager.get(Assets.hoeSound);
-
-
+        hoe = Semtb001MajorAssignment.assetManager.manager.get(Assets.hoe);
+        seeds = Semtb001MajorAssignment.assetManager.manager.get(Assets.seeds);
+        waterIn = Semtb001MajorAssignment.assetManager.manager.get(Assets.waterIn);
+        waterOut = Semtb001MajorAssignment.assetManager.manager.get(Assets.waterOut);
+        walkFast = Semtb001MajorAssignment.assetManager.manager.get(Assets.walkFast);
+        walkMedium = Semtb001MajorAssignment.assetManager.manager.get(Assets.walkMedium);
+        walkSlow = Semtb001MajorAssignment.assetManager.manager.get(Assets.walkSlow);
+        walkID = null;
 
     }
 
@@ -445,11 +478,33 @@ public class Player extends Sprite {
     // Method called to update the player (sounds, animation frame, and states)
     public void update(float delta) {
 
-        //updateItemAnimation(delta);
+
+        adjustAnimationSpeed();
+        playWalkSound();
 
         // Set the current frame of the player depending on the player state (eg. running, jumping, etc.)
         currentFrame = getFramesFromAnimation(delta);
 
+    }
+
+    private void adjustAnimationSpeed() {
+
+        Animation currentAnimation = null;
+        for(Map.Entry<Direction, Animation> keyValue: walkAnimations.entrySet()){
+            if(keyValue.getKey() == currentDirection){
+                currentAnimation = keyValue.getValue();
+            }
+        }
+
+        // Set the players speed
+        switch(currentSpeed){
+            case FAST: currentAnimation.setFrameDuration(0.07f);
+            break;
+            case MEDIUM: currentAnimation.setFrameDuration(0.09f);
+            break;
+            case SLOW: currentAnimation.setFrameDuration(0.11f);
+            break;
+        }
     }
 
     // Method to get the current player animation frame
@@ -462,8 +517,7 @@ public class Player extends Sprite {
         // Texture region that will be returned
         TextureRegion returnRegion = null;
 
-
-        if (currentState == State.WALK && currentSpeed == 0.0) {
+        if (currentState == State.WALK && currentSpeed == Speed.STOP) {
             currentState = State.IDLE;
         }
 
@@ -489,7 +543,7 @@ public class Player extends Sprite {
                             currentState = State.IDLE;
                         }
                         break;
-                    case BUCKET:
+                    case WATER:
                         returnRegion = (TextureRegion) Nbucket.getKeyFrame(stateTimer, false);
                         if(Nbucket.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
@@ -517,7 +571,7 @@ public class Player extends Sprite {
                             currentState = State.IDLE;
                         }
                         break;
-                    case BUCKET:
+                    case WATER:
                         returnRegion = (TextureRegion) NEbucket.getKeyFrame(stateTimer, false);
                         if(NEbucket.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
@@ -545,7 +599,7 @@ public class Player extends Sprite {
                             currentState = State.IDLE;
                         }
                         break;
-                    case BUCKET:
+                    case WATER:
                         returnRegion = (TextureRegion) Ebucket.getKeyFrame(stateTimer, false);
                         if(Nbucket.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
@@ -573,7 +627,7 @@ public class Player extends Sprite {
                             currentState = State.IDLE;
                         }
                         break;
-                    case BUCKET:
+                    case WATER:
                         returnRegion = (TextureRegion) SEbucket.getKeyFrame(stateTimer, false);
                         if(SEbucket.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
@@ -601,7 +655,7 @@ public class Player extends Sprite {
                             currentState = State.IDLE;
                         }
                         break;
-                    case BUCKET:
+                    case WATER:
                         returnRegion = (TextureRegion) Sbucket.getKeyFrame(stateTimer, false);
                         if(Sbucket.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
@@ -629,7 +683,7 @@ public class Player extends Sprite {
                             currentState = State.IDLE;
                         }
                         break;
-                    case BUCKET:
+                    case WATER:
                         returnRegion = (TextureRegion) SWbucket.getKeyFrame(stateTimer, false);
                         if(SWbucket.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
@@ -657,7 +711,7 @@ public class Player extends Sprite {
                             currentState = State.IDLE;
                         }
                         break;
-                    case BUCKET:
+                    case WATER:
                         returnRegion = (TextureRegion) Wbucket.getKeyFrame(stateTimer, false);
                         if(Wbucket.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
@@ -685,7 +739,7 @@ public class Player extends Sprite {
                             currentState = State.IDLE;
                         }
                         break;
-                    case BUCKET:
+                    case WATER:
                         returnRegion = (TextureRegion) NWbucket.getKeyFrame(stateTimer, false);
                         if(NWbucket.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
@@ -839,7 +893,7 @@ public class Player extends Sprite {
                 break;
 
             // If the player state is 'BUCKET'
-            case BUCKET:
+            case WATER:
                 switch (currentDirection) {
                     case N:
                         x = box2dBody.getPosition().x - 1.8f;
@@ -1019,20 +1073,50 @@ public class Player extends Sprite {
 
     }
 
-
-
     public void playItemSound() {
 
         switch (currentState) {
             case HOE:
-                hoeSound.play();
+                hoe.play();
                 break;
-            case BUCKET:
 
-                break;
             case SEEDS:
-
+                seeds.play();
                 break;
+
+            case WATER:
+                    waterOut.play();
+                break;
+            default:
+                waterIn.play();
+        }
+    }
+
+    private void playWalkSound(){
+
+        if(currentSpeed != previousSpeed){
+            walkID = null;
+            walkFast.stop();
+            walkMedium.stop();
+            walkSlow.stop();
+        }else {
+            if (currentState == State.WALK) {
+                if (walkID == null) {
+                    switch (currentSpeed) {
+                        case FAST:
+                            walkID = walkFast.loop();
+                        case MEDIUM:
+                            walkID = walkMedium.loop();
+                        case SLOW:
+                            walkID = walkSlow.loop();
+                    }
+                }
+            } else {
+                walkFast.stop();
+                walkMedium.stop();
+                walkSlow.stop();
+                walkID = null;
+            }
         }
     }
 
@@ -1050,6 +1134,10 @@ public class Player extends Sprite {
 
     public void setCurrentState(State state) {
         currentState = state;
+    }
+
+    public void setPreviousSpeed(){
+        previousSpeed = currentSpeed;
     }
 
 }

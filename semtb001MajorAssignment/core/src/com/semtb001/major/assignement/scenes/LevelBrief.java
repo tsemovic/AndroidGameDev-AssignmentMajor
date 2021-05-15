@@ -1,5 +1,6 @@
 package com.semtb001.major.assignement.scenes;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
+import com.semtb001.major.assignement.screens.PlayScreen;
+import com.semtb001.major.assignement.tools.Assets;
 
 /* Class to present a overlay on the game screen showing the level brief (a count down until
 the game starts */
@@ -17,25 +20,29 @@ public class LevelBrief implements Disposable {
     public Stage stage;
     private Viewport viewport;
 
-    // Obects that will be displayed in the LevelBrief
+    // Objects that will be displayed in the LevelBrief
     private Label startLabel;
     private Label countdownLabel;
+    private Label objectiveLabel;
 
     // Variables for the countdown time
     private Integer countdown;
     private float timeCount;
 
+    // Sprite objects for the background
+    public Sprite backgroundSprite;
+
     // Variable for when the countdown has stopped and it's time to play the game
     public boolean timeToPlay;
 
-    public LevelBrief(SpriteBatch spriteBatch) {
+    public LevelBrief(SpriteBatch spriteBatch, PlayScreen screen) {
 
         // Instantiate the viewport and stage
         viewport = Semtb001MajorAssignment.viewport;
         stage = new Stage(viewport, spriteBatch);
 
         // Set the countdown timer to 3 seconds and set timeToPlay to false
-        countdown = 0;
+        countdown = 5;
         timeToPlay = false;
 
         // Setup table that is displayed in the LevelBrief
@@ -45,16 +52,24 @@ public class LevelBrief implements Disposable {
 
 
         // Setup the labels that will go inside of the table
+        objectiveLabel = new Label("COLLECT " + screen.wheatToPassLevel + " WHEAT TO PASS", Semtb001MajorAssignment.smallFontFontWhite);
         startLabel = new Label("STARTING IN:", Semtb001MajorAssignment.smallFontFontWhite);
         countdownLabel = new Label(Integer.toString(countdown), Semtb001MajorAssignment.tinyFontFontWhite);
 
         // Add the labels to the table
+        hudTable.add(objectiveLabel).pad(Semtb001MajorAssignment.PPM);
+        hudTable.row();
         hudTable.add(startLabel).padLeft(Semtb001MajorAssignment.PPM * 2);
         hudTable.row();
         hudTable.add(countdownLabel);
 
         // Add the table to the stage
         stage.addActor(hudTable);
+
+        // Set the background sprite the 'backgroundTint' asset
+        backgroundSprite = new Sprite(Semtb001MajorAssignment.assetManager.manager.get(Assets.backgroundTint));
+        backgroundSprite.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
+        backgroundSprite.setAlpha(600);
     }
 
     // Method to update the countdown time

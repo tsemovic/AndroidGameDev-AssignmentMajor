@@ -109,7 +109,7 @@ public class Semtb001MajorAssignment extends Game {
 		tinyFont = generator.generateFont(parameter);
 
 		// Setup mini font style
-		parameter.size = (int) (Semtb001MajorAssignment.PPM * 0.9);
+		parameter.size = (int) (Semtb001MajorAssignment.PPM * 0.8);
 		miniFont = generator.generateFont(parameter);
 
 		// Dispose the .ttf font generator as all fonts have now been created

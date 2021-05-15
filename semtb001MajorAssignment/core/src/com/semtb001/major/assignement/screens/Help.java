@@ -89,7 +89,11 @@ public class Help implements Screen {
         // Create label to be displayed in the 'level' table
         levelsLabel = new Label("HELP" , Semtb001MajorAssignment.largeFontWhite);
         levelsLabel.setColor(Color.WHITE);
-        descriptionLabel = new Label("WHEAT HARVESTED", Semtb001MajorAssignment.miniFontFontWhite);
+        descriptionLabel = new Label("HARVEST THE AMOUNT OF WHEAT SHOWN IN THE LEVEL BRIEF.\n" +
+                "SELECT AN ITEM IN THE HOT-BAR AND TAP ANY VACANT \nSCREEN SPACE TO USE THAT ITEM.\n" +
+                "WHEAT IS GROWN BY PLANTING SEEDS ON TILLED SOIL AND \nENSURING THAT THERE IS WATER NEARBY." +
+                "\nCAREFUL!! THE SHEEP ARE VERY HUNGRY!",
+                Semtb001MajorAssignment.miniFontFontWhite);
         descriptionLabel.setColor(Color.WHITE);
 
         // Create 'back' label to be displayed in the 'back' table
@@ -99,7 +103,7 @@ public class Help implements Screen {
         // Add labels to the 'level' table
         levelLabelTable.add(levelsLabel).padBottom(Semtb001MajorAssignment.PPM);
         levelLabelTable.row();
-        levelLabelTable.add(descriptionLabel);
+        levelLabelTable.add(descriptionLabel).center();
         levelLabelTable.row();
 
         // Add 'back' label to the 'back' table

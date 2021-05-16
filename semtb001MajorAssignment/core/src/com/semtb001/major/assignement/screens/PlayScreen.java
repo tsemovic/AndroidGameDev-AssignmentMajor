@@ -232,9 +232,12 @@ public class PlayScreen implements Screen {
                     if (i.getActive()) {
                         if (i.getName() == "hoe") {
                             if (getCell("grass").getTile() == tileSet.getTile(Semtb001MajorAssignment.GRASS)) {
+
+                                // handle player animations
                                 player.resetStateTimer();
                                 player.setCurrentState(Player.State.HOE);
                                 player.playItemSound();
+
 
                                 Boolean wetSoil = false;
                                 for(Vector2 v : getSurroundingPositionss3x3(getPlayerPos())){
@@ -266,8 +269,8 @@ public class PlayScreen implements Screen {
                                     //stop multiple objects being created for the same bounds
                                     boolean create = true;
                                     for (Wheat w : box2dWorldCreator.wheat) {
-                                        if ((w.rectangle.x == (int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
-                                                (w.rectangle.y == (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
+                                        if ((w.bounds.x == (int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
+                                                (w.bounds.y == (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
 
                                             create = false;
                                         }

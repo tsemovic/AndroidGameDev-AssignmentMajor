@@ -3,7 +3,10 @@ package com.semtb001.major.assignement.items;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+// Abstract class that all hotbar items extend
 public abstract class Item {
+
+    // Item attributes
     String name;
     Integer health;
     Texture activeTexture;
@@ -14,6 +17,7 @@ public abstract class Item {
     Boolean active;
     Boolean pressed;
 
+    // Setters and Getters
     public String getName() {
         return name;
     }
@@ -85,6 +89,4 @@ public abstract class Item {
     public void setPressed(Boolean pressed) {
         this.pressed = pressed;
     }
-
-    public abstract boolean setPressed();
 }

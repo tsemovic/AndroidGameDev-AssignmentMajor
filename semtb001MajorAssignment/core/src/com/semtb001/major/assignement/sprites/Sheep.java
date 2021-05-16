@@ -261,8 +261,8 @@ public class Sheep extends Sprite {
         } else {
             if (playScreen.getBox2dWorldCreator().wheat.size() > 0) {
                 Wheat target = playScreen.getBox2dWorldCreator().wheat.get(0);
-                double xDistance = (target.rectangle.getX() + 0.5) - box2dBody.getPosition().x;
-                double yDistance = (target.rectangle.getY() + 0.5) - box2dBody.getPosition().y;
+                double xDistance = (target.bounds.getX() + 0.5) - box2dBody.getPosition().x;
+                double yDistance = (target.bounds.getY() + 0.5) - box2dBody.getPosition().y;
 
                 if (xDistance < 0) {
                     xDistance = xDistance * -1;
@@ -274,8 +274,8 @@ public class Sheep extends Sprite {
 
                 currentSpeed = distanceToTarget * 2;
 
-                Vector2 vector = new Vector2((float) ((float) ((target.rectangle.getX() + 0.5) - box2dBody.getPosition().x) / currentSpeed),
-                        (float) ((float) ((target.rectangle.getY() + 0.5) - box2dBody.getPosition().y) / currentSpeed));
+                Vector2 vector = new Vector2((float) ((float) ((target.bounds.getX() + 0.5) - box2dBody.getPosition().x) / currentSpeed),
+                        (float) ((float) ((target.bounds.getY() + 0.5) - box2dBody.getPosition().y) / currentSpeed));
 
                 box2dBody.setLinearVelocity(vector);
 

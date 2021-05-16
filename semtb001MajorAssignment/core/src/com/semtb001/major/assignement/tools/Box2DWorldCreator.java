@@ -107,12 +107,11 @@ public class Box2DWorldCreator {
         if (screen.getCell("seeds").getTile() == tileSet.getTile(Semtb001MajorAssignment.WHEAT_LARGE)) {
             Wheat removeWheat = null;
             for (Wheat w : wheat) {
-                if ((w.rectangle.x == (int) (screen.player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
-                        (w.rectangle.y == (int) (screen.player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
+                if ((w.bounds.x == (int) (screen.player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
+                        (w.bounds.y == (int) (screen.player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
                     screen.player.addInventory("seeds", w.drops);
                     removeWheat = w;
                     w.destroyed = true;
-                    w.dispose();
                     screen.addWheatHarvested();
                     screen.getCell("seeds").setTile(tileSet.getTile(Semtb001MajorAssignment.BLANK));
 
@@ -137,10 +136,9 @@ public class Box2DWorldCreator {
         Wheat removeWheat = null;
 
         for (Wheat w : screen.getBox2dWorldCreator().wheat) {
-            if (w.rectangle.getX() == pos.x && w.rectangle.getY() == pos.y) {
+            if (w.bounds.getX() == pos.x && w.bounds.getY() == pos.y) {
                 removeWheat = w;
                 w.destroyed = true;
-                w.dispose();
                 cell.setTile(tileSet.getTile(Semtb001MajorAssignment.BLANK));
 
             }

@@ -104,7 +104,7 @@ public class Box2DWorldCreator {
 
     public void harvestWheat() {
         TiledMapTileSet tileSet = map.getTileSets().getTileSet(0);
-        if (screen.getCell("seeds").getTile() == tileSet.getTile(426)) {
+        if (screen.getCell("seeds").getTile() == tileSet.getTile(Semtb001MajorAssignment.WHEAT_LARGE)) {
             Wheat removeWheat = null;
             for (Wheat w : wheat) {
                 if ((w.rectangle.x == (int) (screen.player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
@@ -114,7 +114,7 @@ public class Box2DWorldCreator {
                     w.destroyed = true;
                     w.dispose();
                     screen.addWheatHarvested();
-                    screen.getCell("seeds").setTile(tileSet.getTile(231));
+                    screen.getCell("seeds").setTile(tileSet.getTile(Semtb001MajorAssignment.BLANK));
 
                     screen.getPlayer().setCurrentState(Player.State.HOE);
                     screen.getPlayer().resetStateTimer();
@@ -141,7 +141,7 @@ public class Box2DWorldCreator {
                 removeWheat = w;
                 w.destroyed = true;
                 w.dispose();
-                cell.setTile(tileSet.getTile(231));
+                cell.setTile(tileSet.getTile(Semtb001MajorAssignment.BLANK));
 
             }
 
@@ -153,7 +153,6 @@ public class Box2DWorldCreator {
     public Queue<Vector2> getSheepPositions() {
         return sheepPositions;
     }
-
 
 
 }

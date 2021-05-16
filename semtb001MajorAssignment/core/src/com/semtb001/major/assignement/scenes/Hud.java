@@ -46,7 +46,7 @@ public class Hud implements Disposable {
         stage = new Stage(viewport, spriteBatch);
 
         timeCount = 0;
-        worldTimer = 30;
+        worldTimer = 90;
 
         // Setup the table that is displayed in the HUD
         Table hudTable = new Table();

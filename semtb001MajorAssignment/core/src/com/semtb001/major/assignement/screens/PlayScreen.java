@@ -231,11 +231,25 @@ public class PlayScreen implements Screen {
                 for (Item i : itemSet) {
                     if (i.getActive()) {
                         if (i.getName() == "hoe") {
-                            if (getCell("grass").getTile() == tileSet.getTile(132)) {
+                            if (getCell("grass").getTile() == tileSet.getTile(Semtb001MajorAssignment.GRASS)) {
                                 player.resetStateTimer();
                                 player.setCurrentState(Player.State.HOE);
                                 player.playItemSound();
-                                getCell("grass").setTile(tileSet.getTile(403));
+
+                                Boolean wetSoil = false;
+                                for(Vector2 v : getSurroundingPositionss3x3(getPlayerPos())){
+                                    Rectangle r = new Rectangle(v.x, v.y, 1,1 );
+                                    if(getCell("water", r).getTile().getId() == Semtb001MajorAssignment.WATER){
+                                        wetSoil = true;
+                                    }
+                                }
+
+                                if (wetSoil) {
+                                    getCell("grass").setTile(tileSet.getTile(Semtb001MajorAssignment.WET_SOIL));
+
+                                }else{
+                                    getCell("grass").setTile(tileSet.getTile(Semtb001MajorAssignment.DRY_SOIL));
+                                }
                             }
                             box2dWorldCreator.harvestWheat();
                         }
@@ -246,7 +260,8 @@ public class PlayScreen implements Screen {
 
                                 player.resetStateTimer();
 
-                                if (getCell("grass").getTile() == tileSet.getTile(403)) {
+                                if (getCell("grass").getTile() == tileSet.getTile(Semtb001MajorAssignment.DRY_SOIL) ||
+                                        getCell("grass").getTile() == tileSet.getTile(Semtb001MajorAssignment.WET_SOIL)) {
 
                                     //stop multiple objects being created for the same bounds
                                     boolean create = true;
@@ -286,30 +301,39 @@ public class PlayScreen implements Screen {
                                 // If the bucket is full of water
                                 if (i.getHealth() == 100) {
 
-                                    // Set the player state to water
-                                    player.setCurrentState(Player.State.WATER);
-                                    player.playItemSound();
+                                    getCell("water").setTile(tileSet.getTile(Semtb001MajorAssignment.WATER));
+                                    i.setHealth(0);
 
-                                    if (getCell("grass").getTile() == tileSet.getTile(132)) {
-                                        getCell("grass").setTile(tileSet.getTile(137));
-                                        i.setHealth(0);
-                                    }
-
-                                } else {
-
-                                    // Pick up water from ocean
-                                    for (TiledMapTileLayer.Cell cell : getSurroundingBucketCells("water", getPlayerPos())) {
-                                        if (cell.getTile() == tileSet.getTile(137)) {
-                                            i.setHealth(100);
-                                            player.playItemSound();
-
+                                    for(Vector2 v : getSurroundingPositionss3x3(getPlayerPos())){
+                                        Rectangle r = new Rectangle(v.x, v.y, 1,1 );
+                                        if(getCell("grass", r).getTile().getId() == Semtb001MajorAssignment.DRY_SOIL){
+                                            getCell("grass", r).setTile(tileSet.getTile(Semtb001MajorAssignment.WET_SOIL));
                                         }
                                     }
 
-                                    // Pickup water block that has been placed
-                                    if (getCell("grass").getTile() == tileSet.getTile(137)) {
-                                        getCell("grass").setTile(tileSet.getTile(132));
-                                        i.setHealth(100);
+                                    player.setCurrentState(Player.State.WATER);
+                                    player.playItemSound();
+
+
+                                } else {
+
+                                    // Boolean to track if a water sound should be played
+                                    Boolean playWaterSound = false;
+
+                                    // Pick up water from ocean
+                                    for (TiledMapTileLayer.Cell cell : getSurroundingCells3x3("water", getPlayerPos())) {
+                                        if (cell.getTile() == tileSet.getTile(137)) {
+
+                                            // Fill the bucket up with water
+                                            i.setHealth(100);
+
+                                            // Play water sound to true
+                                            playWaterSound = true;
+                                        }
+                                    }
+
+                                    // Play the item sound
+                                    if (playWaterSound) {
                                         player.playItemSound();
                                     }
                                 }
@@ -590,74 +614,116 @@ public class PlayScreen implements Screen {
 
     }
 
+    // Method to get the cell at the players position from the provided layer name in the tmx file
     public TiledMapTileLayer.Cell getCell(String layerName) {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
         return layer.getCell((int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32),
                 (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32));
     }
 
+    // Method to get the cell at the provided position from the provided layer name in the tmx file
     public TiledMapTileLayer.Cell getCell(String layerName, Rectangle bounds) {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
         return layer.getCell((int) bounds.x, (int) bounds.y);
     }
 
-    public List<TiledMapTileLayer.Cell> getSurroundingWheatCells(String layerName, Rectangle bounds) {
+    // Method to get cells surrounding the provided bounds in a 5x5 area
+    public List<TiledMapTileLayer.Cell> getSurroundingCells5x5(String layerName, Rectangle bounds) {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
         List<TiledMapTileLayer.Cell> cells = new ArrayList<TiledMapTileLayer.Cell>();
 
-        //layer of target
-        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y));
-        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y));
-        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y));
-        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y));
+        // Try to add surrounding cells (5x5) to the list
+        try {
+            //layer of target
+            cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y));
+            cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y));
+            cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y));
+            cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y));
 
-        //layer 1 above target
-        cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 1));
-        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 1));
-        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y + 1));
-        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
-        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 1));
+            //layer 1 above target
+            cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 1));
+            cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 1));
+            cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y + 1));
+            cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
+            cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 1));
 
-        //layer 2 above target
-        cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 2));
-        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 2));
-        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y + 2));
-        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y + 2));
-        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y + 2));
+            //layer 2 above target
+            cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 2));
+            cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 2));
+            cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y + 2));
+            cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y + 2));
+            cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y + 2));
 
-        //layer 1 below target
-        cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 1));
-        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 1));
-        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y - 1));
-        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
-        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 1));
+            //layer 1 below target
+            cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 1));
+            cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 1));
+            cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y - 1));
+            cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
+            cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 1));
 
-        //layer 2 below target
-        cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 2));
-        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 2));
-        cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y - 2));
-        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 2));
-        cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 2));
+            //layer 2 below target
+            cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 2));
+            cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 2));
+            cells.add(layer.getCell((int) bounds.x + 2, (int) bounds.y - 2));
+            cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 2));
+            cells.add(layer.getCell((int) bounds.x - 2, (int) bounds.y - 2));
+
+        } catch (Exception e) {
+
+        }
 
         return cells;
     }
 
-    public List<TiledMapTileLayer.Cell> getSurroundingBucketCells(String layerName, Vector2 bounds) {
+    // Method to get cells surrounding the provided bounds in a 3x3 area
+    public List<TiledMapTileLayer.Cell> getSurroundingCells3x3(String layerName, Vector2 bounds) {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
         List<TiledMapTileLayer.Cell> cells = new ArrayList<TiledMapTileLayer.Cell>();
 
-        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y));
-        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y));
+        cells.add(layer.getCell((int) bounds.x, (int) bounds.y));
 
-        cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 1));
-        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 1));
-        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
+        // Try to add surrounding cells (3x3) to the list
+        try {
+            cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y));
+            cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y));
 
-        cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 1));
-        cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 1));
-        cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y + 1));
+            cells.add(layer.getCell((int) bounds.x, (int) bounds.y - 1));
+            cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y - 1));
+            cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y - 1));
+
+            cells.add(layer.getCell((int) bounds.x, (int) bounds.y + 1));
+            cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 1));
+            cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y + 1));
+        } catch (Exception e) {
+
+        }
 
         return cells;
+    }
+
+    // Method to get cells surrounding the provided bounds in a 3x3 area
+    public List<Vector2> getSurroundingPositionss3x3(Vector2 bounds) {
+        List<Vector2> positions = new ArrayList<>();
+
+        positions.add(new Vector2((int) bounds.x, (int) bounds.y));
+
+        // Try to add surrounding cells (3x3) to the list
+        try {
+            positions.add(new Vector2((int) bounds.x + 1, (int) bounds.y));
+            positions.add(new Vector2((int) bounds.x - 1, (int) bounds.y));
+
+            positions.add(new Vector2((int) bounds.x, (int) bounds.y - 1));
+            positions.add(new Vector2((int) bounds.x + 1, (int) bounds.y - 1));
+            positions.add(new Vector2((int) bounds.x - 1, (int) bounds.y - 1));
+
+            positions.add(new Vector2((int) bounds.x, (int) bounds.y + 1));
+            positions.add(new Vector2((int) bounds.x + 1, (int) bounds.y + 1));
+            positions.add(new Vector2((int) bounds.x - 1, (int) bounds.y + 1));
+        } catch (Exception e) {
+
+        }
+
+        return positions;
     }
 
     @Override

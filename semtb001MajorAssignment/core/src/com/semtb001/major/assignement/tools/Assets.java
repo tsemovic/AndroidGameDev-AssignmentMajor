@@ -38,6 +38,12 @@ public class Assets {
     public static final AssetDescriptor<Sound> walkSlow =
             new AssetDescriptor<Sound>("audio/sounds/walkSlow.ogg", Sound.class);
 
+    public static final AssetDescriptor<Sound> sheep1 =
+            new AssetDescriptor<Sound>("audio/sounds/sheep1.ogg", Sound.class);
+
+    public static final AssetDescriptor<Sound> sheep2 =
+            new AssetDescriptor<Sound>("audio/sounds/sheep2.ogg", Sound.class);
+
     // Provide image assets and their path
     public static final AssetDescriptor<Texture> backgroundTint =
             new AssetDescriptor<Texture>("gui/backgroundTint.png", Texture.class);
@@ -87,6 +93,9 @@ public class Assets {
         manager.load(walkFast);
         manager.load(walkMedium);
         manager.load(walkSlow);
+
+        manager.load(sheep1);
+        manager.load(sheep2);
 
 
         // Load texture images

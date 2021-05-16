@@ -5,8 +5,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
+import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.PlayScreen;
 import com.semtb001.major.assignement.sprites.Player;
 import com.semtb001.major.assignement.tools.InteractiveTileObjects;
@@ -35,7 +37,7 @@ public class Wheat extends InteractiveTileObjects implements Disposable {
         gameScreen = screen;
         rectangle = bounds;
         tileSet = map.getTileSets().getTileSet(0);
-        tile = tileSet.getTile(386);
+        tile = tileSet.getTile(Semtb001MajorAssignment.WHEAT_SMALL);
         updateTile();
 
         //when wheat is fully grown drop between 1 and 3 wheat;
@@ -65,13 +67,13 @@ public class Wheat extends InteractiveTileObjects implements Disposable {
             if (growth == 0) {
                 if (timeAlive > 5) {
                     growth = 1;
-                    tile = tileSet.getTile(425);
+                    tile = tileSet.getTile(Semtb001MajorAssignment.WHEAT_MEDIUM);
                     updateTile();
                 }
             } else if (growth == 1) {
                 if (timeAlive > 10) {
                     growth = 2;
-                    tile = tileSet.getTile(426);
+                    tile = tileSet.getTile(Semtb001MajorAssignment.WHEAT_LARGE);
                     updateTile();
                 }
             }
@@ -83,27 +85,20 @@ public class Wheat extends InteractiveTileObjects implements Disposable {
     }
 
     public void updateWater(){
-        int water = 0;
-        try{
-            for(TiledMapTileLayer.Cell cell: gameScreen.getSurroundingWheatCells("water", rectangle)){
-                if(cell.getTile() == tileSet.getTile(137)){
-                    hasWater = true;
-                    water += 1;
-                }
-            }
-            for(TiledMapTileLayer.Cell cell: gameScreen.getSurroundingWheatCells("grass", rectangle)){
-                if(cell.getTile() == tileSet.getTile(137)){
-                    hasWater = true;
-                    water += 1;
-                }
-            }
-        }catch (Exception e){
 
+        boolean water = false;
+        Vector2 pos = new Vector2(rectangle.x, rectangle.y);
+        for(TiledMapTileLayer.Cell cell : gameScreen.getSurroundingCells3x3("water", pos)){
+
+            if(cell.getTile().getId() == Semtb001MajorAssignment.WATER) {
+                water = true;
+            }
         }
 
-        if(water == 0){
-            hasWater = false;
+        if(water){
+            hasWater = true;
         }
+
     }
 
     @Override

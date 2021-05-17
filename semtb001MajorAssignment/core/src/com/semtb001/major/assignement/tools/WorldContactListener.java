@@ -25,14 +25,25 @@ public class WorldContactListener implements ContactListener {
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
 
+        // This code detects if a sheep and a player has collided
+        // If fixture A is a player
         if(fixA.getUserData() instanceof Player){
+
+            // If fixture B is a sheep
             if(fixB.getUserData() instanceof Sheep){
+
+                // Call the hitSheep method
                 ((Sheep) fixB.getUserData()).sheepHit();
             }
         }
 
+        // If fixture B is a player
         if(fixB.getUserData() instanceof Player){
+
+            // If fixture A is a sheep
             if(fixA.getUserData() instanceof Sheep){
+
+                // Call the hitSheep method
                 ((Sheep) fixA.getUserData()).sheepHit();
             }
         }

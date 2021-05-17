@@ -277,7 +277,7 @@ public class PlayScreen implements Screen {
                                     boolean create = true;
 
                                     // For each wheat in the box2dWorldCreator
-                                    for (Wheat w : box2dWorldCreator.wheat) {
+                                    for (Wheat w : box2dWorldCreator.getWheat()) {
 
                                         // If there is already seeds (wheat) at this location, wheat can't be created at this location
                                         if ((w.bounds.x == (int) (player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
@@ -512,7 +512,7 @@ public class PlayScreen implements Screen {
             handleSheep(deltaTime);
 
             // Loop through the wheat and update them
-            for (Wheat wheat : box2dWorldCreator.wheat) {
+            for (Wheat wheat : box2dWorldCreator.getWheat()) {
                 wheat.update(deltaTime);
                 wheat.updateWater();
             }

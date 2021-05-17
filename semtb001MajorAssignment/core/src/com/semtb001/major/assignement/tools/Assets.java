@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class Assets {
     public AssetManager manager = new AssetManager();
 
+    // Provide sound assets and their path
     public static final AssetDescriptor<Sound> menuClick =
             new AssetDescriptor<Sound>("audio/sounds/menuClick.ogg", Sound.class);
 
@@ -82,10 +83,9 @@ public class Assets {
 
     public void load() {
 
-        // Load audio
+        // Load sounds
         manager.load(menuClick);
         manager.load(music);
-
         manager.load(hoe);
         manager.load(seeds);
         manager.load(waterIn);
@@ -93,10 +93,8 @@ public class Assets {
         manager.load(walkFast);
         manager.load(walkMedium);
         manager.load(walkSlow);
-
         manager.load(sheep1);
         manager.load(sheep2);
-
 
         // Load texture images
         manager.load(backgroundTint);
@@ -105,10 +103,8 @@ public class Assets {
         // Load gui images
         manager.load(hoeActive);
         manager.load(hoeInactive);
-
         manager.load(seedsActive);
         manager.load(seedsInactive);
-
         manager.load(wateringCanFullActive);
         manager.load(wateringCanFullInactive);
         manager.load(wateringCanEmptyActive);

@@ -36,13 +36,12 @@ public class Box2DWorldCreator {
     private FixtureDef fixtureDef;
     private Body body;
 
-    // List's of ground enemies, flying enemies and coins
+    // List's of sheep positions and wheat
     private Queue<Vector2> sheepPositions;
+    private List<Wheat> wheat;
 
+    // PlayScreen object
     private PlayScreen screen;
-
-    public List<Wheat> wheat;
-
 
     public Box2DWorldCreator(PlayScreen playScreen) {
 
@@ -56,9 +55,8 @@ public class Box2DWorldCreator {
         shape = new PolygonShape();
         fixtureDef = new FixtureDef();
 
-        // Instantiate List's of ground enemies, flying enemies and coins
+        // Instantiate List's of sheep and wheat
         sheepPositions = new LinkedList<Vector2>();
-
         wheat = new ArrayList<Wheat>();
 
         // Create world ground and objects (floor of map and boxes/platforms)
@@ -85,72 +83,109 @@ public class Box2DWorldCreator {
             body.createFixture(fixtureDef);
         }
 
-        // Create grounded enemies
+        // Create sheep
         for (MapObject object : map.getLayers().get("sheepObject").getObjects().getByType(RectangleMapObject.class)) {
 
-            // Add the grounded enemy position to the groundedEnemyPositions list
+            // Add the sheep position to the sheepPositions list
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             sheepPositions.offer(new Vector2(rect.x, rect.y));
         }
     }
 
+    // Method to create wheat
     public void createWheat() {
+
+        // Create wheat at the players position
         Rectangle rect = new Rectangle();
         rect.set(screen.getPlayerPos().x, screen.getPlayerPos().y, 1, 1);
         Wheat newWheat = new Wheat(world, map, rect, screen);
+
+        // Add the new wheat to the list of wheat
         wheat.add(newWheat);
     }
 
-
+    // Method to harvest the wheat
     public void harvestWheat() {
+
+        // If the player is standing on fully grown wheat
         TiledMapTileSet tileSet = map.getTileSets().getTileSet(0);
         if (screen.getCell("seeds").getTile() == tileSet.getTile(Semtb001MajorAssignment.WHEAT_LARGE)) {
-            Wheat removeWheat = null;
-            for (Wheat w : wheat) {
-                if ((w.bounds.x == (int) (screen.player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
-                        (w.bounds.y == (int) (screen.player.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
-                    screen.player.addInventory("seeds", w.getDrops());
-                    removeWheat = w;
-                    w.setDestroyed(true);
+
+            // Loop through the list of wheat
+            Wheat tempWheat = null;
+            for (Wheat wheatToRemove : wheat) {
+
+                // If the wheat has the same position as the player
+                if ((wheatToRemove.bounds.x == (int) (screen.player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
+                        (wheatToRemove.bounds.y == (int) (screen.player.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
+                    screen.player.addInventory("seeds", wheatToRemove.getDrops());
+
+                    // Set the tempWheat to the wheat object
+                    tempWheat = wheatToRemove;
+                    wheatToRemove.setDestroyed(true);
+
+                    // Add wheat harvested (increases counter)
                     screen.addWheatHarvested();
+
+                    // Set the wheat tile to 'blank'
                     screen.getCell("seeds").setTile(tileSet.getTile(Semtb001MajorAssignment.BLANK));
 
+                    // Change the players state to 'HOE'
                     screen.getPlayer().setCurrentState(Player.State.HOE);
                     screen.getPlayer().resetStateTimer();
+
+                    // Play the player item sound
                     screen.getPlayer().playItemSound();
-
-
                 }
             }
-            wheat.remove(removeWheat);
+
+            // Remove the harvested wheat from the wheat list
+            wheat.remove(tempWheat);
         }
     }
 
-    public void destoryWheat(Sheep sheep) {
+    // Method to destroy wheat (when a sheep eats it)
+    public void destroyWheat(Sheep sheep) {
         TiledMapTileSet tileSet = map.getTileSets().getTileSet(0);
+
+        // Get the sheep position
         Vector2 pos = new Vector2((int) (sheep.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32),
                 (int) (sheep.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32));
+
+        // Get the wheat cell that the sheep is standing on
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("seeds");
         TiledMapTileLayer.Cell cell = layer.getCell((int) (sheep.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32),
                 (int) (sheep.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32));
+
+        // Instantiate the wheat to remove
         Wheat removeWheat = null;
 
-        for (Wheat w : screen.getBox2dWorldCreator().wheat) {
-            if (w.bounds.getX() == pos.x && w.bounds.getY() == pos.y) {
-                removeWheat = w;
-                w.setDestroyed(true);
+        // Loop through the list of wheat
+        for (Wheat tempWheat : screen.getBox2dWorldCreator().wheat) {
+
+            // If the wheat has the same position as the sheep
+            if (tempWheat.bounds.getX() == pos.x && tempWheat.bounds.getY() == pos.y) {
+
+                // Set the removeWheat to the tempWheat
+                removeWheat = tempWheat;
+                tempWheat.setDestroyed(true);
+
+                // Set the cell that the wheat was on to 'blank'
                 cell.setTile(tileSet.getTile(Semtb001MajorAssignment.BLANK));
 
             }
-
         }
+
+        // Remove the wheat from the wheat list
         wheat.remove(removeWheat);
     }
 
-    //Getters for the list's of enemys and coins
+    //Getters for the list's of sheep and wheat
     public Queue<Vector2> getSheepPositions() {
         return sheepPositions;
     }
 
-
+    public List<Wheat> getWheat() {
+        return wheat;
+    }
 }

@@ -28,15 +28,17 @@ public class Semtb001MajorAssignment extends Game {
 	public static final int WORLD_PIXEL_HEIGHT = 1080/4;
 	public static final float WORLD_WIDTH = WORLD_PIXEL_WIDTH / PPM; //in meter
 	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
+
+	// Viewport for the game
 	public static final Viewport viewport  = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
 
+	// Number of levels in the game
 	public static final int NUMBER_OF_LEVELS = 5;
 
 	// Object types (used for Box2D collisions)
 	public static final short PLAYER = 1;
 	public static final short WORLD = 2;
 	public static final short SHEEP = 4;
-	public static final short DESTROYED = 8;
 
 	// Saved data objects
 	public static Preferences scoresPref;
@@ -52,7 +54,7 @@ public class Semtb001MajorAssignment extends Game {
 	public static BitmapFont tinyFont;
 	public static BitmapFont miniFont;
 
-	// Label styles objects (used for all labels in the application)
+	// Label styles objects (used for all labels in the game)
 	public static Label.LabelStyle largeFontWhite;
 	public static Label.LabelStyle largeFontGrey;
 	public static Label.LabelStyle mediumFontFontWhite;
@@ -63,18 +65,15 @@ public class Semtb001MajorAssignment extends Game {
 	public static Label.LabelStyle tinyFontFontGrey;
 	public static Label.LabelStyle miniFontFontWhite;
 
+	// TileSet ID's of interactive tiles in the game (for readability)
 	public static final int GRASS = 132;
 	public static final int WATER = 137;
 	public static final int DRY_SOIL = 99;
 	public static final int WET_SOIL = 139;
-
 	public static final int WHEAT_SMALL = 386;
 	public static final int WHEAT_MEDIUM = 425;
 	public static final int WHEAT_LARGE = 426;
-
 	public static final int BLANK = 231;
-
-
 
 	@Override
 	public void create () {
@@ -146,7 +145,7 @@ public class Semtb001MajorAssignment extends Game {
 //		scoresPref.clear();
 //		scoresPref.flush();
 
-		// Adding 'LEVEL: 1' to the levels data so that level 1 can be played from the beginning
+		// Adding 'LEVEL: 1' to the levels data so that level 1 can be played from the beginning even when scores are reset
 		levelsPref.putBoolean("LEVEL: 1", true);
 		levelsPref.flush();
 
@@ -175,9 +174,9 @@ public class Semtb001MajorAssignment extends Game {
 		super.dispose();
 		assetManager.dispose();
 		batch.dispose();
-
 		smallFont.dispose();
 		mediumFont.dispose();
 		largeFont.dispose();
+		miniFont.dispose();
 	}
 }

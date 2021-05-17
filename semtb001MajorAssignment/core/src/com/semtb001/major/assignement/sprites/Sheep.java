@@ -278,10 +278,10 @@ public class Sheep extends Sprite {
         } else {
 
             // If there is any wheat planted
-            if (playScreen.getBox2dWorldCreator().wheat.size() > 0) {
+            if (playScreen.getBox2dWorldCreator().getWheat().size() > 0) {
 
                 // Set the sheep target wheat to the first wheat in the list
-                Wheat target = playScreen.getBox2dWorldCreator().wheat.get(0);
+                Wheat target = playScreen.getBox2dWorldCreator().getWheat().get(0);
 
                 // Set the x and y distance to the target
                 double xDistance = (target.bounds.getX() + 0.5) - box2dBody.getPosition().x;
@@ -323,7 +323,7 @@ public class Sheep extends Sprite {
         }
 
         // Destroy the wheat (if there is any, and if the sheep is where the wheat is located)
-        playScreen.getBox2dWorldCreator().destoryWheat(this);
+        playScreen.getBox2dWorldCreator().destroyWheat(this);
 
     }
 

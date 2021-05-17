@@ -560,7 +560,7 @@ public class PlayScreen implements Screen {
 
             // Split up the sheep and add them to the wave queue
             if (totalSheep > numberOfWaves) {
-                for (int y = 0; y <= Math.floor(totalSheep / 3); y++) {
+                for (int y = 0; y < Math.floor(totalSheep / 3); y++) {
                     if (box2dWorldCreator.getSheepPositions().size() > 0) {
                         waveQueue.add(box2dWorldCreator.getSheepPositions().poll());
                     }
@@ -720,15 +720,27 @@ public class PlayScreen implements Screen {
 
     // Method to get the cell at the players position from the provided layer name in the tmx file
     public TiledMapTileLayer.Cell getCell(String layerName) {
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
-        return layer.getCell((int) (player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32),
-                (int) (player.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32));
+
+        TiledMapTileLayer.Cell returnCell = null;
+        try{
+            TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
+            returnCell = layer.getCell((int) (player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32),
+                    (int) (player.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32));
+        }catch (Exception e){}
+
+        return  returnCell;
     }
 
     // Method to get the cell at the provided position from the provided layer name in the tmx file
     public TiledMapTileLayer.Cell getCell(String layerName, Rectangle bounds) {
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
-        return layer.getCell((int) bounds.x, (int) bounds.y);
+        TiledMapTileLayer.Cell returnCell = null;
+
+        try{
+            TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
+            returnCell = layer.getCell((int) bounds.x, (int) bounds.y);
+        }catch (Exception e){}
+
+        return  returnCell;
     }
 
     // Method to get cells surrounding the provided bounds in a 5x5 area

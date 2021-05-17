@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.MainMenu;
@@ -21,7 +19,7 @@ import com.semtb001.major.assignement.tools.Assets;
 // Class to present a overlay on the game screen showing the pause screen
 public class Paused implements Disposable {
 
-    // Paused stage, viewport and PlayScren objects
+    // Paused stage and viewport objects
     public Stage stage;
     private Viewport viewport;
 
@@ -57,7 +55,7 @@ public class Paused implements Disposable {
         exitText = new Label("EXIT", Semtb001MajorAssignment.smallFontFontWhite);
 
         // Add the labels to the table
-        pausedTable.add(pausedText).pad(Semtb001MajorAssignment.PPM*2);
+        pausedTable.add(pausedText).pad(Semtb001MajorAssignment.PPM * 2);
         pausedTable.row();
         pausedTable.add(continueText);
         pausedTable.row();
@@ -85,14 +83,14 @@ public class Paused implements Disposable {
 
             //If the user touches down on the Continue label and drags
             @Override
-            public void touchDragged(InputEvent event, float x, float y, int pointer){
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
 
                 /* If the user touch is dragged and still on the Continue label
                 (change to grey font colour and active continueTextActive) */
-                if(x > 0 && x < continueText.getWidth() && y > 0 && y < continueText.getHeight()){
+                if (x > 0 && x < continueText.getWidth() && y > 0 && y < continueText.getHeight()) {
                     continueText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     continueTextActive = true;
-                }else{
+                } else {
 
                     /* If the user touch is dragged and not over the Continue label
                     (de-activate continueTextActive and set the font colour to white) */
@@ -106,7 +104,7 @@ public class Paused implements Disposable {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 continueText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
-                if(continueTextActive && playScreen.isPaused()) {
+                if (continueTextActive && playScreen.isPaused()) {
                     Semtb001MajorAssignment.playMenuClick();
                     playScreen.setPaused(false);
                 }
@@ -127,14 +125,14 @@ public class Paused implements Disposable {
 
             //If the user touches down on the exit label and drags
             @Override
-            public void touchDragged(InputEvent event, float x, float y, int pointer){
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
 
                 /* If the user touch is dragged and still on the exit label
                 (change to grey font colour and active exitTextActive) */
-                if(x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()){
+                if (x > 0 && x < exitText.getWidth() && y > 0 && y < exitText.getHeight()) {
                     exitText.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     exitTextActive = true;
-                }else{
+                } else {
 
                     /* If the user touch is dragged and not over the exit label
                     (de-activate exitTextActive and set the font colour to white) */
@@ -147,7 +145,7 @@ public class Paused implements Disposable {
             return to the main menu and dispose the playScreen and set the font colour back to white */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if(playScreen.isPaused) {
+                if (playScreen.isPaused) {
                     exitText.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     if (exitTextActive && playScreen.isPaused()) {
                         Semtb001MajorAssignment.playMenuClick();
@@ -159,7 +157,7 @@ public class Paused implements Disposable {
     }
 
     // Get the background sprite image
-    public Sprite getBackgroundSprite(){
+    public Sprite getBackgroundSprite() {
         return backgroundSprite;
     }
 

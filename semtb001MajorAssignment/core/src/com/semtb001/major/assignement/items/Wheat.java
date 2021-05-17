@@ -9,12 +9,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Disposable;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.PlayScreen;
 
@@ -31,7 +29,8 @@ public class Wheat {
     public boolean destroyed;
 
     // Wheat's growth stage
-    private enum Stage {SMALL, MEDIUM, LARGE};
+    private enum Stage {SMALL, MEDIUM, LARGE}
+
     private Stage growth;
 
     // Wheat's tile
@@ -99,7 +98,7 @@ public class Wheat {
         tile = tileSet.getTile(Semtb001MajorAssignment.WHEAT_SMALL);
 
         // Setup the drop to a random number between 1 and 3 (Number of seeds given to player on harvest)
-        drops = new Random().nextInt(3-1) + 1;
+        drops = new Random().nextInt(3 - 1) + 1;
 
         // Update the tile
         updateTile();
@@ -110,7 +109,7 @@ public class Wheat {
     public void update(float dt) {
 
         // If the wheat has water nearby
-        if(hasWater) {
+        if (hasWater) {
 
             // Increase the time alive
             if (destroyed != true) {
@@ -154,16 +153,16 @@ public class Wheat {
     }
 
     // Method to check if the wheat has water nearby
-    public void updateWater(){
+    public void updateWater() {
 
         // Wheat position in the form of a vector
         Vector2 pos = new Vector2(bounds.x, bounds.y);
 
         // Loop through all surrounding 3x3 tiles in the water layer
-        for(TiledMapTileLayer.Cell cell : screen.getSurroundingCells3x3("water", pos)){
+        for (TiledMapTileLayer.Cell cell : screen.getSurroundingCells3x3("water", pos)) {
 
             // If any of these tiles are sources of water
-            if(cell.getTile().getId() == Semtb001MajorAssignment.WATER) {
+            if (cell.getTile().getId() == Semtb001MajorAssignment.WATER) {
 
                 // update the hasWater boolean to true
                 hasWater = true;

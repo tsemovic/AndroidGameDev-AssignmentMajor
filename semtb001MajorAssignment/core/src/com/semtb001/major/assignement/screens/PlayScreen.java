@@ -279,7 +279,7 @@ public class PlayScreen implements Screen {
 
                                     //create seeds if there are seeds in inventory and seeds are already not growing
                                     if (create) {
-                                        if (player.getInventory().getItem("seeds") > 0) {
+                                        if (player.getInventory().getItemValue("seeds") > 0) {
                                             player.setCurrentState(Player.State.SEEDS);
                                             player.playItemSound();
                                             box2dWorldCreator.createWheat();

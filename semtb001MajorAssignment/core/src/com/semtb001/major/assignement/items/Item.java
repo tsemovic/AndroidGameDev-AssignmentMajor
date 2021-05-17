@@ -38,16 +38,8 @@ public abstract class Item {
         return activeTexture;
     }
 
-    public void setActiveTexture(Texture activeTexture) {
-        this.activeTexture = activeTexture;
-    }
-
     public Texture getInactiveTexture() {
         return inactiveTexture;
-    }
-
-    public void setInactiveTexture(Texture inactiveTexture) {
-        this.inactiveTexture = inactiveTexture;
     }
 
     public Image getImage() {
@@ -56,22 +48,6 @@ public abstract class Item {
 
     public void setImage(Image image) {
         this.image = image;
-    }
-
-    public Image getActiveImg() {
-        return activeImg;
-    }
-
-    public void setActiveImg(Image activeImg) {
-        this.activeImg = activeImg;
-    }
-
-    public Image getInActiveImg() {
-        return inActiveImg;
-    }
-
-    public void setInActiveImg(Image inActiveImg) {
-        this.inActiveImg = inActiveImg;
     }
 
     public Boolean getActive() {

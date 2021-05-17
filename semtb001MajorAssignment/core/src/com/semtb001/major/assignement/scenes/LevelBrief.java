@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.PlayScreen;
@@ -41,7 +40,7 @@ public class LevelBrief implements Disposable {
         viewport = Semtb001MajorAssignment.viewport;
         stage = new Stage(viewport, spriteBatch);
 
-        // Set the countdown timer to 3 seconds and set timeToPlay to false
+        // Set the countdown timer to 5 seconds and set timeToPlay to false
         countdown = 5;
         timeToPlay = false;
 
@@ -96,7 +95,7 @@ public class LevelBrief implements Disposable {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
 }

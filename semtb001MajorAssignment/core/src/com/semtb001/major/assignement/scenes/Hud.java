@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.semtb001.major.assignement.Semtb001MajorAssignment;
 import com.semtb001.major.assignement.screens.PlayScreen;
 
-/* Class to present a overlay on the game screen showing the number of coins collected and the
+/* Class to present a overlay on the game screen showing the number of wheat harvested and the
 pause functionality */
 public class Hud implements Disposable {
 
@@ -27,22 +27,24 @@ public class Hud implements Disposable {
     private Label time;
     private Label timeCountLabel;
 
+    // Boolean to track if the paused button has been pressed
     public boolean pausedPressed;
 
+    // Objects for keeping track of time
     public Integer worldTimer;
-    private boolean timeUp; // true when the world timer reaches 0
     private float timeCount;
 
-
+    // Boolean to track if the time is up
+    private boolean timeUp;
 
     public Hud(SpriteBatch spriteBatch, final PlayScreen playScreen) {
 
         // Instantiate the viewport and stage objects
         viewport = Semtb001MajorAssignment.viewport;
         screen = playScreen;
-
         stage = new Stage(viewport, spriteBatch);
 
+        // Set the timeCount to 0 and the worldTimer to 90 (90 seconds for each game)
         timeCount = 0;
         worldTimer = 90;
 
@@ -55,10 +57,8 @@ public class Hud implements Disposable {
         pause = new Label("II", Semtb001MajorAssignment.tinyFontFontWhite);
         harvested = new Label("HARVESTED: ", Semtb001MajorAssignment.tinyFontFontWhite);
         harvestedCountLabel = new Label(Integer.toString(screen.getWheatHarvested()), Semtb001MajorAssignment.tinyFontFontWhite);
-
         time = new Label("TIME: ", Semtb001MajorAssignment.tinyFontFontWhite);
         timeCountLabel = new Label(String.format("%02d", worldTimer), Semtb001MajorAssignment.tinyFontFontWhite);
-
 
         // Set the HUD labels to have an opacity of 75% so that the game view isn't as obstructed
         float hudTextAlpha = 0.75f;
@@ -67,7 +67,6 @@ public class Hud implements Disposable {
         harvestedCountLabel.setColor(1, 1, 1, hudTextAlpha);
         time.setColor(1, 1, 1, hudTextAlpha);
         timeCountLabel.setColor(1, 1, 1, hudTextAlpha);
-
 
         // Add the labels to the table
         hudTable.add(harvested).padLeft(Semtb001MajorAssignment.PPM * 2);
@@ -123,26 +122,36 @@ public class Hud implements Disposable {
 
     }
 
+    // Method to update the HUD
     public void update(float dt){
+
+        // If the world timer is greather than 0, decrease it by 1 every second
         timeCount += dt;
         if(timeCount >= 1){
             if (worldTimer > 0) {
                 worldTimer--;
+
+                // If the worldTimer reaches 0, set the timeUp to true
             } else {
                 timeUp = true;
             }
+
+            // Update the timeCount label to the worldTimer value
             timeCountLabel.setText(String.format("%02d", worldTimer));
             timeCount = 0;
         }
+
+        // Update the harvestedCountLabel to the value of wheat harvested
         harvestedCountLabel.setText(Integer.toString(screen.getWheatHarvested()));
 
     }
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
+    // Getters
     public boolean getTimeUp(){
         return timeUp;
     }

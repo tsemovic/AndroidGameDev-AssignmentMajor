@@ -17,7 +17,7 @@ import com.semtb001.major.assignement.screens.PlayScreen;
 import com.semtb001.major.assignement.tools.Assets;
 
 /* Class to present a overlay on the game screen showing that the game is over
-(this is shown when the player dies and also when the player completes the level */
+(this is shown when the hud game timer runs out */
 public class GameOver implements Disposable {
 
     // GameOver stage viewport, and PlayScreen objects
@@ -38,6 +38,7 @@ public class GameOver implements Disposable {
     public Sprite backgroundSprite;
     public SpriteBatch batch;
 
+    // Wheat counter objects
     public boolean levelPassed;
     public int wheatCount;
     public int wheatTotal;
@@ -51,6 +52,7 @@ public class GameOver implements Disposable {
         viewport = Semtb001MajorAssignment.viewport;
         stage = new Stage(viewport, spriteBatch);
 
+        // Instantiate levelPassed, and wheat counts
         levelPassed = screen.getLevelPassed();
         wheatCount = screen.getWheatHarvested();
         wheatTotal = screen.getWheatToPassLevel();
@@ -60,7 +62,7 @@ public class GameOver implements Disposable {
         pausedTable.center();
         pausedTable.setFillParent(true);
 
-        // Set the exitText label to 'EXIT' (does not change if the player dies or completes the level)
+        // Set the exitText label to 'EXIT', headText to 'GAME OVER' and subHeaderText to 'TRY AGAIN'
         exitText = new Label("EXIT", Semtb001MajorAssignment.smallFontFontWhite);
         headerText = new Label("GAME OVER", Semtb001MajorAssignment.largeFontWhite);
         subHeaderText = new Label("TRY AGAIN", Semtb001MajorAssignment.smallFontFontWhite);
@@ -68,12 +70,11 @@ public class GameOver implements Disposable {
         // If the level has been completed
         if (levelPassed) {
 
-            // If the player is not dead (completes the level successfully)
             // Set the header text to "LEVEL PASSED" and the subHeader text to "TRY AGAIN"
             headerText = new Label("LEVEL PASSED", Semtb001MajorAssignment.mediumFontFontWhite);
             subHeaderText = new Label("TRY AGAIN", Semtb001MajorAssignment.smallFontFontWhite);
 
-            /* If the player has collected all of the coins in the map: unlock the next level
+            /* If the player has harvested the required wheat: unlock the next level
             (and save to the saved data) and set the subHeader text to "NEXT LEVEL" if there is
             a another level to play*/
             if (Integer.valueOf(playScreen.currentLevel.substring(playScreen.currentLevel.length() - 1)) != Semtb001MajorAssignment.NUMBER_OF_LEVELS) {
@@ -92,13 +93,12 @@ public class GameOver implements Disposable {
             }
         }
 
-
-        // Create the Level Completion Percentage label (percentage of coins collected)
+        // Create the level completion label (shows how much wheat was harvested vs the required amount
         Label levelCompletion = new Label("WHEAT HARVESTED: " + wheatCount + " / " + wheatTotal,
                 Semtb001MajorAssignment.smallFontFontWhite);
 
-            /* If percentage completed is greater than values in the saved data: update saved data
-            with new completion percentage */
+            /* If the amount of wheat harvested is greater than values in the saved data: update saved data
+            with new harvest counts */
         if (wheatCount > Semtb001MajorAssignment.scoresPref.getInteger(playScreen.currentLevel)) {
             Semtb001MajorAssignment.scoresPref.putInteger(playScreen.currentLevel, wheatCount);
             Semtb001MajorAssignment.scoresPref.flush();
@@ -112,7 +112,6 @@ public class GameOver implements Disposable {
         pausedTable.add(subHeaderText);
         pausedTable.row();
         pausedTable.add(exitText);
-
 
         // Add the table to the stage
         stage.addActor(pausedTable);

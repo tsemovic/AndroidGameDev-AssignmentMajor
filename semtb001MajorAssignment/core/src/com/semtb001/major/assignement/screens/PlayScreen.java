@@ -574,10 +574,16 @@ public class PlayScreen implements Screen {
             // Add the wave queue and the time increments to the sheep waves
             sheepWaves.put(i * waveTimeIncrements, waveQueue);
         }
+        System.out.println("WAVEWAVEWAVE");
+
+        System.out.println(sheepWaves);
     }
 
     // Method to handle sheep spawns
     public void handleSheep(float deltaTime) {
+
+        Map.Entry<Double, Queue<Vector2>> temp = null;
+        Vector2 tempPos = null;
 
         // For each sheep in the sheep waves queue
         for (Map.Entry<Double, Queue<Vector2>> kv : sheepWaves.entrySet()) {
@@ -586,10 +592,11 @@ public class PlayScreen implements Screen {
             if (hud.getWorldTimer() <= kv.getKey()) {
 
                 // Create the sheep in the sheep wave queue
-                for (Vector2 sheepPosition : kv.getValue()) {
-                    Sheep newSheep = new Sheep(world, this, sheepPosition);
-                    sheep.offer(newSheep);
-                    kv.getValue().remove(sheepPosition);
+                for (int i = 0; i <= kv.getValue().size(); i ++){
+                    if(kv.getValue().peek() != null) {
+                        Sheep newSheep = new Sheep(world, this, kv.getValue().poll());
+                        sheep.offer(newSheep);
+                    }
                 }
 
                 // Remove the created sheep from the queue

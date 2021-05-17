@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "level6.tmx",
     "expandedProjectPaths": [
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap"
     ],
@@ -12,6 +12,7 @@
             "scaleInDock": 1
         },
         "!CL_DEMO_32x32.tsx": {
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "C:/Users/tully/Desktop/Android Studio/AndroidGame/Island Survival/android/assets/!CL_DEMO_32x32.tsx": {
@@ -188,18 +189,50 @@
         },
         "level1.tmx": {
             "scale": 2,
-            "selectedLayer": 5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 2133,
-                "y": 2403.75
+                "x": 2384,
+                "y": 2400
             }
         },
         "level2.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 2119,
-                "y": 2467.75
+                "x": 2384,
+                "y": 2399.333333333333
+            }
+        },
+        "level3.tmx": {
+            "scale": 2,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 2384,
+                "y": 2400
+            }
+        },
+        "level4.tmx": {
+            "scale": 2,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 2384,
+                "y": 2400
+            }
+        },
+        "level5.tmx": {
+            "scale": 2,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 2384,
+                "y": 2400
+            }
+        },
+        "level6.tmx": {
+            "scale": 1,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 2164,
+                "y": 2586.5
             }
         }
     },
@@ -210,21 +243,27 @@
     "map.tileWidth": 32,
     "map.width": 150,
     "openFiles": [
+        "level2.tmx",
+        "level1.tmx",
+        "level3.tmx",
+        "level4.tmx",
+        "level5.tmx",
+        "level6.tmx"
     ],
     "project": "level.tiled-project",
     "recentFiles": [
+        "level2.tmx",
+        "level1.tmx",
+        "level3.tmx",
+        "level4.tmx",
+        "level5.tmx",
+        "level6.tmx",
         "!CL_DEMO_32x32.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx",
-        "level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Major Assignment/semtb001MajorAssignment/android/assets/island1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/ground.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/tiles_spritesheet.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/background_tilesheet.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/platformPack_tilesheet.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/buildings_trees_tilesheet.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/spritesheet_retina.tsx",
-        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/buildings_spritesheet.tsx"
+        "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/tiles_spritesheet.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.spacing": 0,

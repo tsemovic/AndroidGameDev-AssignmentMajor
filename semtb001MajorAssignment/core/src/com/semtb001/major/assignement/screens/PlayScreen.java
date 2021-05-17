@@ -96,6 +96,8 @@ public class PlayScreen implements Screen {
     // HashMap to store the sheep waves (used to spawn sheep in at various times throughout the level)
     public HashMap<Double, Queue<Vector2>> sheepWaves;
 
+    private int beforeSprites[];
+
     public PlayScreen(Semtb001MajorAssignment semtb001MajorAssignment, String currentLevel) {
 
         // Instantiate game and level objects
@@ -106,8 +108,8 @@ public class PlayScreen implements Screen {
         levelPassed = false;
         wheatHarvested = 0;
 
-        // The wheat required to pass the level is 2 * the level number
-        wheatToPassLevel = Integer.parseInt(currentLevel.substring(7, 8)) * 2;
+        // The wheat required to pass the level is 1.5 * the level number
+        wheatToPassLevel = (int) Math.floor(Integer.parseInt(currentLevel.substring(7, 8)) * 2.5);
 
         // Setup game camera
         gameCamera = new OrthographicCamera();
@@ -119,6 +121,10 @@ public class PlayScreen implements Screen {
         map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001MajorAssignment.MPP);
         world = new World(new Vector2(0, 0), true);
+
+        beforeSprites = new int[1];
+        int treeLeaves = map.getLayers().getIndex("treeLeaves");
+        beforeSprites[0] = treeLeaves;
 
         // Setup the texture atlas for loading in the player and enemy textures
         textureAtlas = Semtb001MajorAssignment.assetManager.manager.get(Assets.textureAtlas);
@@ -433,23 +439,27 @@ public class PlayScreen implements Screen {
         gameCamera.update();
         renderer.setView(gameCamera);
         renderer.render();
+
         box2DDebugRenderer.render(world, gameCamera.combined);
         game.batch.setProjectionMatrix(gameCamera.combined);
 
         // Set the input processor
         Gdx.input.setInputProcessor(inputMultiplexer);
 
+        // Move the game camera
         moveCamera();
 
-        // Begin the sprite batch for drawing the Player, Enemies, and Coins
+        // Begin the sprite batch for drawing the player and sheep
         game.batch.begin();
 
         // Draw Player and Sheep
         drawPlayer();
         drawSheep(delta);
 
-        // End the sprite batch for drawing the Player, Enemies, and Coins
+        // End the sprite batch for drawing the player and sheep
         game.batch.end();
+
+        renderer.render(beforeSprites);
 
         // Draw the heads up display
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -487,6 +497,7 @@ public class PlayScreen implements Screen {
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
         }
+
     }
 
     // Method to update the world

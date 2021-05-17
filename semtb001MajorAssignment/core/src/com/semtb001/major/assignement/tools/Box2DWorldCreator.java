@@ -90,6 +90,7 @@ public class Box2DWorldCreator {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             sheepPositions.offer(new Vector2(rect.x, rect.y));
         }
+        
     }
 
     // Method to create wheat

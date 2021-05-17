@@ -78,6 +78,7 @@ public class Sheep extends Sprite {
 
     // Sheep sounds
     private Sound sheepSound;
+    private Sound sheepHurtSound;
 
     // Objects for when the sheep is hit
     private boolean hit;
@@ -194,6 +195,8 @@ public class Sheep extends Sprite {
 
         // Play the sheep sound on a loop
         sheepSound.loop();
+
+        sheepHurtSound = Semtb001MajorAssignment.assetManager.manager.get(Assets.sheepHurt);
     }
 
     // Define the sheep in box2d
@@ -446,9 +449,10 @@ public class Sheep extends Sprite {
     // Method called when the sheep is 'hit'
     public void sheepHit() {
 
-        // Reduce sheep health by 40, and set 'hit' to true
+        // Reduce sheep health by 40, and set 'hit' to true, and play the sheepHurtSound
         health = health - 40;
         hit = true;
+        sheepHurtSound.play();
     }
 
     // Getters and Setters

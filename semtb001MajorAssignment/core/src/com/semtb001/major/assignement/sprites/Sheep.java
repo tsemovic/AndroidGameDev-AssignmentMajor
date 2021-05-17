@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -21,15 +20,15 @@ import com.semtb001.major.assignement.tools.Assets;
 
 import java.util.Random;
 
-// Class for the Grounded enemy (slime)
+// Class for the sheep
 public class Sheep extends Sprite {
 
-    // Enemy world and playscreen objects
+    // Sheep world and playscreen objects
     private World world;
     private PlayScreen playScreen;
 
-    // Enemy Box2D objects
-    public Body box2dBody;
+    // Sheep Box2D objects
+    private Body box2dBody;
     private float stateTimer;
 
     private boolean hasBeenDestroyed;
@@ -44,6 +43,7 @@ public class Sheep extends Sprite {
     private Animation W;
     private Animation NW;
 
+    // Sheep animations when hurt
     private Animation hurtN;
     private Animation hurtNE;
     private Animation hurtE;
@@ -53,28 +53,38 @@ public class Sheep extends Sprite {
     private Animation hurtW;
     private Animation hurtNW;
 
+    // Sheep animation speed duration
     private float sheepAnimationDuration;
 
+    // Current frame of the sheep animation
     public TextureRegion currentFrame;
 
-    // Enemy position
+    // Sheep position
     private Vector2 pos;
 
-    // Player states
-    public enum State {N, NE, E, SE, S, SW, W, NW}
+    // Sheep states
+    private enum State {N, NE, E, SE, S, SW, W, NW}
+    private Sheep.State currentState;
+    private Sheep.State previousState;
 
-    public Sheep.State currentState;
-    public Sheep.State previousState;
-
+    // Sheep angle
     private float angle;
-    public double currentSpeed = 0f;
 
+    // Sheep speed
+    private double currentSpeed = 0f;
+
+    // Sheep health
     private float health;
+
+    // Sheep sounds
+    private Sound sheepSound;
+
+    // Objects for when the sheep is hit
     private boolean hit;
     private float hitTimer;
-    private float timeCount;
 
-    private Sound sheepSound;
+    // Time counter
+    private float timeCount;
 
     public Sheep(World world, PlayScreen playScreen, Vector2 pos) {
 
@@ -103,14 +113,16 @@ public class Sheep extends Sprite {
         currentState = Sheep.State.N;
         previousState = null;
 
+        // Set the sheep animation duration to 0.4f
         sheepAnimationDuration = 0.4f;
 
-        // Define the enemy (Box2D)
+        // Define the sheep in Box2D
         defineSheep();
 
         // Temporary array to hold animation frames
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
+        // Instantiate the sheep animations for all directions
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("sheepN"), i * 128, 0, 128, 128));
         }
@@ -159,8 +171,7 @@ public class Sheep extends Sprite {
         NW = new Animation(sheepAnimationDuration, tempFrames);
         tempFrames.clear();
 
-        // Hurt Animations
-
+        // Instantiation the sheep hurt Animations
         hurtN = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepN"), 512, 0, 128, 128));
         hurtNE = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), 512, 0, 128, 128));
         hurtE = new Animation(sheepAnimationDuration, new TextureRegion(playScreen.textureAtlas.findRegion("sheepE"), 512, 0, 128, 128));
@@ -181,7 +192,7 @@ public class Sheep extends Sprite {
             sheepSound = Semtb001MajorAssignment.assetManager.manager.get(Assets.sheep2);
         }
 
-        // Play the sheep shound on a loop
+        // Play the sheep sound on a loop
         sheepSound.loop();
     }
 
@@ -219,9 +230,6 @@ public class Sheep extends Sprite {
         // Allow the fixture to detect collisions from the player and the world
         fixtureDef.filter.maskBits = Semtb001MajorAssignment.PLAYER | Semtb001MajorAssignment.WORLD;
 
-        // Setup the fixture as a sensor
-        fixtureDef.isSensor = true;
-
         // Set the shape of the body to a 1x1 cube
         fixtureDef.shape = shape;
 
@@ -229,70 +237,93 @@ public class Sheep extends Sprite {
         box2dBody.createFixture(fixtureDef).setUserData(this);
     }
 
-    // Method to update the enemy
+    // Method to update the sheep
     public void update(float delta) {
 
+        // If the sheep is hit
         if (hit) {
-            timeCount += delta;
+
+            // If the hitTimer is greater than 0
             if (hitTimer > 0) {
-                hitTimer--;
+
+                // Reduce the hitTimer by delta time
+                hitTimer -= delta;
+
+                // If the hitTimer is less or equal to 0
             } else {
+
+                // Set hit to false and reset the hitTimer
                 hit = false;
                 hitTimer = 0.5f;
             }
-            timeCount = 0;
-
         }
 
         // Update the state timer and set the current animation frame to the animation key frame
         stateTimer += delta;
         currentFrame = getFramesFromAnimation(delta);
 
+        // If the sheep health is less or equal to 0
         if (health <= 0) {
 
+            // If the sheep hasn't yet been destroyed
             if (!hasBeenDestroyed) {
-                setCategoryFilter(Semtb001MajorAssignment.DESTROYED);
+
+                // Destroy the sheep (box2D) and stop the sheep sounds
                 sheepSound.stop();
                 world.destroyBody(box2dBody);
                 hasBeenDestroyed = true;
-            } else {
-
             }
+
+            // If the sheep is alive
         } else {
+
+            // If there is any wheat planted
             if (playScreen.getBox2dWorldCreator().wheat.size() > 0) {
+
+                // Set the sheep target wheat to the first wheat in the list
                 Wheat target = playScreen.getBox2dWorldCreator().wheat.get(0);
+
+                // Set the x and y distance to the target
                 double xDistance = (target.bounds.getX() + 0.5) - box2dBody.getPosition().x;
                 double yDistance = (target.bounds.getY() + 0.5) - box2dBody.getPosition().y;
 
+                // If the distances are negative, convert them to positive
                 if (xDistance < 0) {
                     xDistance = xDistance * -1;
                 }
                 if (yDistance < 0) {
                     yDistance = yDistance * -1;
                 }
+
+                // Get the distance to the target (Pythagoras' Theorem)
                 double distanceToTarget = Math.sqrt((xDistance * xDistance) + (yDistance * yDistance));
 
+                // Set the sheep current speed
                 currentSpeed = distanceToTarget * 2;
 
+                // Instantiate a vector for the sheep movement towards the target
                 Vector2 vector = new Vector2((float) ((float) ((target.bounds.getX() + 0.5) - box2dBody.getPosition().x) / currentSpeed),
                         (float) ((float) ((target.bounds.getY() + 0.5) - box2dBody.getPosition().y) / currentSpeed));
 
+                // Set the sheep linear velocity to the vector towards the target
                 box2dBody.setLinearVelocity(vector);
 
                 // Set sheep angle to the direction it's moving
                 angle = (float) Math.atan2((double) box2dBody.getLinearVelocity().y, (double) box2dBody.getLinearVelocity().x);
                 box2dBody.setTransform(box2dBody.getWorldCenter(), angle);
 
+                // Update the sheeps state
                 updateState();
 
+                // If there are no wheat objects in the world, stop the sheep's movement
             } else {
                 box2dBody.setLinearVelocity(0, 0);
                 currentSpeed = 0;
             }
         }
 
+        // Destroy the wheat (if there is any, and if the sheep is where the wheat is located)
         playScreen.getBox2dWorldCreator().destoryWheat(this);
-
 
     }
 
@@ -323,14 +354,7 @@ public class Sheep extends Sprite {
         }
     }
 
-    public void setCategoryFilter(short filterBit) {
-        Filter filter = new Filter();
-        filter.categoryBits = filterBit;
-        box2dBody.getFixtureList().get(0).setFilterData(filter);
-    }
-
-
-    // Method to get the current player animation frame
+    // Method to get the current sheep animation frame
     private TextureRegion getFramesFromAnimation(float delta) {
 
         // Store the current state as 'previous state'
@@ -339,11 +363,12 @@ public class Sheep extends Sprite {
         // Texture region that will be returned
         TextureRegion returnRegion = null;
 
-        // If the player state is "FAIL" return the fail animation frame
+        /* Set the returnRegion to the animation frame based on the sheep direction and if they are
+        'hit', and if they are walking or not*/
         if (currentState == Sheep.State.N) {
             returnRegion = (TextureRegion) N.getKeyFrame(stateTimer, true);
             if (hit) {
-                returnRegion = (TextureRegion) hurtN.getKeyFrame(stateTimer, true);
+                returnRegion = (TextureRegion) hurtN.getKeyFrame(0, true);
             } else if (currentSpeed == 0.0) {
                 returnRegion = (TextureRegion) N.getKeyFrame(0.2f, true);
             }
@@ -408,6 +433,7 @@ public class Sheep extends Sprite {
         // If the current state and previous state aren't the same: reset the state timer
         if (currentState != previousState) {
             stateTimer = 0;
+
             // If the current state and previous state are the same: increase the state timer
         } else {
             stateTimer += delta;
@@ -417,31 +443,21 @@ public class Sheep extends Sprite {
         return returnRegion;
     }
 
-    private float getDurationFromSpeed(double currentSpeed) {
-
-        float returnSpeed = 0;
-
-        if (currentSpeed > 0.9) {
-            returnSpeed = 0.06f;
-        } else if (currentSpeed > 0.06) {
-            returnSpeed = 0.1f;
-        } else if (currentSpeed > 0.3) {
-            returnSpeed = 0.125f;
-        } else {
-            returnSpeed = 0.15f;
-        }
-
-        return returnSpeed;
-    }
-
+    // Method called when the sheep is 'hit'
     public void sheepHit() {
+
+        // Reduce sheep health by 40, and set 'hit' to true
         health = health - 40;
         hit = true;
-        System.out.println("HIT");
     }
 
+    // Getters and Setters
     public float getHealth() {
         return health;
+    }
+
+    public Body getBox2dBody(){
+        return box2dBody;
     }
 
 }

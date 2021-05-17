@@ -22,11 +22,11 @@ import java.util.Random;
 public class Wheat {
 
     // Variables for counting time
-    public float timeCount;
-    public int timeAlive;
+    private float timeCount;
+    private int timeAlive;
 
     // Boolean to track if the wheat has been destroyed
-    public boolean destroyed;
+    private boolean destroyed;
 
     // Wheat's growth stage
     private enum Stage {SMALL, MEDIUM, LARGE}
@@ -34,7 +34,7 @@ public class Wheat {
     private Stage growth;
 
     // Wheat's tile
-    public TiledMapTile tile;
+    private TiledMapTile tile;
     private TiledMapTileSet tileSet;
 
     // Rectangle bounds of the wheat (position)
@@ -53,7 +53,7 @@ public class Wheat {
     private boolean hasWater;
 
     // The number of seeds that the wheat gives back once harvested
-    public int drops;
+    private int drops;
 
     public Wheat(World world, TiledMap map, Rectangle bounds, PlayScreen screen) {
 
@@ -171,4 +171,12 @@ public class Wheat {
 
     }
 
+    // Getters and Setters
+    public int getDrops() {
+        return drops;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
+    }
 }

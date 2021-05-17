@@ -135,7 +135,7 @@ public class PlayScreen implements Screen {
         sheepWaves = new HashMap<Double, Queue<Vector2>>();
 
         // Setup the game camera position
-        gameCamera.position.x = player.box2dBody.getPosition().x + 9;
+        gameCamera.position.x = player.getBox2dBody().getPosition().x + 9;
         gameCamera.position.y = 23;
 
         // Setup the screen overlay objects
@@ -206,8 +206,8 @@ public class PlayScreen implements Screen {
         } else {
 
             // Stop all player movement
-            player.box2dBody.setLinearVelocity(0, 0);
-            player.currentSpeed = Player.Speed.STOP;
+            player.getBox2dBody().setLinearVelocity(0, 0);
+            player.setCurrentSpeed(Player.Speed.STOP);
         }
 
         // If a vacant space of the screen is touched (anywhere except overlay objects such as touchpad, pause, or the hotbar)
@@ -280,8 +280,8 @@ public class PlayScreen implements Screen {
                                     for (Wheat w : box2dWorldCreator.wheat) {
 
                                         // If there is already seeds (wheat) at this location, wheat can't be created at this location
-                                        if ((w.bounds.x == (int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
-                                                (w.bounds.y == (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
+                                        if ((w.bounds.x == (int) (player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
+                                                (w.bounds.y == (int) (player.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
                                             create = false;
                                         }
                                     }
@@ -531,8 +531,8 @@ public class PlayScreen implements Screen {
     public void moveCamera() {
 
         // Set the camera position to the players position
-        gameCamera.position.x = player.box2dBody.getPosition().x;
-        gameCamera.position.y = player.box2dBody.getPosition().y;
+        gameCamera.position.x = player.getBox2dBody().getPosition().x;
+        gameCamera.position.y = player.getBox2dBody().getPosition().y;
     }
 
     // Method to setup the sheep waves
@@ -610,8 +610,8 @@ public class PlayScreen implements Screen {
             if (sheep.getHealth() > 0) {
 
                 // Draw the current enemy animation frame
-                game.batch.draw(sheep.currentFrame, sheep.box2dBody.getPosition().x - 1.75f,
-                        (float) (sheep.box2dBody.getPosition().y - 1.5f), 3.5f, 3.5f);
+                game.batch.draw(sheep.currentFrame, sheep.getBox2dBody().getPosition().x - 1.75f,
+                        (float) (sheep.getBox2dBody().getPosition().y - 1.5f), 3.5f, 3.5f);
             }
         }
     }
@@ -629,25 +629,25 @@ public class PlayScreen implements Screen {
 
         // Set the player's direction state
         if (angle == 0) {
-            player.currentDirection = Player.Direction.E;
+            player.setCurrentDirection(Player.Direction.E);
         } else if (angle == -0.7853981633974483) {
-            player.currentDirection = Player.Direction.SE;
+            player.setCurrentDirection(Player.Direction.SE);
         } else if (angle == -1.5707963267948966) {
-            player.currentDirection = Player.Direction.S;
+            player.setCurrentDirection(Player.Direction.S);
         } else if (angle == -2.356194490192345) {
-            player.currentDirection = Player.Direction.SW;
+            player.setCurrentDirection(Player.Direction.SW);
         } else if (angle == -3.141592653589793) {
-            player.currentDirection = Player.Direction.W;
+            player.setCurrentDirection(Player.Direction.W);
         } else if (angle == 2.356194490192345) {
-            player.currentDirection = Player.Direction.NW;
+            player.setCurrentDirection(Player.Direction.NW);
         } else if (angle == 1.5707963267948966) {
-            player.currentDirection = Player.Direction.N;
+            player.setCurrentDirection(Player.Direction.N);
         } else if (angle == 0.7853981633974483) {
-            player.currentDirection = Player.Direction.NE;
+            player.setCurrentDirection(Player.Direction.NE);
         }
 
         // Make player face the direction of travel
-        player.box2dBody.setTransform(player.box2dBody.getPosition(), (float) angle);
+        player.getBox2dBody().setTransform(player.getBox2dBody().getPosition(), (float) angle);
 
         /* Change the x and y direction percentages to positive so that when they are used to
         move the player, the player doesn't move in the opposite direction due to negative velocity */
@@ -669,22 +669,22 @@ public class PlayScreen implements Screen {
 
         // Set the players speed
         if (angleSpeed > 0.9) {
-            player.currentSpeed = Player.Speed.FAST;
+            player.setCurrentSpeed(Player.Speed.FAST);
             playerSpeed = 0.9;
         } else if (angleSpeed > 0.6) {
-            player.currentSpeed = Player.Speed.MEDIUM;
+            player.setCurrentSpeed(Player.Speed.MEDIUM);
             playerSpeed = 0.6;
         } else if (angleSpeed > 0.3) {
-            player.currentSpeed = Player.Speed.SLOW;
+            player.setCurrentSpeed(Player.Speed.SLOW);
             playerSpeed = 0.3;
         } else {
-            player.currentSpeed = Player.Speed.STOP;
+            player.setCurrentSpeed(Player.Speed.STOP);
             playerSpeed = 0;
         }
 
         // Set the player's movement based on the angle they are moving and the angle speed
-        player.box2dBody.setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.maxSpeed * playerSpeed)),
-                (float) (player.getY() + Math.sin(angle) * (player.maxSpeed * playerSpeed)));
+        player.getBox2dBody().setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.getMaxSpeed() * playerSpeed)),
+                (float) (player.getY() + Math.sin(angle) * (player.getMaxSpeed() * playerSpeed)));
 
         // Set the player's state to 'WALK'
         player.setCurrentState(Player.State.WALK);
@@ -696,15 +696,15 @@ public class PlayScreen implements Screen {
         /* This code draws the player in different positions due to the Box2D body shape changing
         size depending on the state of the player*/
         HashMap<String, Float> dimensions = player.getFrameDimensions();
-        game.batch.draw(player.currentFrame, dimensions.get("x"), dimensions.get("y"), dimensions.get("width"), dimensions.get("height"));
+        game.batch.draw(player.getCurrentFrame(), dimensions.get("x"), dimensions.get("y"), dimensions.get("width"), dimensions.get("height"));
 
     }
 
     // Method to get the cell at the players position from the provided layer name in the tmx file
     public TiledMapTileLayer.Cell getCell(String layerName) {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
-        return layer.getCell((int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32),
-                (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32));
+        return layer.getCell((int) (player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32),
+                (int) (player.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32));
     }
 
     // Method to get the cell at the provided position from the provided layer name in the tmx file
@@ -853,21 +853,13 @@ public class PlayScreen implements Screen {
     }
 
     public Vector2 getPlayerPos() {
-        Vector2 pos = new Vector2((int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32),
-                (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32));
+        Vector2 pos = new Vector2((int) (player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32),
+                (int) (player.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32));
         return pos;
-    }
-
-    public OrthographicCamera getGameCamera() {
-        return gameCamera;
     }
 
     public Player getPlayer() {
         return player;
-    }
-
-    public Hud getHud() {
-        return hud;
     }
 
     public Box2DWorldCreator getBox2dWorldCreator() {

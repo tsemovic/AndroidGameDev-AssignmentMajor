@@ -1,6 +1,5 @@
 package com.semtb001.major.assignement.sprites;
 
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -18,11 +17,8 @@ import com.semtb001.major.assignement.scenes.Inventory;
 import com.semtb001.major.assignement.screens.PlayScreen;
 import com.semtb001.major.assignement.tools.Assets;
 
-import java.awt.MediaTracker;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 
 // Class for the player
 public class Player extends Sprite {
@@ -33,22 +29,21 @@ public class Player extends Sprite {
 
     // Player directions
     public enum Direction {N, NE, E, SE, S, SW, W, NW}
-
-    public Direction currentDirection;
-    public Direction previousDirection;
+    private Direction currentDirection;
+    private Direction previousDirection;
 
     // Player states
     public enum State {IDLE, WALK, HOE, SEEDS, WATER}
+    private State currentState;
+    private State previousState;
 
-    public State currentState;
-    public State previousState;
-
+    // Player speed
     public enum Speed {STOP, SLOW, MEDIUM, FAST}
-    public Speed currentSpeed;
-    public Speed previousSpeed;
+    private Speed currentSpeed;
+    private Speed previousSpeed;
+    private float maxSpeed = 2f;
 
-
-    // State timers for the player states
+    // State timer for the player states
     private float stateTimer;
 
     // Player walk animations
@@ -92,15 +87,15 @@ public class Player extends Sprite {
     private Animation Wseeds;
     private Animation NWseeds;
 
-    // Player bucket animations
-    private Animation Nbucket;
-    private Animation NEbucket;
-    private Animation Ebucket;
-    private Animation SEbucket;
-    private Animation Sbucket;
-    private Animation SWbucket;
-    private Animation Wbucket;
-    private Animation NWbucket;
+    // Player wateringCan animations
+    private Animation NwateringCan;
+    private Animation NEwateringCan;
+    private Animation EwateringCan;
+    private Animation SEwateringCan;
+    private Animation SwateringCan;
+    private Animation SWwateringCan;
+    private Animation WwateringCan;
+    private Animation NWwateringCan;
 
     // Player item sounds
     private Sound hoe;
@@ -108,35 +103,32 @@ public class Player extends Sprite {
     private Sound waterIn;
     private Sound waterOut;
 
+    // Player movement sounds
     private Sound walkFast;
     private Sound walkMedium;
     private Sound walkSlow;
-
     private Long walkID;
 
-    float animationTimeCounter;
-    float animationTimeDuration;
+    // Animation time counter
+    private float animationTimeCounter;
+    private float animationTimeDuration;
 
     // Player's current animation frame
-    public TextureRegion currentFrame;
+    private TextureRegion currentFrame;
 
     // Box2D objects
-    public Body box2dBody;
+    private Body box2dBody;
     private FixtureDef fixtureDef;
-    private PolygonShape shape;
-    private Rectangle rect;
     private BodyDef bodyDef;
 
-    private double angle;
-    public float maxSpeed = 2f;
-
+    // Player animation speeds
     private float walkAnimationSpeed;
     private float idleAnimationSpeed;
     private float hoeAnimationSpeed;
     private float seedsAnimationSpeed;
-    private float bucketAnimationSpeed;
+    private float wateringCanAnimationSpeed;
 
-
+    // Player inventory
     private Inventory inventory;
 
     public Player(World world, PlayScreen playScreen) {
@@ -148,33 +140,38 @@ public class Player extends Sprite {
         // Set the state timer to 0
         stateTimer = 0;
 
-        // Setup the player current states (starts the game running)
-        currentDirection = Direction.N;
+        // Setup the player current direction (starts the game facing south)
+        currentDirection = Direction.S;
         previousDirection = null;
 
+        // Setup the player current state (starts the game in 'idle')
         currentState = State.IDLE;
         previousState = null;
 
+        // Setup the player current speed (starts the game not moving)
         currentSpeed = Speed.STOP;
 
+        // Set the animation time counter
         animationTimeCounter = 0;
         animationTimeDuration = 0.07f * 13;
 
+        // Instantiate the player's inventory
         inventory = new Inventory();
 
         // Define the player (Box2d)
         definePlayer();
 
+        // Instantiate the player's animation speeds
         walkAnimationSpeed = 0.07f;
         idleAnimationSpeed = 0.3f;
         hoeAnimationSpeed = 0.07f;
         seedsAnimationSpeed = 0.07f;
-        bucketAnimationSpeed = 0.07f;
+        wateringCanAnimationSpeed = 0.07f;
 
         // Temporary array to hold animation frames
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
 
-        // Player walk Animations
+        // Setup the player's walk animations
         for (int i = 0; i <= 14; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNwalk"), i * 99, 0, 99, 137));
         }
@@ -223,7 +220,7 @@ public class Player extends Sprite {
         NWwalk = new Animation(walkAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        // Player idle Animations
+        // Setup the player's idle animations
         for (int i = 0; i <= 3; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNidle"), i * 99, 0, 99, 123));
         }
@@ -272,7 +269,7 @@ public class Player extends Sprite {
         NWidle = new Animation(idleAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        // Player hoe Animations
+        // Setup the player's hoe animations
         for (int i = 0; i <= 12; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNhoe"), i * 113, 0, 113, 181));
         }
@@ -321,7 +318,7 @@ public class Player extends Sprite {
         NWhoe = new Animation(hoeAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        // Player seeds Animations
+        // Setup the player's seeds animations
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNseeds"), i * 107, 0, 107, 125));
         }
@@ -370,55 +367,56 @@ public class Player extends Sprite {
         NWseeds = new Animation(seedsAnimationSpeed, tempFrames);
         tempFrames.clear();
 
-        // Player seeds Animations
+        // Setup the player's wateringCan animations
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNbucket"), i * 119, 0, 119, 125));
         }
-        Nbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        NwateringCan = new Animation(wateringCanAnimationSpeed, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNEbucket"), i * 146, 0, 146, 126));
         }
-        NEbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        NEwateringCan = new Animation(wateringCanAnimationSpeed, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerEbucket"), i * 150, 0, 150, 142));
         }
-        Ebucket = new Animation(seedsAnimationSpeed, tempFrames);
+        EwateringCan = new Animation(wateringCanAnimationSpeed, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSEbucket"), i * 141, 0, 141, 157));
         }
-        SEbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        SEwateringCan = new Animation(wateringCanAnimationSpeed, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSbucket"), i * 109, 0, 109, 160));
         }
-        Sbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        SwateringCan = new Animation(wateringCanAnimationSpeed, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerSWbucket"), i * 116, 0, 116, 154));
         }
-        SWbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        SWwateringCan = new Animation(wateringCanAnimationSpeed, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerWbucket"), i * 121, 0, 121, 154));
         }
-        Wbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        WwateringCan = new Animation(wateringCanAnimationSpeed, tempFrames);
         tempFrames.clear();
 
         for (int i = 0; i <= 10; i++) {
             tempFrames.add(new TextureRegion(playScreen.textureAtlas.findRegion("playerNWbucket"), i * 116, 0, 116, 126));
         }
-        NWbucket = new Animation(seedsAnimationSpeed, tempFrames);
+        NWwateringCan = new Animation(wateringCanAnimationSpeed, tempFrames);
         tempFrames.clear();
 
+        // Add the walking animations to the walkAnimations HashMap
         walkAnimations = new HashMap<>();
         walkAnimations.put(Direction.N, Nwalk);
         walkAnimations.put(Direction.NE, NEwalk);
@@ -429,13 +427,16 @@ public class Player extends Sprite {
         walkAnimations.put(Direction.W, Wwalk);
         walkAnimations.put(Direction.NW, NWwalk);
 
-        // Set the starting animation frame to N
-        currentFrame = (TextureRegion) Nidle.getKeyFrame(idleAnimationSpeed, false);
+        // Set the starting animation frame to S
+        currentFrame = (TextureRegion) Sidle.getKeyFrame(idleAnimationSpeed, false);
 
+        // Instantiate the players item sounds
         hoe = Semtb001MajorAssignment.assetManager.manager.get(Assets.hoe);
         seeds = Semtb001MajorAssignment.assetManager.manager.get(Assets.seeds);
         waterIn = Semtb001MajorAssignment.assetManager.manager.get(Assets.waterIn);
         waterOut = Semtb001MajorAssignment.assetManager.manager.get(Assets.waterOut);
+
+        // Instantiate the players walking sounds
         walkFast = Semtb001MajorAssignment.assetManager.manager.get(Assets.walkFast);
         walkMedium = Semtb001MajorAssignment.assetManager.manager.get(Assets.walkMedium);
         walkSlow = Semtb001MajorAssignment.assetManager.manager.get(Assets.walkSlow);
@@ -448,11 +449,9 @@ public class Player extends Sprite {
 
         // Instantiate Box2D objects
         bodyDef = new BodyDef();
-        rect = new Rectangle();
-        shape = new PolygonShape();
         fixtureDef = new FixtureDef();
 
-        // Set the player category to 'PLAYER' and maskBits (can collide with) to "WORLD", "ENEMY", and "COIN"
+        // Set the player category to 'PLAYER' and maskBits (can collide with) to 'WORLD' and 'SHEEP'
         fixtureDef.filter.categoryBits = Semtb001MajorAssignment.PLAYER;
         fixtureDef.filter.maskBits = Semtb001MajorAssignment.WORLD | Semtb001MajorAssignment.SHEEP;
 
@@ -466,7 +465,6 @@ public class Player extends Sprite {
         box2dBody = world.createBody(bodyDef);
 
         // Set the shape of the body to a circle
-
         CircleShape cir = new CircleShape();
         cir.setRadius(0.3f);
         fixtureDef.shape = cir;
@@ -475,20 +473,22 @@ public class Player extends Sprite {
         box2dBody.createFixture(fixtureDef).setUserData(this);
     }
 
-    // Method called to update the player (sounds, animation frame, and states)
+    // Method to update the player (sounds, animation frame, and states)
     public void update(float delta) {
 
-
+        // Adjust the player animation and sound speed (walking speeds depending on movement speed)
         adjustAnimationSpeed();
         playWalkSound();
 
-        // Set the current frame of the player depending on the player state (eg. running, jumping, etc.)
+        // Set the current frame of the player depending on the player state and direction
         currentFrame = getFramesFromAnimation(delta);
 
     }
 
+    // Method to adjust the animation speeds
     private void adjustAnimationSpeed() {
 
+        // Get the current animation that is playing
         Animation currentAnimation = null;
         for(Map.Entry<Direction, Animation> keyValue: walkAnimations.entrySet()){
             if(keyValue.getKey() == currentDirection){
@@ -496,7 +496,7 @@ public class Player extends Sprite {
             }
         }
 
-        // Set the players speed
+        // Set the player's walk speed
         switch(currentSpeed){
             case FAST: currentAnimation.setFrameDuration(0.07f);
             break;
@@ -517,6 +517,7 @@ public class Player extends Sprite {
         // Texture region that will be returned
         TextureRegion returnRegion = null;
 
+        // If the player has stopped walking, set the state to 'IDLE'
         if (currentState == State.WALK && currentSpeed == Speed.STOP) {
             currentState = State.IDLE;
         }
@@ -533,19 +534,25 @@ public class Player extends Sprite {
                         break;
                     case HOE:
                         returnRegion = (TextureRegion) Nhoe.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(Nhoe.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case SEEDS:
                         returnRegion = (TextureRegion) Nseeds.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(Nseeds.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case WATER:
-                        returnRegion = (TextureRegion) Nbucket.getKeyFrame(stateTimer, false);
-                        if(Nbucket.isAnimationFinished(stateTimer)){
+                        returnRegion = (TextureRegion) NwateringCan.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
+                        if(NwateringCan.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
@@ -561,19 +568,25 @@ public class Player extends Sprite {
                         break;
                     case HOE:
                         returnRegion = (TextureRegion) NEhoe.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(NEhoe.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case SEEDS:
                         returnRegion = (TextureRegion) NEseeds.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(NEseeds.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case WATER:
-                        returnRegion = (TextureRegion) NEbucket.getKeyFrame(stateTimer, false);
-                        if(NEbucket.isAnimationFinished(stateTimer)){
+                        returnRegion = (TextureRegion) NEwateringCan.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
+                        if(NEwateringCan.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
@@ -589,19 +602,25 @@ public class Player extends Sprite {
                         break;
                     case HOE:
                         returnRegion = (TextureRegion) Ehoe.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(Ehoe.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case SEEDS:
                         returnRegion = (TextureRegion) Eseeds.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(Nseeds.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case WATER:
-                        returnRegion = (TextureRegion) Ebucket.getKeyFrame(stateTimer, false);
-                        if(Nbucket.isAnimationFinished(stateTimer)){
+                        returnRegion = (TextureRegion) EwateringCan.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
+                        if(NwateringCan.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
@@ -617,19 +636,25 @@ public class Player extends Sprite {
                         break;
                     case HOE:
                         returnRegion = (TextureRegion) SEhoe.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(SEhoe.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case SEEDS:
                         returnRegion = (TextureRegion) SEseeds.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(SEseeds.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case WATER:
-                        returnRegion = (TextureRegion) SEbucket.getKeyFrame(stateTimer, false);
-                        if(SEbucket.isAnimationFinished(stateTimer)){
+                        returnRegion = (TextureRegion) SEwateringCan.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
+                        if(SEwateringCan.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
@@ -645,19 +670,25 @@ public class Player extends Sprite {
                         break;
                     case HOE:
                         returnRegion = (TextureRegion) Shoe.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(Shoe.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case SEEDS:
                         returnRegion = (TextureRegion) Sseeds.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(Sseeds.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case WATER:
-                        returnRegion = (TextureRegion) Sbucket.getKeyFrame(stateTimer, false);
-                        if(Sbucket.isAnimationFinished(stateTimer)){
+                        returnRegion = (TextureRegion) SwateringCan.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
+                        if(SwateringCan.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
@@ -673,19 +704,25 @@ public class Player extends Sprite {
                         break;
                     case HOE:
                         returnRegion = (TextureRegion) SWhoe.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(SWhoe.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case SEEDS:
                         returnRegion = (TextureRegion) SWseeds.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(SWseeds.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case WATER:
-                        returnRegion = (TextureRegion) SWbucket.getKeyFrame(stateTimer, false);
-                        if(SWbucket.isAnimationFinished(stateTimer)){
+                        returnRegion = (TextureRegion) SWwateringCan.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
+                        if(SWwateringCan.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
@@ -701,19 +738,25 @@ public class Player extends Sprite {
                         break;
                     case HOE:
                         returnRegion = (TextureRegion) Whoe.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(Whoe.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case SEEDS:
                         returnRegion = (TextureRegion) Wseeds.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(Wseeds.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case WATER:
-                        returnRegion = (TextureRegion) Wbucket.getKeyFrame(stateTimer, false);
-                        if(Wbucket.isAnimationFinished(stateTimer)){
+                        returnRegion = (TextureRegion) WwateringCan.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
+                        if(WwateringCan.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
@@ -729,19 +772,25 @@ public class Player extends Sprite {
                         break;
                     case HOE:
                         returnRegion = (TextureRegion) NWhoe.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(NWhoe.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case SEEDS:
                         returnRegion = (TextureRegion) NWseeds.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
                         if(NWseeds.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
                     case WATER:
-                        returnRegion = (TextureRegion) NWbucket.getKeyFrame(stateTimer, false);
-                        if(NWbucket.isAnimationFinished(stateTimer)){
+                        returnRegion = (TextureRegion) NWwateringCan.getKeyFrame(stateTimer, false);
+
+                        // If the animation has finished, set the player's state back to 'IDLE'
+                        if(NWwateringCan.isAnimationFinished(stateTimer)){
                             currentState = State.IDLE;
                         }
                         break;
@@ -752,7 +801,8 @@ public class Player extends Sprite {
         // If the current state and previous state aren't the same: reset the state timer
         if (currentDirection != previousDirection) {
             stateTimer = 0;
-            // If the current state and previous state are the same: increase the state timer
+
+            // If the current state and previous state are the same: increase the state timer by delta time
         } else {
             stateTimer += delta;
         }
@@ -761,12 +811,8 @@ public class Player extends Sprite {
         return returnRegion;
     }
 
-    public void resetStateTimer(){
-        stateTimer = 0;
-    }
-
-    // Method to get the frame size and position to be drawn for the player
-    // (All player images are unfortunately different dimensions so scaling is required for each frame)
+    /* Method to get the frame size and position to be drawn for the player
+    (All player images are unfortunately different dimensions so scaling is required for each frame)*/
     public HashMap<String, Float> getFrameDimensions() {
 
         // HashMap to store the x, y, width and height dimensions
@@ -1073,17 +1119,17 @@ public class Player extends Sprite {
 
     }
 
+    // Method to play the item sounds
     public void playItemSound() {
 
+        // play the corresponding item sound depending on the player state
         switch (currentState) {
             case HOE:
                 hoe.play();
                 break;
-
             case SEEDS:
                 seeds.play();
                 break;
-
             case WATER:
                     waterOut.play();
                 break;
@@ -1092,16 +1138,26 @@ public class Player extends Sprite {
         }
     }
 
+    // Method to play the player's walk sounds
     private void playWalkSound(){
 
+        // If the player has changed speeds
         if(currentSpeed != previousSpeed){
+
+            // Stop the current playing sound
             walkID = null;
             walkFast.stop();
             walkMedium.stop();
             walkSlow.stop();
+
+            // If the player hasn't changed speeds
         }else {
             if (currentState == State.WALK) {
+
+                // If there is no sound currently playing
                 if (walkID == null) {
+
+                    // Play the corresponding walk sound depending on the players speed
                     switch (currentSpeed) {
                         case FAST:
                             walkID = walkFast.loop();
@@ -1111,7 +1167,11 @@ public class Player extends Sprite {
                             walkID = walkSlow.loop();
                     }
                 }
+
+                // If the player is not walking
             } else {
+
+                // Stop all walking sounds
                 walkFast.stop();
                 walkMedium.stop();
                 walkSlow.stop();
@@ -1120,16 +1180,19 @@ public class Player extends Sprite {
         }
     }
 
-    public void setAngle(double a) {
-        angle = a;
+    // Method to reset the state time back to 0
+    public void resetStateTimer(){
+        stateTimer = 0;
     }
 
-    public Inventory getInventory() {
-        return inventory;
-    }
-
+    // Method to add an item to the players inventory
     public void addInventory(String item, int count) {
         inventory.addItem(item, count);
+    }
+
+    // Getters and Setters
+    public Inventory getInventory() {
+        return inventory;
     }
 
     public void setCurrentState(State state) {
@@ -1140,4 +1203,23 @@ public class Player extends Sprite {
         previousSpeed = currentSpeed;
     }
 
+    public Body getBox2dBody(){
+        return box2dBody;
+    }
+
+    public void setCurrentSpeed(Speed currentSpeed) {
+        this.currentSpeed = currentSpeed;
+    }
+
+    public void setCurrentDirection(Direction currentDirection) {
+        this.currentDirection = currentDirection;
+    }
+
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public TextureRegion getCurrentFrame(){
+        return currentFrame;
+    }
 }

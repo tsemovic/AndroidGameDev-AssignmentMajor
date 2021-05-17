@@ -3,7 +3,6 @@ package com.semtb001.major.assignement.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -58,7 +57,7 @@ public class PlayScreen implements Screen {
     // Box2D objects
     private Box2DWorldCreator box2dWorldCreator;
 
-    // world step time calculation variables
+    // World step time calculation variables
     private static final float dt = (float) 0.01;
     private float time = (float) 0.0;
     double accumulator = 0.0;
@@ -67,7 +66,7 @@ public class PlayScreen implements Screen {
     public TextureAtlas textureAtlas;
     public SpriteBatch batch;
 
-    // variables for game pause and game over
+    // Objects for if the game is paused or game is over
     public boolean isPaused;
     public boolean isGameOverCreated;
 
@@ -76,28 +75,25 @@ public class PlayScreen implements Screen {
     private Hud hud;
     private GameOver gameOver;
     private LevelBrief levelBrief;
+    public TouchPad touchPad;
+    private Gui gui;
 
     // Player and sheep objects
     public Player player;
     private Queue<Sheep> sheep;
 
-    // Music object for game music loop
-    private Music music;
-
     // Input Multiplexer object (multitouch functionality)
     private InputMultiplexer inputMultiplexer;
 
-    // Boolean to determine if the level brief is displayed
-    private boolean levelBriefActive;
-
-    public TouchPad touchPad;
-    private Gui gui;
+    // World time counter
     public float timeCount;
 
+    // Objects for tracking the number of wheat harvested and passing the level
     public boolean levelPassed;
     public int wheatHarvested;
     public int wheatToPassLevel;
 
+    // HashMap to store the sheep waves (used to spawn sheep in at various times throughout the level)
     public HashMap<Double, Queue<Vector2>> sheepWaves;
 
     public PlayScreen(Semtb001MajorAssignment semtb001MajorAssignment, String currentLevel) {
@@ -107,9 +103,10 @@ public class PlayScreen implements Screen {
         batch = semtb001MajorAssignment.batch;
         this.currentLevel = currentLevel;
         isGameOverCreated = false;
-
         levelPassed = false;
         wheatHarvested = 0;
+
+        // The wheat required to pass the level is 2 * the level number
         wheatToPassLevel = Integer.parseInt(currentLevel.substring(7, 8)) * 2;
 
         // Setup game camera
@@ -120,7 +117,6 @@ public class PlayScreen implements Screen {
         // Load map level, render the map, and create the game world
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("mapFiles/level" + currentLevel.substring(7, 8) + ".tmx");
-        //map = mapLoader.load("mapFiles/level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, Semtb001MajorAssignment.MPP);
         world = new World(new Vector2(0, 0), true);
 
@@ -142,15 +138,11 @@ public class PlayScreen implements Screen {
         gameCamera.position.x = player.box2dBody.getPosition().x + 9;
         gameCamera.position.y = 23;
 
-        // Initially, set the level brief to active so that the level brief is displayed at start up
-        levelBriefActive = true;
-
         // Setup the screen overlay objects
         hud = new Hud(game.batch, this);
         gameOver = new GameOver(game.batch, game, this);
         paused = new Paused(game.batch, game, this);
         levelBrief = new LevelBrief(game.batch, this);
-
         touchPad = new TouchPad();
         gui = new Gui(player);
 
@@ -162,28 +154,8 @@ public class PlayScreen implements Screen {
         inputMultiplexer.addProcessor(touchPad.stage);
         inputMultiplexer.addProcessor(gui.stage);
 
-        int numberOfWaves = 3;
-        int totalSheep = box2dWorldCreator.getSheepPositions().size();
-        double waveTimeIncrements = hud.getWorldTimer() / numberOfWaves;
-
-        for (int i = numberOfWaves; i >= 0; i--) {
-            Queue<Vector2> waveQueue = new LinkedList<>();
-
-            if (totalSheep > numberOfWaves) {
-                for (int y = 0; y <= Math.floor(totalSheep / 3); y++) {
-                    if (box2dWorldCreator.getSheepPositions().size() > 0) {
-                        waveQueue.add(box2dWorldCreator.getSheepPositions().poll());
-                    }
-                }
-            } else {
-                if (box2dWorldCreator.getSheepPositions().size() > 0) {
-                    waveQueue.add(box2dWorldCreator.getSheepPositions().poll());
-                }
-            }
-
-            sheepWaves.put(i * waveTimeIncrements, waveQueue);
-
-        }
+        // Setup the sheep waves (3 waves, 1 at the beginning, 1 at 1/3 through the time, 1 at 2/3 through the time)
+        setupSheepWaves(3);
 
         // Set the hoe to be the active item in the player's hotbar
         Set<Item> itemSet = gui.items.keySet();
@@ -193,8 +165,6 @@ public class PlayScreen implements Screen {
             }
         }
 
-        System.out.println(sheepWaves.toString());
-
     }
 
     @Override
@@ -203,127 +173,186 @@ public class PlayScreen implements Screen {
     }
 
     // Method for handling input for the game
-    public void inputHandler(float delta) {
+    public void inputHandler() {
+
+        // Setup the tileset and the itemset objects
         TiledMapTileSet tileSet = map.getTileSets().getTileSet(0);
         Set<Item> itemSet = gui.items.keySet();
 
+        // Increase the time count by delta time
         timeCount += dt;
         Integer itemPressed = 0;
 
+        // Loop through each item in the itemSet
         for (Item i : itemSet) {
+
+            // If the item is pressed
             if (i.getPressed()) {
+
+                // Update the gui to show the active item
                 gui.update(dt, player);
                 itemPressed = 1;
             }
         }
 
+        // If the touchPad is touched
         if (touchPad.isTouched) {
+
+            // Move the player
             movePlayer(touchPad.touchPad.getKnobPercentX(), touchPad.touchPad.getKnobPercentY());
             itemPressed = 1;
+
+            // If the touchPad is not being touched
         } else {
+
+            // Stop all player movement
             player.box2dBody.setLinearVelocity(0, 0);
             player.currentSpeed = Player.Speed.STOP;
         }
 
+        // If a vacant space of the screen is touched (anywhere except overlay objects such as touchpad, pause, or the hotbar)
         if (Gdx.input.isTouched()) {
             if (itemPressed == 0) {
 
+                // For each item in the itemset
                 for (Item i : itemSet) {
+
+                    // If the item is 'active'
                     if (i.getActive()) {
+
+                        // If the item is a 'hoe'
                         if (i.getName() == "hoe") {
+
+                            // If the player is currently standing on 'grass'
                             if (getCell("grass").getTile() == tileSet.getTile(Semtb001MajorAssignment.GRASS)) {
 
-                                // handle player animations
+                                // Handle player animations
                                 player.resetStateTimer();
                                 player.setCurrentState(Player.State.HOE);
                                 player.playItemSound();
 
-
+                                // Boolean to track if the soil should be wet
                                 Boolean wetSoil = false;
-                                for(Vector2 v : getSurroundingPositionss3x3(getPlayerPos())){
-                                    Rectangle r = new Rectangle(v.x, v.y, 1,1 );
-                                    if(getCell("water", r).getTile().getId() == Semtb001MajorAssignment.WATER){
+
+                                // For each tile surrounding the player in a 3x3 grid
+                                for (Vector2 v : getSurroundingPositionss3x3(getPlayerPos())) {
+                                    Rectangle r = new Rectangle(v.x, v.y, 1, 1);
+
+                                    // If the tile is a source of water
+                                    if (getCell("water", r).getTile().getId() == Semtb001MajorAssignment.WATER) {
+
+                                        // Set wetSoil to true
                                         wetSoil = true;
                                     }
                                 }
 
+                                // If the wetSoil boolean is true, till the grass to show wet soil
                                 if (wetSoil) {
                                     getCell("grass").setTile(tileSet.getTile(Semtb001MajorAssignment.WET_SOIL));
 
-                                }else{
+                                    // If the wetSoil boolean is false, till the grass to show dry soil
+                                } else {
                                     getCell("grass").setTile(tileSet.getTile(Semtb001MajorAssignment.DRY_SOIL));
                                 }
                             }
+
+                            // Try to harvest wheat in the box2dWorldCreator
                             box2dWorldCreator.harvestWheat();
                         }
 
+                        // If the item is 'seeds'
                         if (i.getName() == "seeds") {
 
+                            // If 1 second has passed since touching the screen (prevents rapid placement)
                             if (timeCount >= 1) {
 
+                                // Reset the players state timer
                                 player.resetStateTimer();
 
+                                // If the player is standing on either dry soil or wet soil
                                 if (getCell("grass").getTile() == tileSet.getTile(Semtb001MajorAssignment.DRY_SOIL) ||
                                         getCell("grass").getTile() == tileSet.getTile(Semtb001MajorAssignment.WET_SOIL)) {
 
-                                    //stop multiple objects being created for the same bounds
+                                    // Boolean to track if wheat should be created
                                     boolean create = true;
+
+                                    // For each wheat in the box2dWorldCreator
                                     for (Wheat w : box2dWorldCreator.wheat) {
+
+                                        // If there is already seeds (wheat) at this location, wheat can't be created at this location
                                         if ((w.bounds.x == (int) (player.box2dBody.getPosition().x * Semtb001MajorAssignment.PPM / 32)) &&
                                                 (w.bounds.y == (int) (player.box2dBody.getPosition().y * Semtb001MajorAssignment.PPM / 32))) {
-
                                             create = false;
                                         }
                                     }
 
-
-                                    //create seeds if there are seeds in inventory and seeds are already not growing
+                                    // If wheat can be created
                                     if (create) {
+
+                                        // If the player has more than 0 seeds in thier inventory
                                         if (player.getInventory().getItemValue("seeds") > 0) {
+
+                                            // Set the players state to 'SEEDS'
                                             player.setCurrentState(Player.State.SEEDS);
+
+                                            // Play the item sound
                                             player.playItemSound();
+
+                                            // Create wheat in box2dWorldCreator
                                             box2dWorldCreator.createWheat();
+
+                                            // And remove 1 seed from the players inventory
                                             player.getInventory().removeItem("seeds", 1);
                                         }
                                     }
-                                } else {
-                                    //System.out.println("NOT DIRT");
                                 }
-
                             }
+
+                            // Reset the timeCount to 0
                             timeCount = 0;
 
                         }
 
-                        if (i.getName() == "bucket") {
+                        // If the item is a 'wateringCan'
+                        if (i.getName() == "wateringCan") {
 
-                            //prevents picking up water and placing it instantly;
+
+                            // If 1 second has passed since touching the screen (prevents rapid placement)
                             if (timeCount >= 1) {
+
+                                // Reset the players state timer to 0
                                 player.resetStateTimer();
 
                                 // If the bucket is full of water
                                 if (i.getHealth() == 100) {
 
+                                    // Water the ground and empty the wateringCan
                                     getCell("water").setTile(tileSet.getTile(Semtb001MajorAssignment.WATER));
                                     i.setHealth(0);
 
-                                    for(Vector2 v : getSurroundingPositionss3x3(getPlayerPos())){
-                                        Rectangle r = new Rectangle(v.x, v.y, 1,1 );
-                                        if(getCell("grass", r).getTile().getId() == Semtb001MajorAssignment.DRY_SOIL){
+                                    // For each tile in a 3x3 grid surrounding the tile which was watered
+                                    for (Vector2 v : getSurroundingPositionss3x3(getPlayerPos())) {
+
+                                        // If the tile is 'dry' soil, change it to 'wet' soil
+                                        Rectangle r = new Rectangle(v.x, v.y, 1, 1);
+                                        if (getCell("grass", r).getTile().getId() == Semtb001MajorAssignment.DRY_SOIL) {
                                             getCell("grass", r).setTile(tileSet.getTile(Semtb001MajorAssignment.WET_SOIL));
                                         }
                                     }
 
+                                    // Set the player's state to 'WATER'
                                     player.setCurrentState(Player.State.WATER);
+
+                                    // Play the item sound
                                     player.playItemSound();
 
-
+                                    // If the bucket is empty
                                 } else {
 
                                     // Boolean to track if a water sound should be played
                                     Boolean playWaterSound = false;
 
-                                    // Pick up water from ocean
+                                    // If the a tile in a 3x3 grid around the player is water
                                     for (TiledMapTileLayer.Cell cell : getSurroundingCells3x3("water", getPlayerPos())) {
                                         if (cell.getTile() == tileSet.getTile(137)) {
 
@@ -341,7 +370,11 @@ public class PlayScreen implements Screen {
                                     }
                                 }
                             }
+
+                            // Update the wateringCan's water (for the hotbar item)
                             ((WateringCan) i).updateWater();
+
+                            // Reset the timeCount to 0
                             timeCount = 0;
 
                         }
@@ -349,7 +382,6 @@ public class PlayScreen implements Screen {
                 }
             }
         }
-
 
     }
 
@@ -412,7 +444,7 @@ public class PlayScreen implements Screen {
         // Begin the sprite batch for drawing the Player, Enemies, and Coins
         game.batch.begin();
 
-        // Draw Player and Enemies
+        // Draw Player and Sheep
         drawPlayer();
         drawSheep(delta);
 
@@ -438,7 +470,7 @@ public class PlayScreen implements Screen {
         }
         game.batch.end();
 
-        // Draw the game paused and game over screen overlay
+        // Draw the game paused overlay
         if (isPaused) {
             game.batch.setProjectionMatrix(paused.stage.getCamera().combined);
             paused.stage.draw();
@@ -450,6 +482,8 @@ public class PlayScreen implements Screen {
                 inputMultiplexer.addProcessor(gameOver.stage);
                 isGameOverCreated = true;
             }
+
+            // Draw the gameOver screen
             game.batch.setProjectionMatrix(gameOver.stage.getCamera().combined);
             gameOver.stage.draw();
         }
@@ -465,61 +499,97 @@ public class PlayScreen implements Screen {
             world.step(deltaTime, 6, 2);
 
             // Handle application input
-            inputHandler(deltaTime);
+            inputHandler();
 
+            // Update the player
             player.update(deltaTime);
+
+            // Update the screen overlays
             gui.update(deltaTime, player);
             hud.update(deltaTime);
 
-            // Handle enemies (movement, sound, and animation frame depending on state)
-            handleEnemies(deltaTime);
+            // Handle sheep (movement, sound, and animation frame)
+            handleSheep(deltaTime);
 
+            // Loop through the wheat and update them
             for (Wheat wheat : box2dWorldCreator.wheat) {
                 wheat.update(deltaTime);
                 wheat.updateWater();
             }
 
+            // If the amount of wheat harvested is more or equal to the amount to pass the level
             if (wheatHarvested >= wheatToPassLevel) {
+
+                // Set levelPassed to true
                 levelPassed = true;
             }
-
-        } else {
-
-            // If the game is paused or the level brief is displayed: pause all game sounds
 
         }
     }
 
+    // Method to move the game camera
     public void moveCamera() {
+
+        // Set the camera position to the players position
         gameCamera.position.x = player.box2dBody.getPosition().x;
         gameCamera.position.y = player.box2dBody.getPosition().y;
     }
 
-    // Method to handle sheep spawns
-    public void handleEnemies(float deltaTime) {
+    // Method to setup the sheep waves
+    public void setupSheepWaves(int waves) {
 
+        // Set the number of waves that the sheep spawn in
+        int numberOfWaves = waves;
+        int totalSheep = box2dWorldCreator.getSheepPositions().size();
+        double waveTimeIncrements = hud.getWorldTimer() / numberOfWaves;
+
+        // For each wave
+        for (int i = numberOfWaves; i >= 0; i--) {
+            Queue<Vector2> waveQueue = new LinkedList<>();
+
+            // Split up the sheep and add them to the wave queue
+            if (totalSheep > numberOfWaves) {
+                for (int y = 0; y <= Math.floor(totalSheep / 3); y++) {
+                    if (box2dWorldCreator.getSheepPositions().size() > 0) {
+                        waveQueue.add(box2dWorldCreator.getSheepPositions().poll());
+                    }
+                }
+            } else {
+                if (box2dWorldCreator.getSheepPositions().size() > 0) {
+                    waveQueue.add(box2dWorldCreator.getSheepPositions().poll());
+                }
+            }
+
+            // Add the wave queue and the time increments to the sheep waves
+            sheepWaves.put(i * waveTimeIncrements, waveQueue);
+        }
+    }
+
+    // Method to handle sheep spawns
+    public void handleSheep(float deltaTime) {
+
+        // For each sheep in the sheep waves queue
         for (Map.Entry<Double, Queue<Vector2>> kv : sheepWaves.entrySet()) {
 
-            // If the world time is
+            // If the world time is less or equal to the time that the wave should spawn
             if (hud.getWorldTimer() <= kv.getKey()) {
 
-                // Create the enemy
+                // Create the sheep in the sheep wave queue
                 for (Vector2 sheepPosition : kv.getValue()) {
                     Sheep newSheep = new Sheep(world, this, sheepPosition);
                     sheep.offer(newSheep);
                     kv.getValue().remove(sheepPosition);
                 }
 
+                // Remove the created sheep from the queue
                 sheepWaves.remove(kv);
-
-
             }
-
         }
 
-
-        // If there are any ground enemies that are spawned into the map
+        // If there are any sheep that are spawned into the map
         if (sheep.size() > 0) {
+
+            // Loop through the sheep in the map and update them
             for (Sheep s : sheep) {
                 s.update(deltaTime);
             }
@@ -527,32 +597,37 @@ public class PlayScreen implements Screen {
 
     }
 
-    // Method to sheep sprites
+    // Method to draw sheep sprites
     public void drawSheep(float delta) {
 
-        // Get all ground enemies that are spawned into the map
+        // Get all sheep that are spawned into the map
         for (Sheep sheep : sheep) {
 
-            // Update the enemy (updates current animation frame, sound, and movement)
+            // Update the sheep (updates current animation frame, sound, and movement)
             sheep.update(delta);
 
+            // If the sheep are alive
             if (sheep.getHealth() > 0) {
 
                 // Draw the current enemy animation frame
-                game.batch.draw(sheep.currentFrame, sheep.box2dBody.getPosition().x - 1.75f, (float) (sheep.box2dBody.getPosition().y - 1.5f), 3.5f, 3.5f);
+                game.batch.draw(sheep.currentFrame, sheep.box2dBody.getPosition().x - 1.75f,
+                        (float) (sheep.box2dBody.getPosition().y - 1.5f), 3.5f, 3.5f);
             }
         }
     }
 
-    //https://stackoverflow.com/questions/42057796/move-the-player-only-in-45-steps-with-touchpad-in-libgdx
-    public void movePlayer(float dx, float dy) {
-        int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 8) / (2 * Math.PI / 8));
+    /* Method to move the player in the direction of the touchPad
 
+    This code has been implement from the source:
+    https://stackoverflow.com/questions/42057796/move-the-player-only-in-45-steps-with-touchpad-in-libgdx*/
+    public void movePlayer(float dx, float dy) {
+
+        // Get the angle of the touchPad knob
+        int direction = (int) Math.floor((Math.atan2(dy, dx) + Math.PI / 8) / (2 * Math.PI / 8));
         if (direction == 8) direction = 0;
         double angle = direction * (Math.PI / 4);
-        player.setAngle(angle);
 
-        //Set the player direction state
+        // Set the player's direction state
         if (angle == 0) {
             player.currentDirection = Player.Direction.E;
         } else if (angle == -0.7853981633974483) {
@@ -571,11 +646,11 @@ public class PlayScreen implements Screen {
             player.currentDirection = Player.Direction.NE;
         }
 
-        //make player face the direction of travel
+        // Make player face the direction of travel
         player.box2dBody.setTransform(player.box2dBody.getPosition(), (float) angle);
 
-        //change the x and y direction percentages to positive so that when they are used to
-        // move the player, the player doesn't move in the opposite direction due to negative velocity;
+        /* Change the x and y direction percentages to positive so that when they are used to
+        move the player, the player doesn't move in the opposite direction due to negative velocity */
         if (dx < 0) {
             dx = dx * -1;
         }
@@ -583,6 +658,11 @@ public class PlayScreen implements Screen {
             dy = dy * -1;
         }
 
+        /* Get the touchPad knob percentage (small if the knob is hardly moved, 100% (1) if the knob
+        is at the edge of the touchPad background
+
+        This is used for setting the players speed, so the harder the knob is moved, the faster
+        the player will move*/
         double angleSpeed = Math.sqrt((dx * dx) + (dy * dy));
         double playerSpeed = 0;
         player.setPreviousSpeed();
@@ -602,8 +682,11 @@ public class PlayScreen implements Screen {
             playerSpeed = 0;
         }
 
+        // Set the player's movement based on the angle they are moving and the angle speed
         player.box2dBody.setLinearVelocity((float) (player.getX() + Math.cos(angle) * (player.maxSpeed * playerSpeed)),
                 (float) (player.getY() + Math.sin(angle) * (player.maxSpeed * playerSpeed)));
+
+        // Set the player's state to 'WALK'
         player.setCurrentState(Player.State.WALK);
     }
 
@@ -755,7 +838,7 @@ public class PlayScreen implements Screen {
         world.dispose();
         renderer.dispose();
         hud.dispose();
-        //gameOver.dispose();
+        gameOver.dispose();
         levelBrief.dispose();
         paused.dispose();
     }

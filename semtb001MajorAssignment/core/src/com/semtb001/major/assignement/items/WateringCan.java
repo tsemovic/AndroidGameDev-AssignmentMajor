@@ -16,7 +16,7 @@ public class WateringCan extends Item {
     public WateringCan() {
 
         // Setup watering can attributes
-        name = "bucket";
+        name = "wateringCan";
         health = 0;
         active = false;
         pressed = false;

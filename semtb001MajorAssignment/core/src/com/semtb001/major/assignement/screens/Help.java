@@ -19,25 +19,22 @@ import com.semtb001.major.assignement.Semtb001MajorAssignment;
 
 import java.util.List;
 
-// Class to display Statistics Menu (Level Statistics)
+// Class to display Help Menu (Game Instructions)
 public class Help implements Screen {
 
-    // Statistics Menu game, spritebatch, stage, viewport, and camera objects
+    // Help Menu game, spritebatch, stage, viewport, and camera objects
     public Semtb001MajorAssignment game;
     private SpriteBatch batch;
     protected Stage stage;
     private Viewport viewport;
     private OrthographicCamera camera;
 
-    // Objects that will be displayed in the Statistics Menu
+    // Objects that will be displayed in the Help Menu
     private Label backLabel;
     private Label helpLabel;
     private Label descriptionLabel;
 
-    // List of levels in the game
-    private List<Label> levels;
-
-    // Statistics Menu Background sprite object
+    // Help Menu Background sprite object
     private Sprite backgroundSprite;
 
     public Help(Semtb001MajorAssignment semtb001MajorAssignment){
@@ -71,9 +68,9 @@ public class Help implements Screen {
         backgroundSprite.setAlpha(400);
 
         // Create 'level' table to be displayed in the stage
-        Table levelLabelTable = new Table();
-        levelLabelTable.setFillParent(true);
-        levelLabelTable.center();
+        Table helpTable = new Table();
+        helpTable.setFillParent(true);
+        helpTable.center();
 
         // Create 'back' table to be displayed in the stage
         Table backTable = new Table();
@@ -82,10 +79,10 @@ public class Help implements Screen {
         backTable.padTop(20);
         backTable.padLeft(50);
 
-        // Create 'main' table to be displayed in the 'level' table
+        // Create 'main' table to be displayed in the 'help' table
         Table mainTable = new Table();
 
-        // Create label to be displayed in the 'level' table
+        // Create label to be displayed in the 'help' table
         helpLabel = new Label("HELP" , Semtb001MajorAssignment.largeFontWhite);
         helpLabel.setColor(Color.WHITE);
 
@@ -93,6 +90,7 @@ public class Help implements Screen {
         backLabel = new Label("<BACK", Semtb001MajorAssignment.smallFontFontWhite);
         backLabel.setColor(Color.WHITE);
 
+        // Create label that contains brief game instructions
         descriptionLabel = new Label("HARVEST THE AMOUNT OF WHEAT SHOWN IN THE LEVEL BRIEF.\n" +
                 "SELECT AN ITEM IN THE HOT-BAR AND TAP ANY VACANT \nSCREEN SPACE TO USE THAT ITEM.\n" +
                 "WHEAT IS GROWN BY PLANTING SEEDS ON TILLED SOIL AND \nENSURING THAT THERE IS WATER NEARBY." +
@@ -100,21 +98,20 @@ public class Help implements Screen {
                 Semtb001MajorAssignment.miniFontFontWhite);
         descriptionLabel.setColor(Color.WHITE);
 
-
-        // Add labels to the 'level' table
-        levelLabelTable.add(helpLabel).padBottom(Semtb001MajorAssignment.PPM);
-        levelLabelTable.row();
-        levelLabelTable.add(descriptionLabel).center();
-        levelLabelTable.row();
+        // Add labels to the 'help' table
+        helpTable.add(helpLabel).padBottom(Semtb001MajorAssignment.PPM);
+        helpTable.row();
+        helpTable.add(descriptionLabel).center();
+        helpTable.row();
 
         // Add 'back' label to the 'back' table
         backTable.add(backLabel);
 
-        // Add the 'main' table to the 'level' table
-        levelLabelTable.add(mainTable);
+        // Add the 'main' table to the 'help' table
+        helpTable.add(mainTable);
 
-        // Add the 'level' and 'back' tables to the stage
-        stage.addActor(levelLabelTable);
+        // Add the 'help' and 'back' tables to the stage
+        stage.addActor(helpTable);
         stage.addActor(backTable);
 
         // Add input listener to the 'back' label
@@ -168,6 +165,6 @@ public class Help implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }

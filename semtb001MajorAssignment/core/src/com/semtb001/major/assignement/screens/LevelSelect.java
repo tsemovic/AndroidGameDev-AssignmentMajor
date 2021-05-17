@@ -133,7 +133,6 @@ public class LevelSelect implements Screen {
         // Add the 'main' table to the 'levels' table (table within a table)
         levelLabelTable.add(mainTable);
 
-
         // Add the 'level' and 'back' tables to the stage
         stage.addActor(levelLabelTable);
         stage.addActor(backTable);
@@ -208,6 +207,6 @@ public class LevelSelect implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }

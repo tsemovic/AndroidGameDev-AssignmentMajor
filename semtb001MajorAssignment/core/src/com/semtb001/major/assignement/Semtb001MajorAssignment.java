@@ -30,7 +30,7 @@ public class Semtb001MajorAssignment extends Game {
 	public static final float WORLD_HEIGHT = WORLD_PIXEL_HEIGHT / PPM; //in meter
 	public static final Viewport viewport  = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
 
-	public static final int NUMBER_OF_LEVELS = 2;
+	public static final int NUMBER_OF_LEVELS = 5;
 
 	// Object types (used for Box2D collisions)
 	public static final short PLAYER = 1;

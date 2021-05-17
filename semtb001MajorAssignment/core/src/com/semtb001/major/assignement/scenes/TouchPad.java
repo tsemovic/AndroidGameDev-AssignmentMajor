@@ -88,6 +88,8 @@ public class TouchPad {
         // Create a Stage and add the TouchPad
         stage = new Stage();
         stage.addActor(touchPad);
+
+        // Add the stage to the input processor
         Gdx.input.setInputProcessor(stage);
 
         // Add an input listener to the touchPad

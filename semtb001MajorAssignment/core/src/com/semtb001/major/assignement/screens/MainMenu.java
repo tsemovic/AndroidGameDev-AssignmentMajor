@@ -54,7 +54,7 @@ public class MainMenu implements Screen {
         camera.setToOrtho(false, Semtb001MajorAssignment.WORLD_WIDTH, Semtb001MajorAssignment.WORLD_HEIGHT);
 
         // Setup viewport
-        viewport = new FillViewport(Semtb001MajorAssignment.WORLD_WIDTH * Semtb001MajorAssignment.PPM * 2, Semtb001MajorAssignment.WORLD_HEIGHT * Semtb001MajorAssignment.PPM * 2);
+        viewport = Semtb001MajorAssignment.viewport;
         camera.update();
 
         // Setup stage
@@ -156,14 +156,14 @@ public class MainMenu implements Screen {
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
 
                 /* If the user touch is dragged and still on the label
-                (change to grey font colour and active highscoresActive) */
+                (change to grey font colour and active statisticsActive) */
                 if (x > 0 && x < statistics.getWidth() && y > 0 && y < statistics.getHeight()) {
                     statistics.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     statisticsActive = true;
                 } else {
 
                     /* If the user touch is dragged and not over the label
-                    (de-activate highscoresActive and set the font colour to white) */
+                    (de-activate statisticsActive and set the font colour to white) */
                     statistics.setStyle(Semtb001MajorAssignment.smallFontFontWhite);
                     statisticsActive = false;
                 }
@@ -197,7 +197,7 @@ public class MainMenu implements Screen {
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
 
                 /* If the user touch is dragged and still on the label
-                (change to grey font colour and active highscoresActive) */
+                (change to grey font colour and active helpActive) */
                 if (x > 0 && x < help.getWidth() && y > 0 && y < help.getHeight()) {
                     statistics.setStyle(Semtb001MajorAssignment.smallFontFontGrey);
                     helpActive = true;
@@ -210,7 +210,7 @@ public class MainMenu implements Screen {
                 }
             }
 
-            /* If the user 'touches up' (lets go of the touch) and playActive is active:
+            /* If the user 'touches up' (lets go of the touch) and helpActive is active:
             set the screen to the Statistics menu and set the font colour back to white */
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {

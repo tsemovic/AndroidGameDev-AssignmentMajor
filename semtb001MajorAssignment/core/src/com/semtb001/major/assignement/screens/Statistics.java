@@ -98,7 +98,7 @@ public class Statistics implements Screen {
         back.setColor(Color.WHITE);
 
         // Add labels to the 'level' table
-        levelLabelTable.add(levelsLabel).padBottom(Semtb001MajorAssignment.PPM);
+        levelLabelTable.add(levelsLabel).padTop(Semtb001MajorAssignment.PPM);
         levelLabelTable.row();
         levelLabelTable.add(descriptionLabel);
         levelLabelTable.row();
@@ -124,10 +124,14 @@ public class Statistics implements Screen {
                     game.scoresPref.getInteger("LEVEL: " + i), Semtb001MajorAssignment.tinyFontFontWhite);
             currentLevel.setColor(Color.WHITE);
 
+            // Add a new row every 3 levels (displays levels as a grid if/when more levels are added)
+            if ((i-1) % 3 == 0) {
+                mainTable.row();
+            }
+
             // Add the current level label to the main table
-            mainTable.row();
             levels.add(currentLevel);
-            mainTable.add(currentLevel);
+            mainTable.add(currentLevel).pad(Semtb001MajorAssignment.PPM);
         }
 
         // Add input listener to the 'back' label

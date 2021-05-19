@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level5.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap"
     ],
@@ -189,34 +189,34 @@
         },
         "level1.tmx": {
             "scale": 2,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 2384,
-                "y": 2400
+                "x": 2113.5,
+                "y": 2399.25
             }
         },
         "level2.tmx": {
-            "scale": 1.5,
+            "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 2384,
-                "y": 2399.333333333333
+                "x": 2091,
+                "y": 2503.75
             }
         },
         "level3.tmx": {
             "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 2384,
-                "y": 2400
+                "x": 2204,
+                "y": 2462.75
             }
         },
         "level4.tmx": {
             "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 2384,
-                "y": 2400
+                "x": 2114,
+                "y": 2462.75
             }
         },
         "level5.tmx": {
@@ -243,21 +243,15 @@
     "map.tileWidth": 32,
     "map.width": 150,
     "openFiles": [
-        "level2.tmx",
-        "level1.tmx",
-        "level3.tmx",
-        "level4.tmx",
-        "level5.tmx",
-        "level6.tmx"
     ],
     "project": "level.tiled-project",
     "recentFiles": [
-        "level2.tmx",
-        "level1.tmx",
-        "level3.tmx",
-        "level4.tmx",
         "level6.tmx",
         "level5.tmx",
+        "level4.tmx",
+        "level3.tmx",
+        "level1.tmx",
+        "level2.tmx",
         "!CL_DEMO_32x32.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx",

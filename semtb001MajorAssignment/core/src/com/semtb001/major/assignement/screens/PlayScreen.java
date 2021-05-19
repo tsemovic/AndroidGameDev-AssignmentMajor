@@ -202,7 +202,7 @@ public class PlayScreen implements Screen {
         }
 
         // If the touchPad is touched
-        if (touchPad.isTouched) {
+        if (touchPad.isTouched && !isGameOverCreated) {
 
             // Move the player
             movePlayer(touchPad.touchPad.getKnobPercentX(), touchPad.touchPad.getKnobPercentY());
@@ -246,6 +246,13 @@ public class PlayScreen implements Screen {
 
                                     // If the tile is a source of water
                                     if (getCell("water", r).getTile().getId() == Semtb001MajorAssignment.WATER) {
+
+                                        // Set wetSoil to true
+                                        wetSoil = true;
+                                    }
+
+                                    // If the tile is a source of water
+                                    if (getCell("wateringCan", r).getTile().getId() == Semtb001MajorAssignment.WATER) {
 
                                         // Set wetSoil to true
                                         wetSoil = true;
@@ -333,7 +340,7 @@ public class PlayScreen implements Screen {
                                 if (i.getHealth() == 100) {
 
                                     // Water the ground and empty the wateringCan
-                                    getCell("water").setTile(tileSet.getTile(Semtb001MajorAssignment.WATER));
+                                    getCell("wateringCan").setTile(tileSet.getTile(Semtb001MajorAssignment.WATER));
                                     i.setHealth(0);
 
                                     // For each tile in a 3x3 grid surrounding the tile which was watered
@@ -440,7 +447,7 @@ public class PlayScreen implements Screen {
         renderer.setView(gameCamera);
         renderer.render();
 
-        box2DDebugRenderer.render(world, gameCamera.combined);
+        //box2DDebugRenderer.render(world, gameCamera.combined);
         game.batch.setProjectionMatrix(gameCamera.combined);
 
         // Set the input processor
@@ -453,8 +460,7 @@ public class PlayScreen implements Screen {
         game.batch.begin();
 
         // Draw Player and Sheep
-        drawPlayer();
-        drawSheep(delta);
+        drawPlayerAndSheep(delta);
 
         // End the sprite batch for drawing the player and sheep
         game.batch.end();
@@ -574,9 +580,7 @@ public class PlayScreen implements Screen {
             // Add the wave queue and the time increments to the sheep waves
             sheepWaves.put(i * waveTimeIncrements, waveQueue);
         }
-        System.out.println("WAVEWAVEWAVE");
 
-        System.out.println(sheepWaves);
     }
 
     // Method to handle sheep spawns
@@ -592,8 +596,8 @@ public class PlayScreen implements Screen {
             if (hud.getWorldTimer() <= kv.getKey()) {
 
                 // Create the sheep in the sheep wave queue
-                for (int i = 0; i <= kv.getValue().size(); i ++){
-                    if(kv.getValue().peek() != null) {
+                for (int i = 0; i <= kv.getValue().size(); i++) {
+                    if (kv.getValue().peek() != null) {
                         Sheep newSheep = new Sheep(world, this, kv.getValue().poll());
                         sheep.offer(newSheep);
                     }
@@ -615,8 +619,12 @@ public class PlayScreen implements Screen {
 
     }
 
-    // Method to draw sheep sprites
-    public void drawSheep(float delta) {
+    // Method to draw sheep and player sprites
+    public void drawPlayerAndSheep(float delta) {
+
+        // List of sheep that should be drawn before and after the player
+        ArrayList<Sheep> sheepBeforePlayer = new ArrayList<>();
+        ArrayList<Sheep> sheepAfterPlayer = new ArrayList<>();
 
         // Get all sheep that are spawned into the map
         for (Sheep sheep : sheep) {
@@ -627,10 +635,39 @@ public class PlayScreen implements Screen {
             // If the sheep are alive
             if (sheep.getHealth() > 0) {
 
-                // Draw the current enemy animation frame
-                game.batch.draw(sheep.currentFrame, sheep.getBox2dBody().getPosition().x - 1.75f,
-                        (float) (sheep.getBox2dBody().getPosition().y - 1.5f), 3.5f, 3.5f);
+                /* If the sheeps y position is greater than the players y position add it to the
+                list of sheep that are to be drawn before the player*/
+                if(sheep.getBox2dBody().getPosition().y > player.getBox2dBody().getPosition().y){
+                    sheepBeforePlayer.add(sheep);
+
+                /* If the sheeps y position is less than the players y position add it to the
+                list of sheep that are to be drawn after the player*/
+                }else{
+                    sheepAfterPlayer.add(sheep);
+                }
             }
+        }
+
+        // Draw the sheepBeforePlayer sheep
+        for (Sheep sheep : sheepBeforePlayer) {
+
+            // Draw the current sheep animation frame
+            game.batch.draw(sheep.currentFrame, sheep.getBox2dBody().getPosition().x - 1.75f,
+                    (float) (sheep.getBox2dBody().getPosition().y - 1.5f), 3.5f, 3.5f);
+        }
+
+        /* This code draws the player in different positions due to the Box2D body shape changing
+        size depending on the state of the player*/
+        HashMap<String, Float> dimensions = player.getFrameDimensions();
+        game.batch.draw(player.getCurrentFrame(), dimensions.get("x"), dimensions.get("y"),
+                dimensions.get("width"), dimensions.get("height"));
+
+        // Draw the sheepAfterPlayer sheep
+        for (Sheep sheep : sheepAfterPlayer) {
+
+            // Draw the current sheep animation frame
+            game.batch.draw(sheep.currentFrame, sheep.getBox2dBody().getPosition().x - 1.75f,
+                    (float) (sheep.getBox2dBody().getPosition().y - 1.5f), 3.5f, 3.5f);
         }
     }
 
@@ -708,39 +745,31 @@ public class PlayScreen implements Screen {
         player.setCurrentState(Player.State.WALK);
     }
 
-    // Method to draw the player
-    public void drawPlayer() {
-
-        /* This code draws the player in different positions due to the Box2D body shape changing
-        size depending on the state of the player*/
-        HashMap<String, Float> dimensions = player.getFrameDimensions();
-        game.batch.draw(player.getCurrentFrame(), dimensions.get("x"), dimensions.get("y"), dimensions.get("width"), dimensions.get("height"));
-
-    }
-
     // Method to get the cell at the players position from the provided layer name in the tmx file
     public TiledMapTileLayer.Cell getCell(String layerName) {
 
         TiledMapTileLayer.Cell returnCell = null;
-        try{
+        try {
             TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
             returnCell = layer.getCell((int) (player.getBox2dBody().getPosition().x * Semtb001MajorAssignment.PPM / 32),
                     (int) (player.getBox2dBody().getPosition().y * Semtb001MajorAssignment.PPM / 32));
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
-        return  returnCell;
+        return returnCell;
     }
 
     // Method to get the cell at the provided position from the provided layer name in the tmx file
     public TiledMapTileLayer.Cell getCell(String layerName, Rectangle bounds) {
         TiledMapTileLayer.Cell returnCell = null;
 
-        try{
+        try {
             TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
             returnCell = layer.getCell((int) bounds.x, (int) bounds.y);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
-        return  returnCell;
+        return returnCell;
     }
 
     // Method to get cells surrounding the provided bounds in a 5x5 area
@@ -871,6 +900,7 @@ public class PlayScreen implements Screen {
         gameOver.dispose();
         levelBrief.dispose();
         paused.dispose();
+
     }
 
     // Getters and Setters

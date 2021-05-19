@@ -169,6 +169,17 @@ public class Wheat {
             }
         }
 
+        // Loop through all surrounding 3x3 tiles in the wateringCan layer
+        for (TiledMapTileLayer.Cell cell : screen.getSurroundingCells3x3("wateringCan", pos)) {
+
+            // If any of these tiles are sources of water
+            if (cell.getTile().getId() == Semtb001MajorAssignment.WATER) {
+
+                // update the hasWater boolean to true
+                hasWater = true;
+            }
+        }
+
     }
 
     // Getters and Setters

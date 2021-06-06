@@ -1199,6 +1199,10 @@ public class Player extends Sprite {
         currentState = state;
     }
 
+    public State getCurrentState() {
+        return currentState;
+    }
+
     public void setPreviousSpeed(){
         previousSpeed = currentSpeed;
     }

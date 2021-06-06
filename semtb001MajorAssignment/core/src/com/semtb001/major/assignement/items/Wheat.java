@@ -37,8 +37,9 @@ public class Wheat {
     private TiledMapTile tile;
     private TiledMapTileSet tileSet;
 
-    // Rectangle bounds of the wheat (position)
+    // Bounds of the wheat (position)
     public Rectangle bounds;
+    private Vector2 position;
 
     // PlayScreen, World and Map objects
     private PlayScreen screen;
@@ -61,6 +62,7 @@ public class Wheat {
         this.world = world;
         this.map = map;
         this.bounds = bounds;
+        position = new Vector2(bounds.getX(), bounds.getY());
 
         // BodyDef and FixtureDef for Box2D
         BodyDef bdef = new BodyDef();
@@ -158,27 +160,31 @@ public class Wheat {
         // Wheat position in the form of a vector
         Vector2 pos = new Vector2(bounds.x, bounds.y);
 
-        // Loop through all surrounding 3x3 tiles in the water layer
-        for (TiledMapTileLayer.Cell cell : screen.getSurroundingCells3x3("water", pos)) {
+        try {
+            // Loop through all surrounding 3x3 tiles in the water layer
+            for (TiledMapTileLayer.Cell cell : screen.getSurroundingCells3x3("water", pos)) {
 
-            // If any of these tiles are sources of water
-            if (cell.getTile().getId() == Semtb001MajorAssignment.WATER) {
+                // If any of these tiles are sources of water
+                if (cell.getTile().getId() == Semtb001MajorAssignment.WATER) {
 
-                // update the hasWater boolean to true
-                hasWater = true;
+                    // update the hasWater boolean to true
+                    hasWater = true;
+                }
             }
-        }
+        }catch (Exception e){}
 
-        // Loop through all surrounding 3x3 tiles in the wateringCan layer
-        for (TiledMapTileLayer.Cell cell : screen.getSurroundingCells3x3("wateringCan", pos)) {
+        try {
+            // Loop through all surrounding 3x3 tiles in the wateringCan layer
+            for (TiledMapTileLayer.Cell cell : screen.getSurroundingCells3x3("wateringCan", pos)) {
 
-            // If any of these tiles are sources of water
-            if (cell.getTile().getId() == Semtb001MajorAssignment.WATER) {
+                // If any of these tiles are sources of water
+                if (cell.getTile().getId() == Semtb001MajorAssignment.WATER) {
 
-                // update the hasWater boolean to true
-                hasWater = true;
+                    // update the hasWater boolean to true
+                    hasWater = true;
+                }
             }
-        }
+        }catch (Exception e){}
 
     }
 
@@ -189,5 +195,9 @@ public class Wheat {
 
     public void setDestroyed(boolean destroyed) {
         this.destroyed = destroyed;
+    }
+
+    public Vector2 getPosition(){
+        return position;
     }
 }

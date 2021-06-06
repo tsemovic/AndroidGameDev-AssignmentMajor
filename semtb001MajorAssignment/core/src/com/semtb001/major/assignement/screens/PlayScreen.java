@@ -240,22 +240,28 @@ public class PlayScreen implements Screen {
                                 // Boolean to track if the soil should be wet
                                 Boolean wetSoil = false;
 
+
                                 // For each tile surrounding the player in a 3x3 grid
                                 for (Vector2 v : getSurroundingPositionss3x3(getPlayerPos())) {
                                     Rectangle r = new Rectangle(v.x, v.y, 1, 1);
 
-                                    // If the tile is a source of water
-                                    if (getCell("water", r).getTile().getId() == Semtb001MajorAssignment.WATER) {
+                                    try {
+                                        // If the tile is a source of water
+                                        if (getCell("water", r).getTile().getId() == Semtb001MajorAssignment.WATER) {
 
-                                        // Set wetSoil to true
-                                        wetSoil = true;
-                                    }
+                                            // Set wetSoil to true
+                                            wetSoil = true;
+                                        }
 
-                                    // If the tile is a source of water
-                                    if (getCell("wateringCan", r).getTile().getId() == Semtb001MajorAssignment.WATER) {
+                                        // If the tile is a source of water
+                                        if (getCell("wateringCan", r).getTile().getId() == Semtb001MajorAssignment.WATER) {
 
-                                        // Set wetSoil to true
-                                        wetSoil = true;
+                                            // Set wetSoil to true
+                                            wetSoil = true;
+                                        }
+
+                                    } catch (Exception e) {
+
                                     }
                                 }
 
@@ -267,10 +273,13 @@ public class PlayScreen implements Screen {
                                 } else {
                                     getCell("grass").setTile(tileSet.getTile(Semtb001MajorAssignment.DRY_SOIL));
                                 }
+
+
                             }
 
                             // Try to harvest wheat in the box2dWorldCreator
                             box2dWorldCreator.harvestWheat();
+
                         }
 
                         // If the item is 'seeds'
@@ -348,9 +357,13 @@ public class PlayScreen implements Screen {
 
                                         // If the tile is 'dry' soil, change it to 'wet' soil
                                         Rectangle r = new Rectangle(v.x, v.y, 1, 1);
-                                        if (getCell("grass", r).getTile().getId() == Semtb001MajorAssignment.DRY_SOIL) {
-                                            getCell("grass", r).setTile(tileSet.getTile(Semtb001MajorAssignment.WET_SOIL));
-                                        }
+
+                                        try {
+                                            if (getCell("grass", r).getTile().getId() == Semtb001MajorAssignment.DRY_SOIL) {
+                                                getCell("grass", r).setTile(tileSet.getTile(Semtb001MajorAssignment.WET_SOIL));
+                                            }
+                                        }catch (Exception e){}
+
                                     }
 
                                     // Set the player's state to 'WATER'
@@ -637,12 +650,12 @@ public class PlayScreen implements Screen {
 
                 /* If the sheeps y position is greater than the players y position add it to the
                 list of sheep that are to be drawn before the player*/
-                if(sheep.getBox2dBody().getPosition().y > player.getBox2dBody().getPosition().y){
+                if (sheep.getBox2dBody().getPosition().y > player.getBox2dBody().getPosition().y) {
                     sheepBeforePlayer.add(sheep);
 
                 /* If the sheeps y position is less than the players y position add it to the
                 list of sheep that are to be drawn after the player*/
-                }else{
+                } else {
                     sheepAfterPlayer.add(sheep);
                 }
             }
@@ -840,7 +853,7 @@ public class PlayScreen implements Screen {
             cells.add(layer.getCell((int) bounds.x + 1, (int) bounds.y + 1));
             cells.add(layer.getCell((int) bounds.x - 1, (int) bounds.y + 1));
         } catch (Exception e) {
-
+            System.out.println("ERROR " + e);
         }
 
         return cells;
@@ -865,7 +878,7 @@ public class PlayScreen implements Screen {
             positions.add(new Vector2((int) bounds.x + 1, (int) bounds.y + 1));
             positions.add(new Vector2((int) bounds.x - 1, (int) bounds.y + 1));
         } catch (Exception e) {
-
+            System.out.println("ERROR " + e);
         }
 
         return positions;

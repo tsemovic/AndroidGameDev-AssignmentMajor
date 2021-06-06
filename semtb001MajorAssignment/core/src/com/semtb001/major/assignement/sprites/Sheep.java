@@ -64,6 +64,7 @@ public class Sheep extends Sprite {
 
     // Sheep states
     private enum State {N, NE, E, SE, S, SW, W, NW}
+
     private Sheep.State currentState;
     private Sheep.State previousState;
 
@@ -84,8 +85,11 @@ public class Sheep extends Sprite {
     private boolean hit;
     private float hitTimer;
 
-    // Time counter
-    private float timeCount;
+    private Vector2 target;
+    private boolean hasWheatTarget;
+    private boolean moveTowardsTarget;
+
+    private float targetTimer;
 
     public Sheep(World world, PlayScreen playScreen, Vector2 pos) {
 
@@ -104,9 +108,6 @@ public class Sheep extends Sprite {
         // Timer for duration of 'red' sheep (when hit)
         hitTimer = 0.5f;
 
-        // Time counter (for when the sheep is hit)
-        timeCount = 0;
-
         // Boolean to track if the sheep has been destroyed
         hasBeenDestroyed = false;
 
@@ -119,6 +120,11 @@ public class Sheep extends Sprite {
 
         // Define the sheep in Box2D
         defineSheep();
+
+        target = null;
+        hasWheatTarget = true;
+        moveTowardsTarget = false;
+        targetTimer = 3;
 
         // Temporary array to hold animation frames
         Array<TextureRegion> tempFrames = new Array<TextureRegion>();
@@ -280,49 +286,8 @@ public class Sheep extends Sprite {
             // If the sheep is alive
         } else {
 
-            // If there is any wheat planted
-            if (playScreen.getBox2dWorldCreator().getWheat().size() > 0) {
+            updatePosition(delta);
 
-                // Set the sheep target wheat to the first wheat in the list
-                Wheat target = playScreen.getBox2dWorldCreator().getWheat().get(0);
-
-                // Set the x and y distance to the target
-                double xDistance = (target.bounds.getX() + 0.5) - box2dBody.getPosition().x;
-                double yDistance = (target.bounds.getY() + 0.5) - box2dBody.getPosition().y;
-
-                // If the distances are negative, convert them to positive
-                if (xDistance < 0) {
-                    xDistance = xDistance * -1;
-                }
-                if (yDistance < 0) {
-                    yDistance = yDistance * -1;
-                }
-
-                // Get the distance to the target (Pythagoras' Theorem)
-                double distanceToTarget = Math.sqrt((xDistance * xDistance) + (yDistance * yDistance));
-
-                // Set the sheep current speed
-                currentSpeed = distanceToTarget * 2;
-
-                // Instantiate a vector for the sheep movement towards the target
-                Vector2 vector = new Vector2((float) ((float) ((target.bounds.getX() + 0.5) - box2dBody.getPosition().x) / currentSpeed),
-                        (float) ((float) ((target.bounds.getY() + 0.5) - box2dBody.getPosition().y) / currentSpeed));
-
-                // Set the sheep linear velocity to the vector towards the target
-                box2dBody.setLinearVelocity(vector);
-
-                // Set sheep angle to the direction it's moving
-                angle = (float) Math.atan2((double) box2dBody.getLinearVelocity().y, (double) box2dBody.getLinearVelocity().x);
-                box2dBody.setTransform(box2dBody.getWorldCenter(), angle);
-
-                // Update the sheeps state
-                updateState();
-
-                // If there are no wheat objects in the world, stop the sheep's movement
-            } else {
-                box2dBody.setLinearVelocity(0, 0);
-                currentSpeed = 0;
-            }
         }
 
         // Destroy the wheat (if there is any, and if the sheep is where the wheat is located)
@@ -455,12 +420,100 @@ public class Sheep extends Sprite {
         sheepHurtSound.play();
     }
 
+    // Method to update the sheep position
+    public void updatePosition(float delta) {
+
+        // Set the default target position
+        if(target == null){
+            target = box2dBody.getPosition();
+        }
+
+        // If there is any wheat planted
+        if (playScreen.getBox2dWorldCreator().getWheat().size() > 0) {
+
+            // Set the sheep target wheat to the first wheat in the list
+            Wheat wheatTarget = playScreen.getBox2dWorldCreator().getWheat().get(0);
+            target = wheatTarget.getPosition();
+            moveTowardsTarget = true;
+
+            // If there is no wheat planted
+        } else {
+
+            // If the sheep is not moving towards a target
+            if(!moveTowardsTarget){
+
+                // Code to pause movement for 3 seconds
+                if(targetTimer > 0){
+                    targetTimer -= delta;
+                }else{
+                    targetTimer = 3;
+
+                    // If the 3 seconds are up, set the new target position (anywhere within 3 tiles from the sheep's position
+                    Random r = new Random();
+                    int xMod = r.nextInt(2 + 1 - (-2)) + (-2);
+                    int yMod = r.nextInt(2 + 1 - (-2)) + (-2);
+                    target = new Vector2(box2dBody.getPosition().x + xMod, box2dBody.getPosition().y + yMod);
+                    moveTowardsTarget = true;
+                }
+            }
+        }
+
+        // If the sheep is ready to move towards the target
+        if (moveTowardsTarget) {
+
+            // Set the x and y distance to the target
+            double xDistance = (target.x + 0.5) - box2dBody.getPosition().x;
+            double yDistance = (target.y + 0.5) - box2dBody.getPosition().y;
+
+            // If the distances are negative, convert them to positive
+            if (xDistance < 0) {
+                xDistance = xDistance * -1;
+            }
+            if (yDistance < 0) {
+                yDistance = yDistance * -1;
+            }
+
+            // Get the distance to the target (Pythagoras' Theorem)
+            double distanceToTarget = Math.sqrt((xDistance * xDistance) + (yDistance * yDistance));
+
+            // Set the sheep current speed
+            currentSpeed = distanceToTarget * 2;
+
+            // Instantiate a vector for the sheep movement towards the target
+            Vector2 vector = new Vector2((float) ((float) ((target.x + 0.5) - box2dBody.getPosition().x) / currentSpeed),
+                    (float) ((float) ((target.y + 0.5) - box2dBody.getPosition().y) / currentSpeed));
+
+            // Set the sheep linear velocity to the vector towards the target
+            box2dBody.setLinearVelocity(vector);
+
+            // Set sheep angle to the direction it's moving
+            angle = (float) Math.atan2((double) box2dBody.getLinearVelocity().y, (double) box2dBody.getLinearVelocity().x);
+            box2dBody.setTransform(box2dBody.getWorldCenter(), angle);
+
+            // Update the sheeps state
+            updateState();
+
+            // If the sheep is not set to move towards the target
+        } else {
+
+            // Stop the sheep from moving
+            box2dBody.setLinearVelocity(0, 0);
+            currentSpeed = 0;
+        }
+
+
+        if((int)box2dBody.getPosition().x == (int)(target.x + 0.5) && (int) box2dBody.getPosition().y == (int)(target.y + 0.5)){
+            moveTowardsTarget = false;
+            hasWheatTarget = false;
+        }
+    }
+
     // Getters and Setters
     public float getHealth() {
         return health;
     }
 
-    public Body getBox2dBody(){
+    public Body getBox2dBody() {
         return box2dBody;
     }
 

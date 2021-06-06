@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "level4.tmx",
     "expandedProjectPaths": [
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/Starting Assets/map files/mymap"
     ],
@@ -12,7 +12,7 @@
             "scaleInDock": 1
         },
         "!CL_DEMO_32x32.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
         "C:/Users/tully/Desktop/Android Studio/AndroidGame/Island Survival/android/assets/!CL_DEMO_32x32.tsx": {
@@ -188,51 +188,51 @@
             "scaleInEditor": 5.5
         },
         "level1.tmx": {
-            "scale": 2,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 2113.5,
-                "y": 2399.25
+                "x": 2124.6666666666665,
+                "y": 2386.333333333333
             }
         },
         "level2.tmx": {
-            "scale": 2,
-            "selectedLayer": 6,
+            "scale": 1.5,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 2091,
-                "y": 2503.75
+                "x": 2207.333333333333,
+                "y": 2457.6666666666665
             }
         },
         "level3.tmx": {
-            "scale": 2,
-            "selectedLayer": 6,
+            "scale": 1.5,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 2204,
-                "y": 2462.75
+                "x": 2400,
+                "y": 2399.6666666666665
             }
         },
         "level4.tmx": {
-            "scale": 2,
-            "selectedLayer": 6,
+            "scale": 1.5,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 2114,
-                "y": 2462.75
+                "x": 2142.6666666666665,
+                "y": 2399
             }
         },
         "level5.tmx": {
             "scale": 1.5,
-            "selectedLayer": 6,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 2108.6666666666665,
-                "y": 2473.6666666666665
+                "x": 2384,
+                "y": 2399.6666666666665
             }
         },
         "level6.tmx": {
             "scale": 1,
-            "selectedLayer": 6,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 2384,
-                "y": 2400
+                "y": 2399.5
             }
         }
     },
@@ -243,15 +243,18 @@
     "map.tileWidth": 32,
     "map.width": 150,
     "openFiles": [
+        "level5.tmx",
+        "level3.tmx",
+        "level4.tmx"
     ],
     "project": "level.tiled-project",
     "recentFiles": [
-        "level6.tmx",
         "level5.tmx",
-        "level4.tmx",
         "level3.tmx",
+        "level4.tmx",
         "level1.tmx",
         "level2.tmx",
+        "level6.tmx",
         "!CL_DEMO_32x32.tsx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level1.tmx",
         "C:/Users/tully/Desktop/Android Studio/semtb001 Individual Assignment/semtb001IndividualAssignment/android/assets/mapFiles/level2.tmx",
